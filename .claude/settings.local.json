@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/patryk/.agents/skills/find-skills/**)",
+      "Read(//Users/patryk/.agents/skills/10x-cli-guide/**)"
+    ]
+  }
+}
