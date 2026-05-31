@@ -40,6 +40,13 @@ Rules enforced by @pint.json (Pint) and @phpstan.neon. 4-space indentation, UTF-
 
 PHPUnit 12 with in-memory SQLite (@phpunit.xml). Feature tests in `tests/Feature/`, unit tests in `tests/Unit/`. Name test methods `test_<behaviour>` (snake_case). Run `composer test` before pushing.
 
+## Database Migrations
+
+- Every migration must implement both `up()` and `down()` methods — reversible migrations are mandatory.
+- Never use `dropColumn`, `dropTable`, or `change()` without a matching `down()` that restores the previous state.
+- Test rollback locally before merging: `php artisan migrate:rollback` must complete without errors.
+- Adding a NOT NULL column requires a default or a two-phase migration (add nullable → backfill → add constraint) to avoid locking issues and deployment failures during rolling restarts on Fly.io.
+
 ## Commits
 
 Prefix every commit: `[FEATURE]`, `[CHORE]`, or `[BUGFIX]`. Append a milestone/lesson tag where applicable — e.g. `[CHORE] M1L4 description`.
