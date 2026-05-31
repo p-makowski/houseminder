@@ -34,7 +34,7 @@ House Minder is a PHP 8.3 / Laravel 13 household appliance maintenance tracker w
 
 ## Coding Style
 
-PHP 8.3 strict types in every file. Rules enforced by @pint.json (Pint) and @phpstan.neon (PHPStan level 6). 4-space indentation, UTF-8, LF line endings — see @.editorconfig. Keep controllers thin; AI integrations belong in `app/Services/`.
+Rules enforced by @pint.json (Pint) and @phpstan.neon. 4-space indentation, UTF-8, LF line endings — see @.editorconfig. Controllers must not contain business logic or database queries; delegate to service classes in `app/Services/`.
 
 ## Testing
 
