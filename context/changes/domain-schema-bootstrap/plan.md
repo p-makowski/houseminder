@@ -31,7 +31,7 @@ Fresh Laravel 13.8 + Livewire Volt + Tailwind Breeze scaffold. Three infrastruct
 - No `metric_type` on `appliance_types` — metrics are per maintenance task, not per type
 - No unique index on `appliance_types.name` — SQLite treats NULLs as always distinct in UNIQUE constraints; idempotency is handled by `updateOrCreate` in the seeder
 - No soft deletes on any table in v1 — permanent deletion is handled with a confirmation step in S-03
-- No new application-layer tests in this change — test coverage for business logic belongs to S-01/S-02/S-03
+- No new feature tests — test coverage for business logic belongs to S-01/S-02/S-03. The existing Breeze registration test is updated to pass `household_name` in Phase 1 (maintaining, not adding)
 - No changes to any existing auth flows (login, password reset, email verification)
 
 ## Implementation Approach
@@ -102,11 +102,20 @@ Creates `households` and `household_user` tables, the `Household` Eloquent model
 - In `register()`: extract `$householdName = $validated['household_name']` and remove the key before passing `$validated` to `User::create()`. Wrap User + Household + pivot creation in `DB::transaction(function() use (...) { ... })`. Fire `event(new Registered($user))` and call `Auth::login($user)` after the transaction returns — not inside it
 - Blade template: add a `<div class="mt-4">` block for Household Name below the Name field, using the same `<x-input-label>` / `<x-text-input wire:model="household_name">` / `<x-input-error>` pattern as the existing fields
 
+#### 6. Registration test update
+
+**File:** `tests/Feature/Auth/RegistrationTest.php`
+
+**Intent:** Keep the existing Breeze registration test green after Phase 1 adds `household_name` as a required field.
+
+**Contract:** In the test that POSTs to `/register`, add `'household_name' => 'Test Household'` to the request data array. No new test cases — only updating the existing POST payload so validation passes.
+
 ### Success Criteria
 
 #### Automated Verification
 
 - `php artisan migrate` completes without errors — two new tables present in the DB
+- `php artisan test` passes — existing Breeze auth tests remain green after the `household_name` change
 
 #### Manual Verification
 
@@ -147,13 +156,13 @@ Creates the `appliance_types` table supporting both system-seeded and per-househ
 
 **Contract:** Seeder class with `use WithoutModelEvents`. `run(): void` calls `ApplianceType::updateOrCreate(['name' => $name, 'household_id' => null], [])` for each of the 13 names: Refrigerator, Washing Machine, Dryer, Dishwasher, HVAC / Air Conditioner, Water Heater, Oven / Range, Microwave, Vacuum Cleaner, Car / Vehicle, Lawn Mower, Generator, Other.
 
-#### 4. DatabaseSeeder — register ApplianceTypeSeeder
+#### 4. DatabaseSeeder — register ApplianceTypeSeeder + seed household for test user
 
 **File:** `database/seeders/DatabaseSeeder.php`
 
-**Intent:** Ensure `php artisan db:seed` runs the appliance type seeder before the user factory.
+**Intent:** Ensure `php artisan db:seed` runs the appliance type seeder before the user factory, and that the test user gets a Household so local dev state matches what registration produces.
 
-**Contract:** Add `$this->call(ApplianceTypeSeeder::class)` as the first line of `run()`, before the existing `User::factory()->create(...)` call.
+**Contract:** Add `$this->call(ApplianceTypeSeeder::class)` as the first line of `run()`, before the existing `User::factory()->create(...)` call. After the User is created, also create a Household (`Household::create(['name' => 'Test Household'])`) and attach the user to it via `$user->households()->attach($household->id, ['role' => 'owner'])`.
 
 ### Success Criteria
 
@@ -293,6 +302,7 @@ Migrations run automatically on Fly.io deploy via `release_command: php artisan 
 #### Automated
 
 - [ ] 1.1 `php artisan migrate` completes without errors (households + household_user tables created)
+- [ ] 1.3 `php artisan test` passes after Phase 1 changes (no regressions in Breeze auth tests)
 
 #### Manual
 

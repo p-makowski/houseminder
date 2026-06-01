@@ -1,7 +1,7 @@
 ---
 change_id: domain-schema-bootstrap
 title: Domain schema bootstrap
-status: planned
+status: plan_reviewed
 created: 2026-06-01
 updated: 2026-06-01
 archived_at: null
