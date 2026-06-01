@@ -18,7 +18,10 @@
       "Edit",
       "Write",
       "Bash(composer setup *)",
-      "Bash(composer dev *)"
+      "Bash(composer dev *)",
+      "Bash(fly apps *)",
+      "Bash(fly logs *)",
+      "Bash(fly deploy *)"
     ],
     "deny": [
       "Bash(rm -rf *)"
