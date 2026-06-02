@@ -21,7 +21,8 @@
       "Bash(composer dev *)",
       "Bash(fly apps *)",
       "Bash(fly logs *)",
-      "Bash(fly deploy *)"
+      "Bash(fly deploy *)",
+      "Skill(10x-implement)"
     ],
     "deny": [
       "Bash(rm -rf *)"
