@@ -312,13 +312,13 @@ Migrations run automatically on Fly.io deploy via `release_command: php artisan 
 
 #### Automated
 
-- [ ] 2.1 `php artisan migrate` completes without errors (appliance_types table created)
-- [ ] 2.2 `php artisan db:seed` completes without errors
-- [ ] 2.3 `ApplianceType::whereNull('household_id')->count()` returns 13
+- [x] 2.1 `php artisan migrate` completes without errors (appliance_types table created)
+- [x] 2.2 `php artisan db:seed` completes without errors
+- [x] 2.3 `ApplianceType::whereNull('household_id')->count()` returns 13
 
 #### Manual
 
-- [ ] 2.4 Re-seeding is idempotent — running db:seed twice keeps count at 13
+- [x] 2.4 Re-seeding is idempotent — running db:seed twice keeps count at 13
 
 ### Phase 3: Core Domain Models
 
