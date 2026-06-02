@@ -301,12 +301,12 @@ Migrations run automatically on Fly.io deploy via `release_command: php artisan 
 
 #### Automated
 
-- [x] 1.1 `php artisan migrate` completes without errors (households + household_user tables created)
-- [x] 1.3 `php artisan test` passes after Phase 1 changes (no regressions in Breeze auth tests)
+- [x] 1.1 `php artisan migrate` completes without errors (households + household_user tables created) — a50f3c4
+- [x] 1.3 `php artisan test` passes after Phase 1 changes (no regressions in Breeze auth tests) — a50f3c4
 
 #### Manual
 
-- [x] 1.2 Register a new user with household name → one row each in users, households, household_user; pivot role = owner
+- [x] 1.2 Register a new user with household name → one row each in users, households, household_user; pivot role = owner — a50f3c4
 
 ### Phase 2: Appliance Types + Seeder
 

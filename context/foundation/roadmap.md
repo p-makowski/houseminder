@@ -123,6 +123,8 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 1. **What distinguishes House Minder from existing tools (e.g., Centriq)?** — Owner: user. Block: no (the product can be built and validated without this answer, but market positioning will be weak until resolved). Lifted verbatim from `prd.md § Open Questions`.
 
+2. **Email delivery infrastructure is not configured** — Owner: user. Block: **yes for production** (dashboard is gated behind `middleware(['auth', 'verified'])`; users cannot reach the dashboard without a delivered verification link). Discovered during F-01 registration testing on 2026-06-02. Local dev fix: configure Mailpit (`MAIL_MAILER=smtp`, `MAIL_PORT=1025`) or set `MAIL_MAILER=log` to write emails to the Laravel log instead of sending. Production fix: provision a transactional email provider (Resend, Mailgun, Postmark) and set `MAIL_*` secrets on Fly.io. See `SERVICES.md` for details. Run `/10x-new email-delivery-setup` when ready to plan this.
+
 ## Parked
 
 - **No native mobile app** — Why parked: PRD §Non-Goals; responsive web covers mobile browsers in v1.
