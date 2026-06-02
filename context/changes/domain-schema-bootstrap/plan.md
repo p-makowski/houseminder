@@ -324,10 +324,10 @@ Migrations run automatically on Fly.io deploy via `release_command: php artisan 
 
 #### Automated
 
-- [x] 3.1 `php artisan migrate` runs all six migrations without errors
-- [x] 3.2 `php artisan test` passes with no regressions
+- [x] 3.1 `php artisan migrate` runs all six migrations without errors — 9f43391
+- [x] 3.2 `php artisan test` passes with no regressions — 9f43391
 
 #### Manual
 
-- [x] 3.3 Tinker: Appliance → MaintenanceTask → ServiceRecord chain created and relationships resolve both ways
-- [x] 3.4 Data isolation confirmed: two households, each sees only its own appliances via the relationship
+- [x] 3.3 Tinker: Appliance → MaintenanceTask → ServiceRecord chain created and relationships resolve both ways — 9f43391
+- [x] 3.4 Data isolation confirmed: two households, each sees only its own appliances via the relationship — 9f43391
