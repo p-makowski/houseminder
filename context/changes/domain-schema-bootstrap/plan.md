@@ -312,22 +312,22 @@ Migrations run automatically on Fly.io deploy via `release_command: php artisan 
 
 #### Automated
 
-- [x] 2.1 `php artisan migrate` completes without errors (appliance_types table created)
-- [x] 2.2 `php artisan db:seed` completes without errors
-- [x] 2.3 `ApplianceType::whereNull('household_id')->count()` returns 13
+- [x] 2.1 `php artisan migrate` completes without errors (appliance_types table created) — 7fd2542
+- [x] 2.2 `php artisan db:seed` completes without errors — 7fd2542
+- [x] 2.3 `ApplianceType::whereNull('household_id')->count()` returns 13 — 7fd2542
 
 #### Manual
 
-- [x] 2.4 Re-seeding is idempotent — running db:seed twice keeps count at 13
+- [x] 2.4 Re-seeding is idempotent — running db:seed twice keeps count at 13 — 7fd2542
 
 ### Phase 3: Core Domain Models
 
 #### Automated
 
-- [ ] 3.1 `php artisan migrate` runs all six migrations without errors
-- [ ] 3.2 `php artisan test` passes with no regressions
+- [x] 3.1 `php artisan migrate` runs all six migrations without errors
+- [x] 3.2 `php artisan test` passes with no regressions
 
 #### Manual
 
-- [ ] 3.3 Tinker: Appliance → MaintenanceTask → ServiceRecord chain created and relationships resolve both ways
-- [ ] 3.4 Data isolation confirmed: two households, each sees only its own appliances via the relationship
+- [x] 3.3 Tinker: Appliance → MaintenanceTask → ServiceRecord chain created and relationships resolve both ways
+- [x] 3.4 Data isolation confirmed: two households, each sees only its own appliances via the relationship
