@@ -15,6 +15,10 @@ return new class extends Migration
             $table->foreignId('household_id')->nullable()->constrained()->nullOnDelete();
             $table->string('name');
             $table->timestamps();
+            // No unique index on (name, household_id): SQLite treats NULLs as always
+            // distinct in UNIQUE constraints, so a composite index would not protect
+            // system rows (household_id = null) from duplicates. Idempotency is
+            // enforced by ApplianceTypeSeeder::updateOrCreate() instead.
         });
     }
 

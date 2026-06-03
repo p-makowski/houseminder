@@ -27,7 +27,9 @@ class MaintenanceTask extends Model
         return [
             'anchor_date' => 'date',
             'last_completed_at' => 'datetime',
+            'last_metric_value' => 'float',
             'next_due_at' => 'datetime',
+            'next_due_at_value' => 'float',
             'is_confirmed' => 'boolean',
         ];
     }

@@ -41,7 +41,7 @@ new #[Layout('layouts.guest')] class extends Component
             $user->households()->attach($household->id, ['role' => 'owner']);
 
             return $user;
-        });
+        }, 3);
 
         event(new Registered($user));
 

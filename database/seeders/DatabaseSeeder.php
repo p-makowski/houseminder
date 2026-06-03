@@ -8,6 +8,8 @@ use App\Models\Household;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,14 +26,16 @@ class DatabaseSeeder extends Seeder
             ['email' => 'test@example.com'],
             [
                 'name' => 'Test User',
-                'password' => 'password',
+                'password' => Hash::make('password'),
                 'email_verified_at' => now(),
             ]
         );
 
         if ($user->households()->doesntExist()) {
-            $household = Household::create(['name' => 'Test Household']);
-            $user->households()->attach($household->id, ['role' => 'owner']);
+            DB::transaction(function () use ($user): void {
+                $household = Household::create(['name' => 'Test Household']);
+                $user->households()->attach($household->id, ['role' => 'owner']);
+            });
         }
     }
 }
