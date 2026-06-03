@@ -3,7 +3,7 @@ project: "House Minder"
 version: 1
 status: draft
 created: 2026-06-01
-updated: 2026-06-01
+updated: 2026-06-03
 prd_version: 1
 main_goal: market-feedback
 top_blocker: time
@@ -29,7 +29,7 @@ House Minder is a shared web tool for households tracking maintenance on home ap
 
 | ID   | Change ID                     | Outcome (user can …)                                                                                  | Prerequisites | PRD refs                                          | Status   |
 | ---- | ----------------------------- | ----------------------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------- | -------- |
-| F-01 | domain-schema-bootstrap       | (foundation) domain models and migrations in place; appliance types seeded; registration extended with household name | —             | FR-001, FR-002, FR-005, FR-010, FR-011, FR-012, FR-013 | ready    |
+| F-01 | domain-schema-bootstrap       | (foundation) domain models and migrations in place; appliance types seeded; registration extended with household name | —             | FR-001, FR-002, FR-005, FR-010, FR-011, FR-012, FR-013 | done     |
 | S-01 | first-appliance-ai-plan       | add an appliance, get AI suggestions, edit intervals and anchor type, backdate services, confirm plan | F-01          | US-01, FR-005, FR-010, FR-011                     | proposed |
 | S-02 | dashboard-tasks-and-mark-done | view all tasks grouped as overdue / due soon / upcoming; mark any task done; next due date advances   | S-01          | US-02, FR-012, FR-013                             | proposed |
 | S-03 | appliance-crud                | edit appliance details; delete appliance with explicit confirmation (permanent)                       | S-01          | FR-008, FR-009                                    | proposed |
@@ -68,7 +68,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Schema decisions made here propagate to every downstream slice; a migration mistake is cheap to fix before any user-facing work sits on top of it and expensive after. Sequenced first precisely to catch data-model errors at the lowest cost.
-- **Status:** ready
+- **Status:** done
 
 ## Slices
 
@@ -140,3 +140,5 @@ Foundations below assume these are present and do NOT re-scaffold them.
 ## Done
 
 (Empty on first generation. `/10x-archive` appends an entry here — and flips the matching item's `Status` to `done` — when a change whose `Change ID` matches a roadmap item is archived.)
+
+- **F-01: (foundation) domain models and migrations in place; appliance types seeded; registration extended with household name** — Archived 2026-06-03 → `context/archive/2026-06-01-domain-schema-bootstrap/`. Lesson: —.
