@@ -26,7 +26,7 @@ Implement the north-star user flow: a 4-step Volt wizard where a user adds an ap
 
 After this plan is complete:
 - A logged-in user can navigate to `/appliances/create`, fill in appliance details, receive AI-generated tasks, edit the list, optionally backdate services, and confirm the plan.
-- Confirmed data is persisted: `Appliance.is_plan_confirmed = true`, each `MaintenanceTask.is_confirmed = true`, `next_due_at` set per task, `ServiceRecord` rows created for backdated tasks.
+- Confirmed data is persisted: `Appliance.is_plan_confirmed = true`, each `MaintenanceTask.is_confirmed = true`, `next_due_at` set per task, `ServiceRecord` rows created for backdated `from_last_done` tasks only (not for `fixed_calendar` tasks).
 - User lands on `/appliances/{id}` showing the confirmed appliance and its task list.
 - A nav link is present in the primary navigation.
 - All four test scenarios pass with `Prism::fake()` (no real API calls in CI).
@@ -243,12 +243,12 @@ The 4-step class-based Volt component at `resources/views/livewire/pages/applian
 
 **Contract** — methods:
 
-- `mount()`: loads `$allTypes` using the two-tier pattern (`whereNull('household_id')->orWhere('household_id', $householdId)`), ordered by name. Returns `['id', 'name']` maps only.
+- `mount()`: retrieves `$household = Auth::user()->households()->first()`; calls `abort_if(!$household, 403)` immediately after. Stores as `$this->householdId`. Loads `$allTypes` using the two-tier pattern (`whereNull('household_id')->orWhere('household_id', $this->householdId)`), ordered by name. Returns `['id', 'name']` maps only.
 - `selectType(int $id, string $name)`: sets `$selectedTypeId` and `$typeSearch`; called by Alpine when user picks from dropdown.
 - `nextStep()`: dispatches to `advanceFromStep1()`, `advanceFromStep2()`, or increments `$step` (for step 3 → 4). Never skips validation.
 - `prevStep()`: decrements `$step`; resets `$aiError`.
 - `advanceFromStep1()`: validates `name` (required, string, max:255), `model` (required, string, max:255), `typeSearch` (required, string, max:255). On success: sets `$aiLoading = true`, `$step = 2`.
-- `advanceFromStep2()`: guards that `$tasks` is non-empty. Initialises `$backdates` (one `['date' => '', 'metric' => '', 'notes' => '', 'skip' => false]` per task). Sets `$step = 3`.
+- `advanceFromStep2()`: guards that `$tasks` is non-empty. Always re-initialises `$backdates` from scratch (one `['date' => '', 'metric' => '', 'notes' => '', 'skip' => false]` per task). Sets `$step = 3`. Note: back-navigation from step 3 to step 2 intentionally resets backdates — preserving them would require index-matching against a mutable task list (add/delete/reorder), which is out of S-01 scope. Tradeoff accepted for simplicity.
 - `fetchSuggestions()`: calls `GenerateMaintenancePlan` action; on success maps result to `$tasks` array (adds `'anchor_type' => 'from_last_done'` default); on `PrismException` / `\Throwable` sets `$aiError` and logs the error. Always sets `$aiLoading = false` in `finally`.
 - `retryFetch()`: calls `fetchSuggestions()` directly.
 - `deleteTask(int $index)`: splices from `$tasks`.
@@ -264,7 +264,7 @@ Wrapped in `DB::transaction()`. Steps in order:
    - Determine `$anchorDate` (Carbon): if `$backdates[$i]['date']` is set and not skipped → parse it; otherwise `Carbon::today()`.
    - Calculate `$nextDueAt` via `match($task['interval_unit'])` branching (see Critical Implementation Details).
    - Create `MaintenanceTask` with `is_confirmed = true`, `next_due_at = $nextDueAt`, `next_due_at_value = null`, `anchor_date` = `$anchorDate` only if `anchor_type === 'fixed_calendar'`, `last_completed_at` = `$anchorDate` only if `anchor_type === 'from_last_done'` AND a backdate date was provided.
-   - If backdate date OR metric was provided (and not skipped): create `ServiceRecord` with `completed_at`, `metric_reading`, `notes`.
+   - If `anchor_type === 'from_last_done'` AND (backdate date OR metric was provided and not skipped): create `ServiceRecord` with `completed_at`, `metric_reading`, `notes`. For `fixed_calendar` tasks, the backdate date is used only to compute `next_due_at` — no ServiceRecord is written.
 4. Redirect to `route('appliances.show', $appliance)` via `$this->redirect(..., navigate: true)`.
 
 #### 2. Wizard Volt component — Blade template
@@ -437,8 +437,13 @@ Four Pest/PHPUnit feature tests covering the four scenarios selected during plan
 
 **Intent**: Verify that a `PrismException` surfaces the error message and Retry button without crashing the wizard, and that a successful retry proceeds normally.
 
+> **Phase 5 decision point (F2 fix)**: Before writing this test, inspect the installed Prism source for exception-simulation support:
+> - `grep -r "throw\|exception\|Exception" vendor/prism-php/prism/src/Testing/ --include="*.php" -l`
+> - If `StructuredResponseFake` (or a sibling class) supports throwing, use `Prism::fake()` with exception config.
+> - If not, bind a mock of `GenerateMaintenancePlan` via `$this->instance(GenerateMaintenancePlan::class, fn() => throw new PrismException('test'))` and use `Prism::fake()` only for the success case.
+
 **Contract**:
-- `Prism::fake()` configured to throw `PrismException` on first call, return valid structured data on second.
+- `Prism::fake()` configured to throw `PrismException` on first call, return valid structured data on second (or mock GenerateMaintenancePlan directly — see decision point above).
 - Call `fetchSuggestions()` → `->assertSet('aiError', fn($e) => !is_null($e))` → `->assertSet('aiLoading', false)`.
 - Call `retryFetch()` → `->assertSet('tasks', fn($t) => count($t) > 0)` → `->assertSet('aiError', null)`.
 
@@ -507,7 +512,7 @@ Four Pest/PHPUnit feature tests covering the four scenarios selected during plan
 7. Backdate one task; skip another. Click Next.
 8. Review step 4 summary. Click "Confirm Plan".
 9. Verify redirect to `/appliances/{id}`. Verify task list appears.
-10. In Tinker: verify `Appliance.is_plan_confirmed = true`, `MaintenanceTask.is_confirmed = true` per task, `next_due_at` set, `ServiceRecord` exists for the backdated task.
+10. In Tinker: verify `Appliance.is_plan_confirmed = true`, `MaintenanceTask.is_confirmed = true` per task, `next_due_at` set, `ServiceRecord` exists for the backdated `from_last_done` task (no ServiceRecord for `fixed_calendar` tasks).
 11. Visit `/appliances/{other_household_id}` → verify 403.
 
 ## Performance Considerations
