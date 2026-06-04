@@ -545,15 +545,15 @@ Four Pest/PHPUnit feature tests covering the four scenarios selected during plan
 
 #### Automated
 
-- [x] 1.1 `composer show prism-php/prism` lists the package without error
-- [x] 1.2 `php artisan migrate --pretend` shows the description migration without error
-- [x] 1.3 `php artisan migrate` runs cleanly on a fresh DB
-- [x] 1.4 `php artisan tinker` — `MaintenanceTask::factory()->make(['description' => 'test'])` — no exception
+- [x] 1.1 `composer show prism-php/prism` lists the package without error — c21a180
+- [x] 1.2 `php artisan migrate --pretend` shows the description migration without error — c21a180
+- [x] 1.3 `php artisan migrate` runs cleanly on a fresh DB — c21a180
+- [x] 1.4 `php artisan tinker` — `MaintenanceTask::factory()->make(['description' => 'test'])` — no exception — c21a180
 
 #### Manual
 
-- [ ] 1.5 `config/prism.php` exists and contains Anthropic block with `env('ANTHROPIC_API_KEY', '')`
-- [ ] 1.6 `.env.example` contains `ANTHROPIC_API_KEY=`
+- [x] 1.5 `config/prism.php` exists and contains Anthropic block with `env('ANTHROPIC_API_KEY', '')` — c21a180
+- [x] 1.6 `.env.example` contains `ANTHROPIC_API_KEY=` — c21a180
 
 ### Phase 2: GenerateMaintenancePlan Action
 

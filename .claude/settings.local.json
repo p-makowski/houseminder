@@ -23,7 +23,10 @@
       "Bash(fly logs *)",
       "Bash(fly deploy *)",
       "Skill(10x-implement)",
-      "mcp__context7__resolve-library-id"
+      "mcp__context7__resolve-library-id",
+      "Skill(10x-impl-review)",
+      "Bash(composer show *)",
+      "Bash(echo \"EXIT:$?\")"
     ],
     "deny": [
       "Bash(rm -rf *)"
