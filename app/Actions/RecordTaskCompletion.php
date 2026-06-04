@@ -11,24 +11,28 @@ use Illuminate\Support\Facades\DB;
 
 class RecordTaskCompletion
 {
-    public function execute(MaintenanceTask $task, User $user): void
+    public function __invoke(MaintenanceTask $task, User $user): void
     {
+        $task->loadMissing('appliance');
+
         $household = $user->households()->first();
         abort_if(! $household || $task->appliance->household_id !== $household->id, 403);
 
-        DB::transaction(function () use ($task): void {
+        $completedAt = now();
+
+        DB::transaction(function () use ($task, $completedAt): void {
             ServiceRecord::create([
                 'maintenance_task_id' => $task->id,
-                'completed_at' => now(),
+                'completed_at' => $completedAt,
             ]);
 
-            $task->last_completed_at = now();
+            $task->last_completed_at = $completedAt;
 
             $task->next_due_at = match ($task->interval_unit) {
-                'days' => now()->addDays((int) $task->interval_value),
-                'weeks' => now()->addWeeks((int) $task->interval_value),
-                'months' => now()->addMonths((int) $task->interval_value),
-                'years' => now()->addYears((int) $task->interval_value),
+                'days' => $completedAt->copy()->addDays((int) $task->interval_value),
+                'weeks' => $completedAt->copy()->addWeeks((int) $task->interval_value),
+                'months' => $completedAt->copy()->addMonths((int) $task->interval_value),
+                'years' => $completedAt->copy()->addYears((int) $task->interval_value),
                 default => $task->next_due_at,
             };
 

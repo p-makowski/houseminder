@@ -9,31 +9,9 @@ use App\Models\Appliance;
 use App\Models\Household;
 use App\Models\MaintenanceTask;
 use App\Models\ServiceRecord;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class RecordTaskCompletionTest extends TestCase
+class RecordTaskCompletionTest extends DashboardTestCase
 {
-    use RefreshDatabase;
-
-    protected User $user;
-    protected Household $household;
-    protected Appliance $appliance;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->user = User::factory()->create();
-        $this->household = Household::factory()->create();
-        $this->user->households()->attach($this->household->id, ['role' => 'owner']);
-        $this->actingAs($this->user);
-
-        $this->appliance = Appliance::factory()->create([
-            'household_id' => $this->household->id,
-        ]);
-    }
 
     public function test_creates_service_record_with_completed_at_now(): void
     {
@@ -45,7 +23,7 @@ class RecordTaskCompletionTest extends TestCase
             'is_confirmed'  => true,
         ]);
 
-        (new RecordTaskCompletion)->execute($task, $this->user);
+        (new RecordTaskCompletion)($task, $this->user);
 
         $this->assertDatabaseHas('service_records', [
             'maintenance_task_id' => $task->id,
@@ -66,7 +44,7 @@ class RecordTaskCompletionTest extends TestCase
             'is_confirmed'   => true,
         ]);
 
-        (new RecordTaskCompletion)->execute($task, $this->user);
+        (new RecordTaskCompletion)($task, $this->user);
 
         $task->refresh();
         $this->assertTrue($task->last_completed_at->isToday());
@@ -82,7 +60,7 @@ class RecordTaskCompletionTest extends TestCase
             'is_confirmed'   => true,
         ]);
 
-        (new RecordTaskCompletion)->execute($task, $this->user);
+        (new RecordTaskCompletion)($task, $this->user);
 
         $task->refresh();
         $this->assertTrue($task->next_due_at->isFuture());
@@ -99,7 +77,7 @@ class RecordTaskCompletionTest extends TestCase
             'is_confirmed'   => true,
         ]);
 
-        (new RecordTaskCompletion)->execute($task, $this->user);
+        (new RecordTaskCompletion)($task, $this->user);
 
         $task->refresh();
         $this->assertEquals(now()->addWeeks(2)->toDateString(), $task->next_due_at->toDateString());
@@ -115,7 +93,7 @@ class RecordTaskCompletionTest extends TestCase
             'is_confirmed'   => true,
         ]);
 
-        (new RecordTaskCompletion)->execute($task, $this->user);
+        (new RecordTaskCompletion)($task, $this->user);
 
         $task->refresh();
         $this->assertEquals(now()->addMonths(6)->toDateString(), $task->next_due_at->toDateString());
@@ -131,7 +109,7 @@ class RecordTaskCompletionTest extends TestCase
             'is_confirmed'   => true,
         ]);
 
-        (new RecordTaskCompletion)->execute($task, $this->user);
+        (new RecordTaskCompletion)($task, $this->user);
 
         $task->refresh();
         $this->assertEquals(now()->addYear()->toDateString(), $task->next_due_at->toDateString());
@@ -149,7 +127,7 @@ class RecordTaskCompletionTest extends TestCase
             'is_confirmed'   => true,
         ]);
 
-        (new RecordTaskCompletion)->execute($task, $this->user);
+        (new RecordTaskCompletion)($task, $this->user);
 
         $task->refresh();
         $this->assertEquals($originalNextDue->toDateString(), $task->next_due_at->toDateString());
@@ -172,6 +150,6 @@ class RecordTaskCompletionTest extends TestCase
 
         $this->expectException(\Symfony\Component\HttpKernel\Exception\HttpException::class);
 
-        (new RecordTaskCompletion)->execute($task, $this->user);
+        (new RecordTaskCompletion)($task, $this->user);
     }
 }

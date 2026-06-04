@@ -23,6 +23,34 @@
 **Rule**: Always validate user-supplied strings at the Livewire/controller boundary before passing them to AI actions — enforce max length, strip control characters, and use Laravel validation rules (max:255, string). The action itself stays clean; sanitization belongs at the entry boundary.
 **Applies to**: Any feature that passes user input to an AI prompt — S-01 wizard, future AI features.
 
+## Feature test namespaces must have their own base test case
+
+**Context**: tests/Feature/Dashboard/ — DashboardTestCase, ApplianceTestCase
+**Problem**: RecordTaskCompletionTest duplicated the user + household + pivot + actingAs setUp boilerplate from ApplianceTestCase verbatim. A change to household setup (e.g. new pivot field, role enum) would require updating two places.
+**Rule**: Every feature test namespace that shares the same fixture setup (user, household, appliance, actingAs) must have its own abstract base TestCase in that namespace. New test classes in the namespace extend the base class and only add fixtures specific to their own tests.
+**Applies to**: Any new test namespace under tests/Feature/ — e.g. Dashboard/, and future namespaces like Settings/, Notifications/.
+
+## Action classes must use __invoke() as their single public entry point
+
+**Context**: app/Actions/ — RecordTaskCompletion, GenerateMaintenancePlan
+**Problem**: RecordTaskCompletion was initially written with execute() while GenerateMaintenancePlan uses __invoke(). Two different calling conventions in the same namespace force call sites to look different and make future action scaffolding inconsistent.
+**Rule**: All single-responsibility action classes in App\Actions must expose one public method named __invoke(). Call sites use (new SomeAction)(...) — never ->execute() or ->handle(). Applies to new actions and any existing actions that are refactored.
+**Applies to**: Any new or refactored action class under app/Actions/.
+
+## Action classes that use abort_if are coupled to HTTP context
+
+**Context**: app/Actions/RecordTaskCompletion.php — abort_if used for ownership guard
+**Problem**: abort_if throws HttpException (HTTP 403). This works correctly from Livewire components and controllers, but if an action is ever reused from an Artisan command or a queued job, the 403 surfaces as an unhandled HTTP exception rather than a domain-level authorization failure.
+**Rule**: Actions intended only for HTTP contexts may use abort_if. Actions that may be reused from non-HTTP contexts (queued jobs, Artisan commands) must throw AuthorizationException or a domain exception instead. Document the HTTP-only assumption at the action class level when using abort_if.
+**Applies to**: Any action class under app/Actions/ that performs authorization checks.
+
+## Ownership guards assume single household per user — revisit for multi-household
+
+**Context**: app/Actions/ and Livewire pages — all ownership checks use $user->households()->first()
+**Problem**: $user->households()->first() silently picks the first membership. For a user with multiple household memberships, it may resolve the wrong household, potentially granting access to another household's data.
+**Rule**: The current app assumes one household per user. All ownership guards use the two-step pattern: `$household = $user->households()->first(); abort_if(!$household || ...)`. This is intentional and consistent. If multi-household support is ever added, every ownership guard in app/Actions/ and Livewire pages must be audited and switched to an exists()-based check scoped to the specific resource's household.
+**Applies to**: Any feature that adds multi-household support, and any ownership guard review during that work.
+
 ## MaintenanceTask: interval_unit determines which next_due field is authoritative
 
 **Context**: app/Models/MaintenanceTask.php — interval_unit, next_due_at, next_due_at_value
