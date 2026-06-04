@@ -261,9 +261,9 @@ No schema changes. The `/dashboard` URL and `dashboard` named route are preserve
 
 #### Automated
 
-- [x] 1.1 Dashboard feature tests pass: `php artisan test tests/Feature/Dashboard/`
-- [x] 1.2 PHPStan passes with no new errors: `./vendor/bin/phpstan analyse`
-- [x] 1.3 Pint reports no style issues on new files: `./vendor/bin/pint app/Models/MaintenanceTask.php app/Actions/RecordTaskCompletion.php --test`
+- [x] 1.1 Dashboard feature tests pass: `php artisan test tests/Feature/Dashboard/` — 439aec5
+- [x] 1.2 PHPStan passes with no new errors: `./vendor/bin/phpstan analyse` — 439aec5
+- [x] 1.3 Pint reports no style issues on new files: `./vendor/bin/pint app/Models/MaintenanceTask.php app/Actions/RecordTaskCompletion.php --test` — 439aec5
 
 #### Manual
 
