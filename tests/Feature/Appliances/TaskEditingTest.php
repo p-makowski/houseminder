@@ -5,26 +5,16 @@ declare(strict_types=1);
 namespace Tests\Feature\Appliances;
 
 use App\Models\ApplianceType;
-use App\Models\Household;
 use App\Models\MaintenanceTask;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Volt\Volt;
 use Prism\Prism\Facades\Prism;
 use Prism\Prism\Testing\StructuredResponseFake;
 use Prism\Prism\ValueObjects\Usage;
-use Tests\TestCase;
 
-class TaskEditingTest extends TestCase
+class TaskEditingTest extends ApplianceTestCase
 {
-    use RefreshDatabase;
-
     public function test_task_editing_delete_and_add_reflect_in_db(): void
     {
-        $user      = User::factory()->create();
-        $household = Household::factory()->create();
-        $user->households()->attach($household->id, ['role' => 'owner']);
-
         $type = ApplianceType::factory()->create(['name' => 'Washer', 'household_id' => null]);
 
         Prism::fake([
@@ -47,8 +37,6 @@ class TaskEditingTest extends TestCase
                 ])
                 ->withUsage(new Usage(100, 60)),
         ]);
-
-        $this->actingAs($user);
 
         $component = Volt::test('pages.appliances.create')
             ->set('name', 'Edit Washer')

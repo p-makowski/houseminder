@@ -6,23 +6,13 @@ namespace Tests\Feature\Appliances;
 
 use App\Actions\GenerateMaintenancePlan;
 use App\Models\ApplianceType;
-use App\Models\Household;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Volt\Volt;
 use Prism\Prism\Exceptions\PrismException;
-use Tests\TestCase;
 
-class AiFailureTest extends TestCase
+class AiFailureTest extends ApplianceTestCase
 {
-    use RefreshDatabase;
-
     public function test_ai_failure_shows_error_and_retry_succeeds(): void
     {
-        $user      = User::factory()->create();
-        $household = Household::factory()->create();
-        $user->households()->attach($household->id, ['role' => 'owner']);
-
         $type = ApplianceType::factory()->create(['name' => 'Washing Machine', 'household_id' => null]);
 
         $mock = $this->mock(GenerateMaintenancePlan::class);
@@ -39,8 +29,6 @@ class AiFailureTest extends TestCase
                     'interval_unit'  => 'months',
                 ],
             ]);
-
-        $this->actingAs($user);
 
         $component = Volt::test('pages.appliances.create')
             ->set('name', 'Test Washer')

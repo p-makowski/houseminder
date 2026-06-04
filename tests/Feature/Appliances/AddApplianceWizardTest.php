@@ -6,26 +6,16 @@ namespace Tests\Feature\Appliances;
 
 use App\Models\Appliance;
 use App\Models\ApplianceType;
-use App\Models\Household;
 use App\Models\MaintenanceTask;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Volt\Volt;
 use Prism\Prism\Facades\Prism;
 use Prism\Prism\Testing\StructuredResponseFake;
 use Prism\Prism\ValueObjects\Usage;
-use Tests\TestCase;
 
-class AddApplianceWizardTest extends TestCase
+class AddApplianceWizardTest extends ApplianceTestCase
 {
-    use RefreshDatabase;
-
     public function test_happy_path_creates_appliance_and_tasks(): void
     {
-        $user      = User::factory()->create();
-        $household = Household::factory()->create();
-        $user->households()->attach($household->id, ['role' => 'owner']);
-
         $type = ApplianceType::factory()->create(['name' => 'Washing Machine', 'household_id' => null]);
 
         $fake = Prism::fake([
@@ -48,8 +38,6 @@ class AddApplianceWizardTest extends TestCase
                 ])
                 ->withUsage(new Usage(120, 80)),
         ]);
-
-        $this->actingAs($user);
 
         $component = Volt::test('pages.appliances.create')
             ->set('name', 'Test Washer')

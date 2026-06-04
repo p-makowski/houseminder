@@ -17,9 +17,9 @@ class GenerateMaintenancePlan
 {
     public function __invoke(string $applianceName, string $applianceModel, string $typeName): array
     {
-        $applianceName = mb_substr($applianceName, 0, 255);
-        $applianceModel = mb_substr($applianceModel, 0, 255);
-        $typeName      = mb_substr($typeName, 0, 255);
+        $applianceName  = preg_replace('/[\x00-\x1F\x7F]/u', '', mb_substr($applianceName, 0, 255));
+        $applianceModel = preg_replace('/[\x00-\x1F\x7F]/u', '', mb_substr($applianceModel, 0, 255));
+        $typeName       = preg_replace('/[\x00-\x1F\x7F]/u', '', mb_substr($typeName, 0, 255));
 
         $schema = new ObjectSchema(
             name: 'maintenance_plan',

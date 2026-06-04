@@ -30,17 +30,15 @@ new #[Layout('layouts.app')] class extends Component
     public array $tasks = [];
     public array $backdates = [];
 
-    protected int $householdId;
-
     public function mount(): void
     {
         $household = Auth::user()->households()->first();
         abort_if(!$household, 403);
 
-        $this->householdId = $household->id;
+        $householdId = $household->id;
 
         $this->allTypes = ApplianceType::whereNull('household_id')
-            ->orWhere('household_id', $this->householdId)
+            ->orWhere('household_id', $householdId)
             ->orderBy('name')
             ->get(['id', 'name'])
             ->map(fn($t) => ['id' => $t->id, 'name' => $t->name])
@@ -64,7 +62,9 @@ new #[Layout('layouts.app')] class extends Component
 
     public function prevStep(): void
     {
-        $this->step--;
+        if ($this->step > 1) {
+            $this->step--;
+        }
         $this->aiError = null;
     }
 
@@ -137,6 +137,10 @@ new #[Layout('layouts.app')] class extends Component
 
     public function addTask(): void
     {
+        if (count($this->tasks) >= 20) {
+            return;
+        }
+
         $this->tasks[] = [
             'name'           => '',
             'description'    => '',
@@ -157,7 +161,9 @@ new #[Layout('layouts.app')] class extends Component
             'tasks.*.anchor_type'    => ['required', 'in:from_last_done,fixed_calendar'],
             'tasks.*.description'    => ['nullable', 'string', 'max:1000'],
             'backdates.*.date'       => ['nullable', 'date'],
+            'backdates.*.metric'     => ['nullable', 'numeric'],
             'backdates.*.notes'      => ['nullable', 'string', 'max:2000'],
+            'backdates.*.skip'       => ['boolean'],
         ]);
 
         $household = Auth::user()->households()->first();
