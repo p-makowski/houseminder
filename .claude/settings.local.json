@@ -22,7 +22,8 @@
       "Bash(fly apps *)",
       "Bash(fly logs *)",
       "Bash(fly deploy *)",
-      "Skill(10x-implement)"
+      "Skill(10x-implement)",
+      "mcp__context7__resolve-library-id"
     ],
     "deny": [
       "Bash(rm -rf *)"
