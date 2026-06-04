@@ -3,7 +3,7 @@ project: "House Minder"
 version: 1
 status: draft
 created: 2026-06-01
-updated: 2026-06-03
+updated: 2026-06-04
 prd_version: 1
 main_goal: market-feedback
 top_blocker: time
@@ -30,7 +30,7 @@ House Minder is a shared web tool for households tracking maintenance on home ap
 | ID   | Change ID                     | Outcome (user can …)                                                                                  | Prerequisites | PRD refs                                          | Status   |
 | ---- | ----------------------------- | ----------------------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------- | -------- |
 | F-01 | domain-schema-bootstrap       | (foundation) domain models and migrations in place; appliance types seeded; registration extended with household name | —             | FR-001, FR-002, FR-005, FR-010, FR-011, FR-012, FR-013 | done     |
-| S-01 | first-appliance-ai-plan       | add an appliance, get AI suggestions, edit intervals and anchor type, backdate services, confirm plan | F-01          | US-01, FR-005, FR-010, FR-011                     | proposed |
+| S-01 | first-appliance-ai-plan       | add an appliance, get AI suggestions, edit intervals and anchor type, backdate services, confirm plan | F-01          | US-01, FR-005, FR-010, FR-011                     | done     |
 | S-02 | dashboard-tasks-and-mark-done | view all tasks grouped as overdue / due soon / upcoming; mark any task done; next due date advances   | S-01          | US-02, FR-012, FR-013                             | proposed |
 | S-03 | appliance-crud                | edit appliance details; delete appliance with explicit confirmation (permanent)                       | S-01          | FR-008, FR-009                                    | proposed |
 
@@ -83,7 +83,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Will the Anthropic API reliably return structured task + interval pairs from an appliance name/model/type prompt, within the 10-second NFR? — Owner: team. Block: no (can proceed; if response format is unreliable, prompt engineering resolves it during implementation — but final latency and format are unknown until tested).
 - **Risk:** The AI suggestion call is the highest-uncertainty integration and the product's stated differentiator (FR-010: "the product's core differentiator — must be in v1"). Sequenced immediately after F-01 so this assumption is tested at the earliest possible moment. If suggestions are poor or too slow, the product premise needs revision before more slices are built.
-- **Status:** proposed
+- **Status:** done
 
 ### S-02: Dashboard — tasks by status + mark service done
 
@@ -142,3 +142,4 @@ Foundations below assume these are present and do NOT re-scaffold them.
 (Empty on first generation. `/10x-archive` appends an entry here — and flips the matching item's `Status` to `done` — when a change whose `Change ID` matches a roadmap item is archived.)
 
 - **F-01: (foundation) domain models and migrations in place; appliance types seeded; registration extended with household name** — Archived 2026-06-03 → `context/archive/2026-06-01-domain-schema-bootstrap/`. Lesson: —.
+- **S-01: add an appliance, get AI suggestions, edit intervals and anchor type, backdate services, confirm plan** — Archived 2026-06-04 → `context/archive/2026-06-03-first-appliance-ai-plan/`. Lesson: —.

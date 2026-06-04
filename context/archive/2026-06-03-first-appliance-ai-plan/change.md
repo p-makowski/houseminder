@@ -1,11 +1,10 @@
 ---
 change_id: first-appliance-ai-plan
 title: First appliance AI plan
-status: impl_reviewed
+status: archived
 created: 2026-06-03
 updated: 2026-06-04
-
-archived_at: null
+archived_at: 2026-06-04T18:25:20Z
 ---
 
 ## Notes
