@@ -13,7 +13,7 @@ The `/dashboard` route and nav link both exist, but the view (`resources/views/d
 ### Key Discoveries
 
 - `resources/views/dashboard.blade.php` — static placeholder; must be deleted when the Volt page is in place
-- `routes/web.php` — dashboard is a closure route; must become `Volt::route` (Volt facade already imported)
+- `routes/web.php` — dashboard uses `Route::view('dashboard', 'dashboard')` shorthand; must become `Volt::route` (Volt facade already imported)
 - `create.blade.php:201–207` — existing `next_due_at` recalculation pattern (match on interval_unit, add interval to anchor date)
 - `tests/Feature/Appliances/ApplianceTestCase.php` — test base class pattern: `RefreshDatabase`, User + Household factory, `actingAs`
 - `phpstan.neon` — Larastan level 6, analyses `app/`; PHPStan and Pint both present in `vendor/`
@@ -136,13 +136,13 @@ Convert the `/dashboard` route to a `Volt::route`, create the Volt component wit
 
 **Intent**: Replace the closure-based dashboard route with a `Volt::route` to make the dashboard consistent with every other auth-required page in the app.
 
-**Contract**: The closure and `return view('dashboard')` are removed. The replacement is:
+**Contract**: `Route::view('dashboard', 'dashboard')` is replaced with:
 ```php
-Volt::route('/dashboard', 'pages.dashboard')
+Volt::route('dashboard', 'pages.dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 ```
-The `Volt` facade import at the top of the file already covers this route.
+No leading slash — matches the convention of all other routes in the file (lines 8, 10, 14, 18, 22). The `Volt` facade import at line 6 already covers this route.
 
 #### 2. Delete old static dashboard blade
 
@@ -164,7 +164,9 @@ Component class opens with `new #[Layout('layouts.app')] class extends Component
 
 Four public Collection properties: `$overdue`, `$dueThisWeek`, `$upcoming`, `$metric`.
 
-`mount()` resolves `auth()->user()->households()->first()->id` (aborts 403 if no household), then assigns each property:
+`mount()` resolves the household using the two-step null-safe pattern (same as `create.blade.php:169-170` and the RecordTaskCompletion guard):
+`$household = auth()->user()->households()->first(); abort_if(!$household, 403);`
+Then uses `$household->id` to assign each property:
 - `$overdue` — `calendar()->forHousehold($id)->where('next_due_at', '<', now())->orderBy('next_due_at')->with('appliance')->get()`
 - `$dueThisWeek` — `calendar()->forHousehold($id)->whereBetween('next_due_at', [now(), now()->addDays(7)])->orderBy('next_due_at')->with('appliance')->get()`
 - `$upcoming` — `calendar()->forHousehold($id)->where('next_due_at', '>', now()->addDays(7))->orderBy('next_due_at')->with('appliance')->get()`
