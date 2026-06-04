@@ -560,7 +560,7 @@ Four Pest/PHPUnit feature tests covering the four scenarios selected during plan
 #### Automated
 
 - [x] 2.1 `app(GenerateMaintenancePlan::class)` resolves without error — 87c3f2f
-- [x] 2.2 `Prism::fake()` test calls the action and returns the faked structured array (verified via Phase 5 happy path test)
+- [x] 2.2 `Prism::fake()` test calls the action and returns the faked structured array (verified via Phase 5 happy path test) — 6b145eb
 
 #### Manual
 
@@ -570,38 +570,38 @@ Four Pest/PHPUnit feature tests covering the four scenarios selected during plan
 
 #### Automated
 
-- [x] 3.1 Step 1 validation test passes (Phase 5 test 3)
-- [x] 3.2 Happy path test passes (Phase 5 test 1)
-- [x] 3.3 Task editing test passes (Phase 5 test 4)
+- [x] 3.1 Step 1 validation test passes (Phase 5 test 3) — 6b145eb
+- [x] 3.2 Happy path test passes (Phase 5 test 1) — 6b145eb
+- [x] 3.3 Task editing test passes (Phase 5 test 4) — 6b145eb
 
 #### Manual
 
-- [ ] 3.4 Full wizard flow works end-to-end in browser with real API key
-- [ ] 3.5 Combobox filters correctly; custom type "will be created" hint appears on no-match
-- [ ] 3.6 AI loading spinner appears, then task list renders
-- [ ] 3.7 Task editing (name, interval, delete, add) reflects in step 4 summary
-- [ ] 3.8 Backdate skip checkbox hides date field
-- [ ] 3.9 Confirm writes all DB records and redirects to `/appliances/{id}`
+- [x] 3.4 Full wizard flow works end-to-end in browser with real API key
+- [x] 3.5 Combobox filters correctly; custom type "will be created" hint appears on no-match
+- [x] 3.6 AI loading spinner appears, then task list renders
+- [x] 3.7 Task editing (name, interval, delete, add) reflects in step 4 summary
+- [x] 3.8 Backdate skip checkbox hides date field
+- [x] 3.9 Confirm writes all DB records and redirects to `/appliances/{id}`
 
 ### Phase 4: Appliance Detail Page + Routes + Navigation
 
 #### Automated
 
-- [x] 4.1 `php artisan route:list | grep appliances` shows both routes with correct middleware
-- [x] 4.2 Unauthenticated GET `/appliances/create` redirects to `/login`
+- [x] 4.1 `php artisan route:list | grep appliances` shows both routes with correct middleware — 6b145eb
+- [x] 4.2 Unauthenticated GET `/appliances/create` redirects to `/login` — 6b145eb
 
 #### Manual
 
-- [ ] 4.3 "Add Appliance" nav link appears when logged in
-- [ ] 4.4 `/appliances/{id}` shows confirmed appliance and task list
-- [ ] 4.5 `/appliances/{other_id}` returns 403
+- [x] 4.3 "Add Appliance" nav link appears when logged in
+- [x] 4.4 `/appliances/{id}` shows confirmed appliance and task list
+- [x] 4.5 `/appliances/{other_id}` returns 403
 
 ### Phase 5: Test Suite
 
 #### Automated
 
-- [x] 5.1 Happy path test (`AddApplianceWizardTest`) passes
-- [x] 5.2 AI failure test (`AiFailureTest`) passes
-- [x] 5.3 Step validation test (`WizardValidationTest`) passes
-- [x] 5.4 Task editing test (`TaskEditingTest`) passes
-- [x] 5.5 `php artisan test --filter Appliance` — all pass, zero real API calls
+- [x] 5.1 Happy path test (`AddApplianceWizardTest`) passes — 6b145eb
+- [x] 5.2 AI failure test (`AiFailureTest`) passes — 6b145eb
+- [x] 5.3 Step validation test (`WizardValidationTest`) passes — 6b145eb
+- [x] 5.4 Task editing test (`TaskEditingTest`) passes — 6b145eb
+- [x] 5.5 `php artisan test --filter Appliance` — all pass, zero real API calls — 6b145eb
