@@ -560,7 +560,7 @@ Four Pest/PHPUnit feature tests covering the four scenarios selected during plan
 #### Automated
 
 - [x] 2.1 `app(GenerateMaintenancePlan::class)` resolves without error — 87c3f2f
-- [ ] 2.2 `Prism::fake()` test calls the action and returns the faked structured array (verified via Phase 5 happy path test)
+- [x] 2.2 `Prism::fake()` test calls the action and returns the faked structured array (verified via Phase 5 happy path test)
 
 #### Manual
 
@@ -570,9 +570,9 @@ Four Pest/PHPUnit feature tests covering the four scenarios selected during plan
 
 #### Automated
 
-- [ ] 3.1 Step 1 validation test passes (Phase 5 test 3)
-- [ ] 3.2 Happy path test passes (Phase 5 test 1)
-- [ ] 3.3 Task editing test passes (Phase 5 test 4)
+- [x] 3.1 Step 1 validation test passes (Phase 5 test 3)
+- [x] 3.2 Happy path test passes (Phase 5 test 1)
+- [x] 3.3 Task editing test passes (Phase 5 test 4)
 
 #### Manual
 
@@ -587,8 +587,8 @@ Four Pest/PHPUnit feature tests covering the four scenarios selected during plan
 
 #### Automated
 
-- [ ] 4.1 `php artisan route:list | grep appliances` shows both routes with correct middleware
-- [ ] 4.2 Unauthenticated GET `/appliances/create` redirects to `/login`
+- [x] 4.1 `php artisan route:list | grep appliances` shows both routes with correct middleware
+- [x] 4.2 Unauthenticated GET `/appliances/create` redirects to `/login`
 
 #### Manual
 
@@ -600,8 +600,8 @@ Four Pest/PHPUnit feature tests covering the four scenarios selected during plan
 
 #### Automated
 
-- [ ] 5.1 Happy path test (`AddApplianceWizardTest`) passes
-- [ ] 5.2 AI failure test (`AiFailureTest`) passes
-- [ ] 5.3 Step validation test (`WizardValidationTest`) passes
-- [ ] 5.4 Task editing test (`TaskEditingTest`) passes
-- [ ] 5.5 `php artisan test --filter Appliance` — all pass, zero real API calls
+- [x] 5.1 Happy path test (`AddApplianceWizardTest`) passes
+- [x] 5.2 AI failure test (`AiFailureTest`) passes
+- [x] 5.3 Step validation test (`WizardValidationTest`) passes
+- [x] 5.4 Task editing test (`TaskEditingTest`) passes
+- [x] 5.5 `php artisan test --filter Appliance` — all pass, zero real API calls

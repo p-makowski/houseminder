@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Livewire\Volt\Volt;
 
 Route::view('/', 'welcome');
 
@@ -13,5 +14,13 @@ Route::view('dashboard', 'dashboard')
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+
+Volt::route('appliances/create', 'pages.appliances.create')
+    ->middleware(['auth', 'verified'])
+    ->name('appliances.create');
+
+Volt::route('appliances/{appliance}', 'pages.appliances.show')
+    ->middleware(['auth', 'verified'])
+    ->name('appliances.show');
 
 require __DIR__.'/auth.php';
