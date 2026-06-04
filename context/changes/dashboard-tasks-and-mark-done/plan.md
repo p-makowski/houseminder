@@ -134,7 +134,7 @@ Convert the `/dashboard` route to a `Volt::route`, create the Volt component wit
 
 **File**: `routes/web.php`
 
-**Intent**: Replace the closure-based dashboard route with a `Volt::route` to make the dashboard consistent with every other auth-required page in the app.
+**Intent**: Replace the static-view dashboard route with a `Volt::route` to make the dashboard consistent with every other auth-required page in the app.
 
 **Contract**: `Route::view('dashboard', 'dashboard')` is replaced with:
 ```php
