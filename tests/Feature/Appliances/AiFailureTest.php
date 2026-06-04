@@ -11,9 +11,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Volt\Volt;
 use Prism\Prism\Exceptions\PrismException;
-use Prism\Prism\Facades\Prism;
-use Prism\Prism\Testing\StructuredResponseFake;
-use Prism\Prism\ValueObjects\Usage;
 use Tests\TestCase;
 
 class AiFailureTest extends TestCase
@@ -28,23 +25,20 @@ class AiFailureTest extends TestCase
 
         $type = ApplianceType::factory()->create(['name' => 'Washing Machine', 'household_id' => null]);
 
-        $callCount = 0;
-
-        $this->instance(GenerateMaintenancePlan::class, function () use (&$callCount) {
-            $callCount++;
-            if ($callCount === 1) {
-                throw new PrismException('AI service unavailable');
-            }
-
-            return [
+        $mock = $this->mock(GenerateMaintenancePlan::class);
+        $mock->shouldReceive('__invoke')
+            ->once()
+            ->andThrow(new PrismException('AI service unavailable'));
+        $mock->shouldReceive('__invoke')
+            ->once()
+            ->andReturn([
                 [
                     'name'           => 'Clean filter',
                     'description'    => 'Remove and clean the lint filter.',
                     'interval_value' => 3,
                     'interval_unit'  => 'months',
                 ],
-            ];
-        });
+            ]);
 
         $this->actingAs($user);
 

@@ -27,7 +27,8 @@
       "Skill(10x-impl-review)",
       "Bash(composer show *)",
       "Bash(echo \"EXIT:$?\")",
-      "Bash(pbcopy)"
+      "Bash(pbcopy)",
+      "Bash(echo \"exit:$?\")"
     ],
     "deny": [
       "Bash(rm -rf *)"

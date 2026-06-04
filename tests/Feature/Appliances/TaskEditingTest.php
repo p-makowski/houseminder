@@ -69,6 +69,8 @@ class TaskEditingTest extends TestCase
         $component->call('addTask');
         $component->assertSet('tasks', fn($t) => count($t) === 2);
 
+        $component->set('tasks.1.name', 'Manual Task');
+
         $component
             ->call('nextStep') // step 2 → 3
             ->call('nextStep') // step 3 → 4

@@ -148,12 +148,25 @@ new #[Layout('layouts.app')] class extends Component
 
     public function confirm(): void
     {
+        abort_if(count($this->backdates) !== count($this->tasks), 422);
+
+        $this->validate([
+            'tasks.*.name'           => ['required', 'string', 'max:255'],
+            'tasks.*.interval_value' => ['required', 'integer', 'min:1'],
+            'tasks.*.interval_unit'  => ['required', 'in:days,weeks,months,years'],
+            'tasks.*.anchor_type'    => ['required', 'in:from_last_done,fixed_calendar'],
+            'tasks.*.description'    => ['nullable', 'string', 'max:1000'],
+            'backdates.*.date'       => ['nullable', 'date'],
+            'backdates.*.notes'      => ['nullable', 'string', 'max:2000'],
+        ]);
+
         $household = Auth::user()->households()->first();
         abort_if(!$household, 403);
 
         $appliance = DB::transaction(function () use ($household) {
             if ($this->selectedTypeId) {
                 $type = ApplianceType::findOrFail($this->selectedTypeId);
+                abort_if($type->household_id !== null && $type->household_id !== $household->id, 403);
             } else {
                 $type = ApplianceType::firstOrCreate([
                     'name'         => $this->typeSearch,
