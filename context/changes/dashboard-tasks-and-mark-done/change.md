@@ -1,7 +1,7 @@
 ---
 change_id: dashboard-tasks-and-mark-done
 title: Dashboard tasks and mark done
-status: preparing
+status: planned
 created: 2026-06-04
 updated: 2026-06-04
 archived_at: null
