@@ -545,10 +545,10 @@ Four Pest/PHPUnit feature tests covering the four scenarios selected during plan
 
 #### Automated
 
-- [ ] 1.1 `composer show prism-php/prism` lists the package without error
-- [ ] 1.2 `php artisan migrate --pretend` shows the description migration without error
-- [ ] 1.3 `php artisan migrate` runs cleanly on a fresh DB
-- [ ] 1.4 `php artisan tinker` — `MaintenanceTask::factory()->make(['description' => 'test'])` — no exception
+- [x] 1.1 `composer show prism-php/prism` lists the package without error
+- [x] 1.2 `php artisan migrate --pretend` shows the description migration without error
+- [x] 1.3 `php artisan migrate` runs cleanly on a fresh DB
+- [x] 1.4 `php artisan tinker` — `MaintenanceTask::factory()->make(['description' => 'test'])` — no exception
 
 #### Manual
 
