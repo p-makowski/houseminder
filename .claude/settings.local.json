@@ -26,7 +26,8 @@
       "mcp__context7__resolve-library-id",
       "Skill(10x-impl-review)",
       "Bash(composer show *)",
-      "Bash(echo \"EXIT:$?\")"
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(pbcopy)"
     ],
     "deny": [
       "Bash(rm -rf *)"
