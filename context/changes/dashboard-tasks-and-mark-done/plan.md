@@ -81,7 +81,10 @@ Date-range conditions (overdue, due-this-week, upcoming) are applied by callers,
 
 **Contract**:
 - Single public method: `execute(MaintenanceTask $task, User $user): void`
-- Ownership guard: `abort_if($task->appliance->household_id !== $user->households()->first()->id, 403)`
+- Ownership guard: resolve household first, then guard — matching the pattern at `create.blade.php:169-170`:
+  `$household = $user->households()->first();`
+  `abort_if(!$household || $task->appliance->household_id !== $household->id, 403);`
+  Direct `->first()->id` without a null guard will throw TypeError (not 403) and fail PHPStan level 6.
 - Wraps writes in `DB::transaction`
 - Inserts `ServiceRecord` with `completed_at = now()`
 - Sets `last_completed_at = now()` on the task
@@ -167,7 +170,7 @@ Four public Collection properties: `$overdue`, `$dueThisWeek`, `$upcoming`, `$me
 - `$upcoming` — `calendar()->forHousehold($id)->where('next_due_at', '>', now()->addDays(7))->orderBy('next_due_at')->with('appliance')->get()`
 - `$metric` — `metric()->forHousehold($id)->orderBy('name')->with('appliance')->get()`
 
-`markDone(int $taskId)`: fetches task using `MaintenanceTask::forHousehold($householdId)->findOrFail($taskId)` (the scope acts as the ownership guard at fetch time), then calls `(new RecordTaskCompletion)->execute($task, auth()->user())`, then re-runs all four collection queries to refresh the properties.
+`markDone(int $taskId)`: resolves `$householdId` fresh via `Auth::user()->households()->first()` inside the method — must NOT be stored as a public Livewire property (public properties are serialised to the client and are tamperable). Fetches task using `MaintenanceTask::calendar()->forHousehold($householdId)->findOrFail($taskId)` (scope acts as ownership guard at fetch time; including `calendar()` makes the task unfetchable for metric IDs). Calls `(new RecordTaskCompletion)->execute($task, auth()->user())`. Extracts the four collection queries into a private `loadTasks()` method called from both `mount()` and `markDone()` to avoid duplication.
 
 Template: `<x-app-layout>` with `<x-slot name="header">Dashboard</x-slot>`. Four `<section>` blocks rendered in order. Each section is hidden if its collection is empty (empty-state message shown instead). Calendar task rows include the Mark Done button: `wire:click="markDone({{ $task->id }})"`. Metric task rows show a "No date" badge and no button.
 
@@ -178,7 +181,7 @@ Template: `<x-app-layout>` with `<x-slot name="header">Dashboard</x-slot>`. Four
 **Intent**: Verify that the Volt page renders the right tasks in the right sections and that the mark-done flow works end-to-end via Livewire test helpers.
 
 **Contract**: Same base pattern as `ApplianceTestCase`. Test cases:
-- Unauthenticated GET `/dashboard` redirects to `/login`
+- Unauthenticated GET `/dashboard` redirects to `/login` (via the `auth` middleware; the `verified` middleware only redirects authenticated-but-unverified users to `/verify-email`)
 - Authenticated user sees "Dashboard" in the response
 - A task with `next_due_at = yesterday` appears in the overdue section
 - A task with `next_due_at = now()->addDays(3)` appears in the due-this-week section
