@@ -559,12 +559,12 @@ Four Pest/PHPUnit feature tests covering the four scenarios selected during plan
 
 #### Automated
 
-- [ ] 2.1 `app(GenerateMaintenancePlan::class)` resolves without error
+- [x] 2.1 `app(GenerateMaintenancePlan::class)` resolves without error
 - [ ] 2.2 `Prism::fake()` test calls the action and returns the faked structured array (verified via Phase 5 happy path test)
 
 #### Manual
 
-- [ ] 2.3 Real API call via Tinker returns 3–6 tasks with calendar `interval_unit` values only
+- [x] 2.3 Real API call via Tinker returns 3–6 tasks with calendar `interval_unit` values only
 
 ### Phase 3: Appliance Wizard Component
 

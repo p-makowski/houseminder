@@ -16,6 +16,13 @@
 **Rule**: All components/controllers that create or update an Appliance must include `'model' => ['required', 'string', 'max:255']` in validation.
 **Applies to**: S-01 appliance-add form, S-03 appliance-edit form.
 
+## User input must be validated before reaching AI prompts
+
+**Context**: app/Actions/GenerateMaintenancePlan.php:56 — user-supplied $applianceName, $applianceModel, $typeName are interpolated directly into the Prism user message.
+**Problem**: Any value reaching an AI prompt without sanitization is a potential prompt injection vector. Even with structured output mode and authentication reducing the risk, the pattern of passing raw user input to AI is a recurring decision point.
+**Rule**: Always validate user-supplied strings at the Livewire/controller boundary before passing them to AI actions — enforce max length, strip control characters, and use Laravel validation rules (max:255, string). The action itself stays clean; sanitization belongs at the entry boundary.
+**Applies to**: Any feature that passes user input to an AI prompt — S-01 wizard, future AI features.
+
 ## MaintenanceTask: interval_unit determines which next_due field is authoritative
 
 **Context**: app/Models/MaintenanceTask.php — interval_unit, next_due_at, next_due_at_value
