@@ -1,0 +1,12 @@
+---
+change_id: dashboard-tasks-and-mark-done
+title: Dashboard tasks and mark done
+status: preparing
+created: 2026-06-04
+updated: 2026-06-04
+archived_at: null
+---
+
+## Notes
+
+<!-- Free-form notes for this change: links, ad-hoc context, decisions that don't belong in research/frame/plan. -->
