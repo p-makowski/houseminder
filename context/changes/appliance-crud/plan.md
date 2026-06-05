@@ -282,26 +282,26 @@ All tests extend `tests/Feature/Appliances/ApplianceTestCase.php` which handles 
 
 #### Automated
 
-- [x] 2.1 Feature tests pass: `php artisan test --filter=ApplianceEditTest`
+- [x] 2.1 Feature tests pass: `php artisan test --filter=ApplianceEditTest` — f6e62da
 
 #### Manual
 
-- [x] 2.2 Edit page loads pre-filled with current appliance values
-- [x] 2.3 `model` field required — blank submit shows validation error
-- [x] 2.4 Changing type shows inline notice; saving updates record and redirects to show page
-- [x] 2.5 Type combobox shows system and custom types; selecting a different type shows the inline notice
-- [x] 2.6 Cancelling (browser back / nav link) does not persist changes
+- [x] 2.2 Edit page loads pre-filled with current appliance values — f6e62da
+- [x] 2.3 `model` field required — blank submit shows validation error — f6e62da
+- [x] 2.4 Changing type shows inline notice; saving updates record and redirects to show page — f6e62da
+- [x] 2.5 Type combobox shows system and custom types; selecting a different type shows the inline notice — f6e62da
+- [x] 2.6 Cancelling (browser back / nav link) does not persist changes — f6e62da
 
 ### Phase 3: Appliance Delete
 
 #### Automated
 
-- [ ] 3.1 Feature tests pass: `php artisan test --filter=ApplianceDeleteTest`
+- [x] 3.1 Feature tests pass: `php artisan test --filter=ApplianceDeleteTest`
 
 #### Manual
 
-- [ ] 3.2 Delete button visible on edit page
-- [ ] 3.3 Modal shows correct appliance name and task count
-- [ ] 3.4 Cancel leaves appliance unchanged; confirm deletes and redirects to index
-- [ ] 3.5 Deleted appliance no longer appears on index
-- [ ] 3.6 Navigating directly to the deleted appliance's show/edit URL returns a 404 or 403
+- [x] 3.2 Delete button visible on edit page
+- [x] 3.3 Modal shows correct appliance name and task count
+- [x] 3.4 Cancel leaves appliance unchanged; confirm deletes and redirects to index
+- [x] 3.5 Deleted appliance no longer appears on index
+- [x] 3.6 Navigating directly to the deleted appliance's show/edit URL returns a 404 or 403
