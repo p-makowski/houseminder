@@ -83,7 +83,7 @@ Appliance::where('household_id', $household->id)
     ->get()
 ```
 
-Each card links to `appliances.show` and `appliances.edit`. Uses `#[Layout('layouts.app')]`.
+Each card links to `appliances.show`. Uses `#[Layout('layouts.app')]`. The edit link is added in Phase 2 Change 3 once the route exists.
 
 #### 3. Navigation — add "My Appliances" link
 
@@ -91,7 +91,7 @@ Each card links to `appliances.show` and `appliances.edit`. Uses `#[Layout('layo
 
 **Intent**: Add a "My Appliances" nav link alongside the existing "Add Appliance" link, in both the desktop and mobile nav blocks.
 
-**Contract**: Follow the existing `x-nav-link` pattern at lines 35–40 (desktop) and the corresponding mobile block. Use `:active="request()->routeIs('appliances.index')"` and `wire:navigate`.
+**Contract**: Desktop block uses `x-nav-link` (follow lines 35–40); mobile block uses `x-responsive-nav-link` (follow line 92). Both use `:active="request()->routeIs('appliances.index')"` and `wire:navigate`.
 
 #### 4. New test file — index
 
@@ -99,7 +99,7 @@ Each card links to `appliances.show` and `appliances.edit`. Uses `#[Layout('layo
 
 **Intent**: Verify the index loads appliances for the authenticated household and rejects access to a different household's appliances with 403.
 
-**Contract**: Extends `ApplianceTestCase`. Two tests: (1) authenticated user sees their appliance names on the index page; (2) a second household's appliance does not appear and any attempt to load the index as that household returns the correct isolation (appliances not in the list).
+**Contract**: Extends `ApplianceTestCase`. Two tests: (1) authenticated user sees their appliance names on the index page; (2) a user authenticated as a second household gets HTTP 200 but sees only their own appliances — none of the first household's appliances appear in the response.
 
 ### Success Criteria
 
@@ -289,6 +289,8 @@ All tests extend `tests/Feature/Appliances/ApplianceTestCase.php` which handles 
 - [ ] 2.2 Edit page loads pre-filled with current appliance values
 - [ ] 2.3 `model` field required — blank submit shows validation error
 - [ ] 2.4 Changing type shows inline notice; saving updates record and redirects to show page
+- [ ] 2.5 Type combobox shows system and custom types; selecting a different type shows the inline notice
+- [ ] 2.6 Cancelling (browser back / nav link) does not persist changes
 
 ### Phase 3: Appliance Delete
 
@@ -302,3 +304,4 @@ All tests extend `tests/Feature/Appliances/ApplianceTestCase.php` which handles 
 - [ ] 3.3 Modal shows correct appliance name and task count
 - [ ] 3.4 Cancel leaves appliance unchanged; confirm deletes and redirects to index
 - [ ] 3.5 Deleted appliance no longer appears on index
+- [ ] 3.6 Navigating directly to the deleted appliance's show/edit URL returns a 404 or 403
