@@ -356,21 +356,21 @@ Fill in the `§6.1 Adding a unit test for business logic` placeholder with the c
 
 #### Automated
 
-- [x] 2.1 Existing wizard test passes after `ApplianceTestCase` change: `composer test --filter ApplianceTestCase`
-- [x] 2.2 All 5 new unit tests pass: `composer test --filter MaintenanceTaskCalculationTest`
-- [x] 2.3 PHPStan + Pint — no violations
+- [x] 2.1 Existing wizard test passes after `ApplianceTestCase` change: `composer test --filter ApplianceTestCase` — 8ee64dd
+- [x] 2.2 All 5 new unit tests pass: `composer test --filter MaintenanceTaskCalculationTest` — 8ee64dd
+- [x] 2.3 PHPStan + Pint — no violations — 8ee64dd
 
 #### Manual
 
-- [x] 2.4 `test_happy_path_creates_appliance_and_tasks` still passes after `ApplianceTestCase` change
+- [x] 2.4 `test_happy_path_creates_appliance_and_tasks` still passes after `ApplianceTestCase` change — 8ee64dd
 
 ### Phase 3: Integration Tests — Wizard `confirm()` Path
 
 #### Automated
 
-- [ ] 3.1 All 12 wizard calculation tests pass: `composer test --filter WizardCalculationTest`
-- [ ] 3.2 PHPStan + Pint — no violations
-- [ ] 3.3 Full suite — no regressions: `composer test`
+- [x] 3.1 All 12 wizard calculation tests pass: `composer test --filter WizardCalculationTest`
+- [x] 3.2 PHPStan + Pint — no violations
+- [x] 3.3 Full suite — no regressions: `composer test`
 
 #### Manual
 
