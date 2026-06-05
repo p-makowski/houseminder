@@ -14,11 +14,13 @@ abstract class ApplianceTestCase extends TestCase
     use RefreshDatabase;
 
     protected User $user;
+
     protected Household $household;
 
     protected function setUp(): void
     {
         parent::setUp();
+        $this->freezeTime();
 
         $this->user = User::factory()->create();
         $this->household = Household::factory()->create();
