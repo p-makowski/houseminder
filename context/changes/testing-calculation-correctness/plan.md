@@ -343,14 +343,14 @@ Fill in the `§6.1 Adding a unit test for business logic` placeholder with the c
 
 #### Automated
 
-- [x] 1.1 PHPStan level 6 — no new violations: `./vendor/bin/phpstan analyse`
-- [x] 1.2 Code style — no violations: `./vendor/bin/pint --test`
-- [x] 1.3 All existing tests pass: `composer test`
+- [x] 1.1 PHPStan level 6 — no new violations: `./vendor/bin/phpstan analyse` — 2fd8480
+- [x] 1.2 Code style — no violations: `./vendor/bin/pint --test` — 2fd8480
+- [x] 1.3 All existing tests pass: `composer test` — 2fd8480
 
 #### Manual
 
-- [x] 1.4 Dashboard shows same due dates as before extraction
-- [x] 1.5 Tinker confirms extracted helper returns correct date
+- [x] 1.4 Dashboard shows same due dates as before extraction — 2fd8480
+- [x] 1.5 Tinker confirms extracted helper returns correct date — 2fd8480
 
 ### Phase 2: Add `freezeTime()` to `ApplianceTestCase` + Unit Tests for Extracted Helper
 

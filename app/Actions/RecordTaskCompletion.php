@@ -7,6 +7,7 @@ namespace App\Actions;
 use App\Models\MaintenanceTask;
 use App\Models\ServiceRecord;
 use App\Models\User;
+use App\Support\CalendarInterval;
 use Illuminate\Support\Facades\DB;
 
 class RecordTaskCompletion
@@ -29,7 +30,7 @@ class RecordTaskCompletion
             $task->last_completed_at = $completedAt;
 
             $task->next_due_at = match ($task->interval_unit) {
-                'days', 'weeks', 'months', 'years' => MaintenanceTask::calculateNextDueAt(
+                'days', 'weeks', 'months', 'years' => CalendarInterval::calculateNextDueAt(
                     $completedAt, $task->interval_unit, (int) $task->interval_value
                 ),
                 default => $task->next_due_at,

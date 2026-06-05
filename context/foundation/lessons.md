@@ -51,6 +51,13 @@
 **Rule**: The current app assumes one household per user. All ownership guards use the two-step pattern: `$household = $user->households()->first(); abort_if(!$household || ...)`. This is intentional and consistent. If multi-household support is ever added, every ownership guard in app/Actions/ and Livewire pages must be audited and switched to an exists()-based check scoped to the specific resource's household.
 **Applies to**: Any feature that adds multi-household support, and any ownership guard review during that work.
 
+## Guard helper calls when validation and helper contract can diverge
+
+**Context**: resources/views/livewire/pages/appliances/create.blade.php:confirm() / app/Support/CalendarInterval.php
+**Problem**: CalendarInterval::calculateNextDueAt() throws InvalidArgumentException on non-calendar units. The wizard's confirm() calls it unconditionally, relying entirely on upstream validation (interval_unit in:days,weeks,months,years) to prevent metric units from reaching the call. If validation is ever relaxed (e.g., hours/km added to the wizard), the helper throws inside the DB transaction — clean rollback, but an opaque internal exception instead of a user-facing validation error.
+**Rule**: When a helper has a strict unit/type contract and is called inside a DB::transaction(), add an inline guard at the call site rather than relying solely on upstream validation. Either branch on interval_unit before calling, or extend the helper to handle the broader input set.
+**Applies to**: Any call site inside a DB::transaction() that delegates to CalendarInterval::calculateNextDueAt() or similar strict helpers when the set of valid inputs may expand in future features.
+
 ## MaintenanceTask: interval_unit determines which next_due field is authoritative
 
 **Context**: app/Models/MaintenanceTask.php — interval_unit, next_due_at, next_due_at_value

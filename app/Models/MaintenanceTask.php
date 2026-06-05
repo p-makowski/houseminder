@@ -10,23 +10,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Carbon;
 
 #[Fillable(['appliance_id', 'name', 'description', 'interval_value', 'interval_unit', 'anchor_type', 'anchor_date', 'last_completed_at', 'last_metric_value', 'next_due_at', 'next_due_at_value', 'is_confirmed'])]
 class MaintenanceTask extends Model
 {
     use HasFactory;
-
-    public static function calculateNextDueAt(Carbon $anchor, string $unit, int $value): Carbon
-    {
-        return match ($unit) {
-            'days' => $anchor->copy()->addDays($value),
-            'weeks' => $anchor->copy()->addWeeks($value),
-            'months' => $anchor->copy()->addMonths($value),
-            'years' => $anchor->copy()->addYears($value),
-            default => throw new \InvalidArgumentException("Unknown calendar unit: {$unit}"),
-        };
-    }
 
     public function scopeCalendar(Builder $query): void
     {
