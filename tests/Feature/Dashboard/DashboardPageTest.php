@@ -116,8 +116,9 @@ class DashboardPageTest extends DashboardTestCase
 
         try {
             Volt::test('pages.dashboard')->call('markDone', $foreignTask->id);
+            $this->fail('ModelNotFoundException not thrown — forHousehold() scope guard may have been removed from markDone()');
         } catch (ModelNotFoundException $e) {
-            // scope guard worked — foreign task not found in user's household
+            // correct: forHousehold()->findOrFail() blocked the foreign task
         }
 
         $this->assertDatabaseMissing('service_records', [

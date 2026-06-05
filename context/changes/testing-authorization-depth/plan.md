@@ -230,10 +230,10 @@ No unit tests needed — no pure functions are being tested.
 
 #### Automated
 
-- [x] 1.1 PHPUnit passes for ApplianceShowTest: `php artisan test tests/Feature/Appliances/ApplianceShowTest.php`
-- [x] 1.2 Full Appliances suite passes: `php artisan test tests/Feature/Appliances/`
-- [x] 1.3 PHPStan passes: `./vendor/bin/phpstan analyse`
-- [x] 1.4 Pint passes: `./vendor/bin/pint --test`
+- [x] 1.1 PHPUnit passes for ApplianceShowTest: `php artisan test tests/Feature/Appliances/ApplianceShowTest.php` — 1daafbb
+- [x] 1.2 Full Appliances suite passes: `php artisan test tests/Feature/Appliances/` — 1daafbb
+- [x] 1.3 PHPStan passes: `./vendor/bin/phpstan analyse` — 1daafbb
+- [x] 1.4 Pint passes: `./vendor/bin/pint --test` — 1daafbb
 
 #### Manual
 
@@ -244,13 +244,13 @@ No unit tests needed — no pure functions are being tested.
 
 #### Automated
 
-- [ ] 2.1 Dashboard suite passes: `php artisan test tests/Feature/Dashboard/DashboardPageTest.php`
-- [ ] 2.2 Full test suite passes: `php artisan test`
-- [ ] 2.3 PHPStan passes: `./vendor/bin/phpstan analyse`
+- [x] 2.1 Dashboard suite passes: `php artisan test tests/Feature/Dashboard/DashboardPageTest.php`
+- [x] 2.2 Full test suite passes: `php artisan test`
+- [x] 2.3 PHPStan passes: `./vendor/bin/phpstan analyse`
 
 #### Manual
 
-- [ ] 2.4 Removing `forHousehold()` from `markDone()` causes test to fail with `$this->fail()` message; restore scope
+- [x] 2.4 Removing `forHousehold()` from `markDone()` causes test to fail with `$this->fail()` message; restore scope
 
 ### Phase 3: §6.2 and §6.3 Cookbook Update
 
