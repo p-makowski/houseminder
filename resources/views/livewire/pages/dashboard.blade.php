@@ -6,22 +6,15 @@ use App\Actions\RecordTaskCompletion;
 use App\Models\MaintenanceTask;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
 new #[Layout('layouts.app')] class extends Component
 {
-    public Collection $overdue;
-    public Collection $dueThisWeek;
-    public Collection $upcoming;
-    public Collection $metric;
-
     public function mount(): void
     {
-        $household = Auth::user()->households()->first();
-        abort_if(! $household, 403);
-
-        $this->loadTasks($household->id);
+        abort_if(! Auth::user()->households()->first(), 403);
     }
 
     public function markDone(int $taskId): void
@@ -32,38 +25,56 @@ new #[Layout('layouts.app')] class extends Component
         $task = MaintenanceTask::calendar()->forHousehold($household->id)->findOrFail($taskId);
 
         (new RecordTaskCompletion)($task, Auth::user());
-
-        $this->loadTasks($household->id);
     }
 
-    private function loadTasks(int $householdId): void
+    #[Computed]
+    public function overdue(): Collection
     {
-        $this->overdue = MaintenanceTask::calendar()
-            ->forHousehold($householdId)
+        return MaintenanceTask::calendar()
+            ->forHousehold($this->resolveHouseholdId())
             ->where('next_due_at', '<', now())
             ->orderBy('next_due_at')
             ->with('appliance')
             ->get();
+    }
 
-        $this->dueThisWeek = MaintenanceTask::calendar()
-            ->forHousehold($householdId)
-            ->whereBetween('next_due_at', [now(), now()->addDays(7)])
+    #[Computed]
+    public function dueThisWeek(): Collection
+    {
+        $now = now();
+
+        return MaintenanceTask::calendar()
+            ->forHousehold($this->resolveHouseholdId())
+            ->whereBetween('next_due_at', [$now, $now->copy()->addDays(7)])
             ->orderBy('next_due_at')
             ->with('appliance')
             ->get();
+    }
 
-        $this->upcoming = MaintenanceTask::calendar()
-            ->forHousehold($householdId)
+    #[Computed]
+    public function upcoming(): Collection
+    {
+        return MaintenanceTask::calendar()
+            ->forHousehold($this->resolveHouseholdId())
             ->where('next_due_at', '>', now()->addDays(7))
             ->orderBy('next_due_at')
             ->with('appliance')
             ->get();
+    }
 
-        $this->metric = MaintenanceTask::metric()
-            ->forHousehold($householdId)
+    #[Computed]
+    public function metric(): Collection
+    {
+        return MaintenanceTask::metric()
+            ->forHousehold($this->resolveHouseholdId())
             ->orderBy('name')
             ->with('appliance')
             ->get();
+    }
+
+    private function resolveHouseholdId(): int
+    {
+        return Auth::user()->households()->first()->id;
     }
 }; ?>
 
@@ -77,11 +88,11 @@ new #[Layout('layouts.app')] class extends Component
         {{-- Overdue --}}
         <section>
             <h2 class="text-lg font-semibold text-red-700 mb-3">Overdue</h2>
-            @if($overdue->isEmpty())
+            @if($this->overdue->isEmpty())
                 <p class="text-sm text-gray-500">No overdue tasks.</p>
             @else
                 <div class="space-y-2">
-                    @foreach($overdue as $task)
+                    @foreach($this->overdue as $task)
                         <div class="bg-white border border-red-200 rounded-md px-4 py-3 flex justify-between items-center">
                             <div>
                                 <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
@@ -99,11 +110,11 @@ new #[Layout('layouts.app')] class extends Component
         {{-- Due this week --}}
         <section>
             <h2 class="text-lg font-semibold text-yellow-700 mb-3">Due this week</h2>
-            @if($dueThisWeek->isEmpty())
+            @if($this->dueThisWeek->isEmpty())
                 <p class="text-sm text-gray-500">Nothing due this week.</p>
             @else
                 <div class="space-y-2">
-                    @foreach($dueThisWeek as $task)
+                    @foreach($this->dueThisWeek as $task)
                         <div class="bg-white border border-yellow-200 rounded-md px-4 py-3 flex justify-between items-center">
                             <div>
                                 <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
@@ -121,11 +132,11 @@ new #[Layout('layouts.app')] class extends Component
         {{-- Upcoming --}}
         <section>
             <h2 class="text-lg font-semibold text-gray-700 mb-3">Upcoming</h2>
-            @if($upcoming->isEmpty())
+            @if($this->upcoming->isEmpty())
                 <p class="text-sm text-gray-500">No upcoming tasks.</p>
             @else
                 <div class="space-y-2">
-                    @foreach($upcoming as $task)
+                    @foreach($this->upcoming as $task)
                         <div class="bg-white border border-gray-200 rounded-md px-4 py-3 flex justify-between items-center">
                             <div>
                                 <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
@@ -143,11 +154,11 @@ new #[Layout('layouts.app')] class extends Component
         {{-- Manual tracking --}}
         <section>
             <h2 class="text-lg font-semibold text-gray-700 mb-3">Manual tracking</h2>
-            @if($metric->isEmpty())
+            @if($this->metric->isEmpty())
                 <p class="text-sm text-gray-500">No tasks requiring manual tracking.</p>
             @else
                 <div class="space-y-2">
-                    @foreach($metric as $task)
+                    @foreach($this->metric as $task)
                         <div class="bg-white border border-gray-200 rounded-md px-4 py-3 flex justify-between items-center">
                             <div>
                                 <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>

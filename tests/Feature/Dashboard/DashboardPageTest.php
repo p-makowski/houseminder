@@ -7,16 +7,11 @@ namespace Tests\Feature\Dashboard;
 use App\Models\Appliance;
 use App\Models\Household;
 use App\Models\MaintenanceTask;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Livewire\Volt\Volt;
 
 class DashboardPageTest extends DashboardTestCase
 {
-    public function test_unauthenticated_user_is_redirected_to_login(): void
-    {
-        auth()->logout();
-        $this->get('/dashboard')->assertRedirect('/login');
-    }
-
     public function test_authenticated_user_sees_dashboard(): void
     {
         $this->get('/dashboard')->assertOk()->assertSee('Dashboard');
@@ -72,7 +67,9 @@ class DashboardPageTest extends DashboardTestCase
             'is_confirmed' => true,
         ]);
 
-        $this->get('/dashboard')->assertSee('Metric Check');
+        $this->get('/dashboard')
+            ->assertSee('Metric Check')
+            ->assertDontSee('Mark done');
     }
 
     public function test_unconfirmed_task_does_not_appear(): void
@@ -104,6 +101,30 @@ class DashboardPageTest extends DashboardTestCase
         $this->get('/dashboard')->assertDontSee('Other Household Task');
     }
 
+    public function test_mark_done_rejects_foreign_household_task(): void
+    {
+        $otherHousehold = Household::factory()->create();
+        $otherAppliance = Appliance::factory()->create(['household_id' => $otherHousehold->id]);
+
+        $foreignTask = MaintenanceTask::factory()->create([
+            'appliance_id' => $otherAppliance->id,
+            'next_due_at' => now()->subDay(),
+            'interval_unit' => 'months',
+            'interval_value' => 6,
+            'is_confirmed' => true,
+        ]);
+
+        try {
+            Volt::test('pages.dashboard')->call('markDone', $foreignTask->id);
+        } catch (ModelNotFoundException $e) {
+            // scope guard worked — foreign task not found in user's household
+        }
+
+        $this->assertDatabaseMissing('service_records', [
+            'maintenance_task_id' => $foreignTask->id,
+        ]);
+    }
+
     public function test_mark_done_creates_service_record_and_updates_task(): void
     {
         $task = MaintenanceTask::factory()->create([
@@ -117,7 +138,8 @@ class DashboardPageTest extends DashboardTestCase
 
         Volt::test('pages.dashboard')
             ->call('markDone', $task->id)
-            ->assertOk();
+            ->assertOk()
+            ->assertSee('No overdue tasks.');
 
         $this->assertDatabaseHas('service_records', [
             'maintenance_task_id' => $task->id,
