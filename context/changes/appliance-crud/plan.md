@@ -296,12 +296,12 @@ All tests extend `tests/Feature/Appliances/ApplianceTestCase.php` which handles 
 
 #### Automated
 
-- [x] 3.1 Feature tests pass: `php artisan test --filter=ApplianceDeleteTest`
+- [x] 3.1 Feature tests pass: `php artisan test --filter=ApplianceDeleteTest` — 1ee9c54
 
 #### Manual
 
-- [x] 3.2 Delete button visible on edit page
-- [x] 3.3 Modal shows correct appliance name and task count
-- [x] 3.4 Cancel leaves appliance unchanged; confirm deletes and redirects to index
-- [x] 3.5 Deleted appliance no longer appears on index
-- [x] 3.6 Navigating directly to the deleted appliance's show/edit URL returns a 404 or 403
+- [x] 3.2 Delete button visible on edit page — 1ee9c54
+- [x] 3.3 Modal shows correct appliance name and task count — 1ee9c54
+- [x] 3.4 Cancel leaves appliance unchanged; confirm deletes and redirects to index — 1ee9c54
+- [x] 3.5 Deleted appliance no longer appears on index — 1ee9c54
+- [x] 3.6 Navigating directly to the deleted appliance's show/edit URL returns a 404 or 403 — 1ee9c54
