@@ -96,10 +96,16 @@ new #[Layout('layouts.app')] class extends Component
                             @endif
                         </div>
 
-                        <a href="{{ route('appliances.show', $appliance) }}" wire:navigate
-                           class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
-                            {{ __('View details') }} &rarr;
-                        </a>
+                        <div class="flex gap-4">
+                            <a href="{{ route('appliances.show', $appliance) }}" wire:navigate
+                               class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
+                                {{ __('View details') }} &rarr;
+                            </a>
+                            <a href="{{ route('appliances.edit', $appliance) }}" wire:navigate
+                               class="text-sm text-gray-500 hover:text-gray-700">
+                                {{ __('Edit') }}
+                            </a>
+                        </div>
                     </div>
                 @endforeach
             </div>

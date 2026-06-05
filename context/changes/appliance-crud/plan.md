@@ -267,30 +267,30 @@ All tests extend `tests/Feature/Appliances/ApplianceTestCase.php` which handles 
 
 #### Automated
 
-- [x] 1.1 Feature tests pass: `php artisan test --filter=ApplianceIndexTest`
+- [x] 1.1 Feature tests pass: `php artisan test --filter=ApplianceIndexTest` — 2945174
 
 #### Manual
 
-- [x] 1.2 "My Appliances" nav link appears on desktop and mobile
-- [x] 1.3 Index page loads and shows all household appliances
-- [x] 1.4 Cards display name, type, and task counts (overdue / due soon / upcoming)
-- [x] 1.5 Appliances with overdue tasks appear before those without
-- [x] 1.6 Empty state renders when no appliances exist
-- [x] 1.7 "Add Appliance" button links to the create wizard
+- [x] 1.2 "My Appliances" nav link appears on desktop and mobile — 2945174
+- [x] 1.3 Index page loads and shows all household appliances — 2945174
+- [x] 1.4 Cards display name, type, and task counts (overdue / due soon / upcoming) — 2945174
+- [x] 1.5 Appliances with overdue tasks appear before those without — 2945174
+- [x] 1.6 Empty state renders when no appliances exist — 2945174
+- [x] 1.7 "Add Appliance" button links to the create wizard — 2945174
 
 ### Phase 2: Appliance Edit Page
 
 #### Automated
 
-- [ ] 2.1 Feature tests pass: `php artisan test --filter=ApplianceEditTest`
+- [x] 2.1 Feature tests pass: `php artisan test --filter=ApplianceEditTest`
 
 #### Manual
 
-- [ ] 2.2 Edit page loads pre-filled with current appliance values
-- [ ] 2.3 `model` field required — blank submit shows validation error
-- [ ] 2.4 Changing type shows inline notice; saving updates record and redirects to show page
-- [ ] 2.5 Type combobox shows system and custom types; selecting a different type shows the inline notice
-- [ ] 2.6 Cancelling (browser back / nav link) does not persist changes
+- [x] 2.2 Edit page loads pre-filled with current appliance values
+- [x] 2.3 `model` field required — blank submit shows validation error
+- [x] 2.4 Changing type shows inline notice; saving updates record and redirects to show page
+- [x] 2.5 Type combobox shows system and custom types; selecting a different type shows the inline notice
+- [x] 2.6 Cancelling (browser back / nav link) does not persist changes
 
 ### Phase 3: Appliance Delete
 
