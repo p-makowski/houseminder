@@ -32,7 +32,7 @@ House Minder is a shared web tool for households tracking maintenance on home ap
 | F-01 | domain-schema-bootstrap       | (foundation) domain models and migrations in place; appliance types seeded; registration extended with household name | —             | FR-001, FR-002, FR-005, FR-010, FR-011, FR-012, FR-013 | done     |
 | S-01 | first-appliance-ai-plan       | add an appliance, get AI suggestions, edit intervals and anchor type, backdate services, confirm plan | F-01          | US-01, FR-005, FR-010, FR-011                     | done     |
 | S-02 | dashboard-tasks-and-mark-done | view all tasks grouped as overdue / due soon / upcoming; mark any task done; next due date advances   | S-01          | US-02, FR-012, FR-013                             | done     |
-| S-03 | appliance-crud                | edit appliance details; delete appliance with explicit confirmation (permanent)                       | S-01          | FR-008, FR-009                                    | proposed |
+| S-03 | appliance-crud                | edit appliance details; delete appliance with explicit confirmation (permanent)                       | S-01          | FR-008, FR-009                                    | done     |
 
 ## Streams
 
@@ -108,7 +108,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Delete is irreversible in v1 (FR-009 Socrates: "risks losing all maintenance history permanently"). Sequenced after S-01 so the confirmation pattern is built and tested when at least one real appliance with a plan exists, making it easy to verify the guard actually works before it matters.
-- **Status:** proposed
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -144,3 +144,4 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **F-01: (foundation) domain models and migrations in place; appliance types seeded; registration extended with household name** — Archived 2026-06-03 → `context/archive/2026-06-01-domain-schema-bootstrap/`. Lesson: —.
 - **S-01: add an appliance, get AI suggestions, edit intervals and anchor type, backdate services, confirm plan** — Archived 2026-06-04 → `context/archive/2026-06-03-first-appliance-ai-plan/`. Lesson: —.
 - **S-02: view all tasks grouped as overdue / due soon / upcoming; mark any task done; next due date advances** — Archived 2026-06-05 → `context/archive/2026-06-04-dashboard-tasks-and-mark-done/`. Lesson: —.
+- **S-03: edit appliance details; delete appliance with explicit confirmation (permanent)** — Archived 2026-06-05 → `context/archive/2026-06-04-appliance-crud/`. Lesson: —.
