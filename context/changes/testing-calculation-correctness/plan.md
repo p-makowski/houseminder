@@ -368,25 +368,25 @@ Fill in the `§6.1 Adding a unit test for business logic` placeholder with the c
 
 #### Automated
 
-- [x] 3.1 All 12 wizard calculation tests pass: `composer test --filter WizardCalculationTest`
-- [x] 3.2 PHPStan + Pint — no violations
-- [x] 3.3 Full suite — no regressions: `composer test`
+- [x] 3.1 All 12 wizard calculation tests pass: `composer test --filter WizardCalculationTest` — 6078cb4
+- [x] 3.2 PHPStan + Pint — no violations — 6078cb4
+- [x] 3.3 Full suite — no regressions: `composer test` — 6078cb4
 
 #### Manual
 
-- [ ] 3.4 Tests pass reliably across multiple runs (no time-sensitivity)
-- [ ] 3.5 Anchor storage fields verified correct for each anchor type
+- [x] 3.4 Tests pass reliably across multiple runs (no time-sensitivity)
+- [x] 3.5 Anchor storage fields verified correct for each anchor type
 
 ### Phase 4: Integration Tests — `RecordTaskCompletion` `fixed_calendar` Path
 
 #### Automated
 
-- [ ] 4.1 All 9 RTC tests pass (5 existing + 4 new): `composer test --filter RecordTaskCompletionTest`
-- [ ] 4.2 PHPStan + Pint — no violations
+- [x] 4.1 All 9 RTC tests pass (5 existing + 4 new): `composer test --filter RecordTaskCompletionTest`
+- [x] 4.2 PHPStan + Pint — no violations
 
 #### Manual
 
-- [ ] 4.3 No observable change to dashboard mark-done behavior
+- [x] 4.3 No observable change to dashboard mark-done behavior
 
 ### Phase 5: Update `test-plan.md §6.1` Cookbook
 

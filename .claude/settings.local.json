@@ -29,7 +29,10 @@
       "Bash(echo \"EXIT:$?\")",
       "Bash(pbcopy)",
       "Bash(echo \"exit:$?\")",
-      "Bash(php artisan *)"
+      "Bash(php artisan *)",
+      "Bash(echo \"empty=$?\")",
+      "Bash(./vendor/bin/pint *)",
+      "Bash(composer test *)"
     ],
     "deny": [
       "Bash(rm -rf *)"

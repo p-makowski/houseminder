@@ -134,6 +134,74 @@ class RecordTaskCompletionTest extends DashboardTestCase
         $this->assertEquals($originalNextDue->toDateString(), $task->next_due_at->toDateString());
     }
 
+    public function test_recalculates_next_due_at_for_days_with_fixed_calendar_anchor(): void
+    {
+        $task = MaintenanceTask::factory()->create([
+            'appliance_id' => $this->appliance->id,
+            'interval_unit' => 'days',
+            'interval_value' => 30,
+            'anchor_type' => 'fixed_calendar',
+            'next_due_at' => now()->subDay(),
+            'is_confirmed' => true,
+        ]);
+
+        (new RecordTaskCompletion)($task, $this->user);
+
+        $task->refresh();
+        $this->assertEquals(now()->addDays(30)->toDateString(), $task->next_due_at->toDateString());
+    }
+
+    public function test_recalculates_next_due_at_for_weeks_with_fixed_calendar_anchor(): void
+    {
+        $task = MaintenanceTask::factory()->create([
+            'appliance_id' => $this->appliance->id,
+            'interval_unit' => 'weeks',
+            'interval_value' => 2,
+            'anchor_type' => 'fixed_calendar',
+            'next_due_at' => now()->subDay(),
+            'is_confirmed' => true,
+        ]);
+
+        (new RecordTaskCompletion)($task, $this->user);
+
+        $task->refresh();
+        $this->assertEquals(now()->addWeeks(2)->toDateString(), $task->next_due_at->toDateString());
+    }
+
+    public function test_recalculates_next_due_at_for_months_with_fixed_calendar_anchor(): void
+    {
+        $task = MaintenanceTask::factory()->create([
+            'appliance_id' => $this->appliance->id,
+            'interval_unit' => 'months',
+            'interval_value' => 6,
+            'anchor_type' => 'fixed_calendar',
+            'next_due_at' => now()->subDay(),
+            'is_confirmed' => true,
+        ]);
+
+        (new RecordTaskCompletion)($task, $this->user);
+
+        $task->refresh();
+        $this->assertEquals(now()->addMonths(6)->toDateString(), $task->next_due_at->toDateString());
+    }
+
+    public function test_recalculates_next_due_at_for_years_with_fixed_calendar_anchor(): void
+    {
+        $task = MaintenanceTask::factory()->create([
+            'appliance_id' => $this->appliance->id,
+            'interval_unit' => 'years',
+            'interval_value' => 1,
+            'anchor_type' => 'fixed_calendar',
+            'next_due_at' => now()->subDay(),
+            'is_confirmed' => true,
+        ]);
+
+        (new RecordTaskCompletion)($task, $this->user);
+
+        $task->refresh();
+        $this->assertEquals(now()->addYear()->toDateString(), $task->next_due_at->toDateString());
+    }
+
     public function test_aborts_403_when_user_has_no_household(): void
     {
         $userWithNoHousehold = User::factory()->create();
