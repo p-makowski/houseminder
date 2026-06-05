@@ -28,7 +28,8 @@
       "Bash(composer show *)",
       "Bash(echo \"EXIT:$?\")",
       "Bash(pbcopy)",
-      "Bash(echo \"exit:$?\")"
+      "Bash(echo \"exit:$?\")",
+      "Bash(php artisan *)"
     ],
     "deny": [
       "Bash(rm -rf *)"
