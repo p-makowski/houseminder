@@ -9,6 +9,7 @@ use App\Models\Appliance;
 use App\Models\Household;
 use App\Models\MaintenanceTask;
 use App\Models\ServiceRecord;
+use App\Models\User;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class RecordTaskCompletionTest extends DashboardTestCase
@@ -133,6 +134,26 @@ class RecordTaskCompletionTest extends DashboardTestCase
         $this->assertEquals($originalNextDue->toDateString(), $task->next_due_at->toDateString());
     }
 
+    public function test_aborts_403_when_user_has_no_household(): void
+    {
+        $userWithNoHousehold = User::factory()->create();
+
+        $task = MaintenanceTask::factory()->create([
+            'appliance_id' => $this->appliance->id,
+            'interval_unit' => 'months',
+            'interval_value' => 6,
+            'next_due_at' => now()->subDay(),
+            'is_confirmed' => true,
+        ]);
+
+        try {
+            (new RecordTaskCompletion)($task, $userWithNoHousehold);
+            $this->fail('Expected HttpException was not thrown');
+        } catch (HttpException $e) {
+            $this->assertEquals(403, $e->getStatusCode());
+        }
+    }
+
     public function test_aborts_403_for_task_belonging_to_different_household(): void
     {
         $otherHousehold = Household::factory()->create();
@@ -148,8 +169,11 @@ class RecordTaskCompletionTest extends DashboardTestCase
             'is_confirmed' => true,
         ]);
 
-        $this->expectException(HttpException::class);
-
-        (new RecordTaskCompletion)($task, $this->user);
+        try {
+            (new RecordTaskCompletion)($task, $this->user);
+            $this->fail('Expected HttpException was not thrown');
+        } catch (HttpException $e) {
+            $this->assertEquals(403, $e->getStatusCode());
+        }
     }
 }

@@ -3,9 +3,9 @@
 
 - **Plan**: context/changes/dashboard-tasks-and-mark-done/plan.md
 - **Scope**: Phase 1 of 2
-- **Date**: 2026-06-04
-- **Verdict**: NEEDS ATTENTION
-- **Findings**: 0 critical  4 warnings  3 observations
+- **Date**: 2026-06-05
+- **Verdict**: APPROVED (after fixes)
+- **Findings**: 0 critical  0 warnings  0 observations (all triaged)
 
 ## Verdicts
 
@@ -13,92 +13,59 @@
 |-----------|---------|
 | Plan Adherence | PASS |
 | Scope Discipline | PASS |
-| Safety & Quality | WARNING |
+| Safety & Quality | PASS |
 | Architecture | PASS |
-| Pattern Consistency | WARNING |
+| Pattern Consistency | PASS |
 | Success Criteria | PASS |
-
-## Grounding
-
-All 3 implementation files match plan intent exactly. Automated criteria: 8/8 tests pass, PHPStan clean, Pint clean. Manual 1.4 ✓ (3 scopes confirmed), 1.5 ✓ (file exists), 1.6 ✓ (6/6 appliance wizard tests pass).
 
 ## Findings
 
-### F1 — now() called three times inside transaction
-
-- **Severity**: ⚠️ WARNING
-- **Impact**: 🏃 LOW — quick decision; fix is obvious and narrowly scoped
-- **Dimension**: Safety & Quality
-- **Location**: app/Actions/RecordTaskCompletion.php:20–33
-- **Detail**: now() is called once for ServiceRecord.completed_at, once for last_completed_at, and once as the base for next_due_at arithmetic. The three timestamps can differ by microseconds. Capturing it once makes the action's three writes coherent.
-- **Fix**: Capture now() once before the transaction and pass it into the closure as $completedAt, use $completedAt for all three writes and $completedAt->copy()->addDays(...) for next_due_at arithmetic.
-- **Decision**: FIXED — captured now() once as $completedAt before transaction
-
-### F2 — execute() vs __invoke() inconsistency with GenerateMaintenancePlan
-
-- **Severity**: ⚠️ WARNING
-- **Impact**: 🏃 LOW — quick decision; fix is obvious and narrowly scoped
-- **Dimension**: Pattern Consistency
-- **Location**: app/Actions/RecordTaskCompletion.php:14
-- **Detail**: GenerateMaintenancePlan uses __invoke() as its entry point. RecordTaskCompletion uses execute(), making call sites look different. One call site exists (the test) and one more will be added in Phase 2 (the Volt component).
-- **Fix**: Rename execute() to __invoke() and update the one call site in RecordTaskCompletionTest.php to use (new RecordTaskCompletion)(...).
-- **Decision**: FIXED + ACCEPTED-AS-RULE: "Action classes must use __invoke()"
-
-### F3 — Test class duplicates ApplianceTestCase setUp boilerplate
-
-- **Severity**: ⚠️ WARNING
-- **Impact**: 🏃 LOW — quick decision; fix is obvious and narrowly scoped
-- **Dimension**: Pattern Consistency
-- **Location**: tests/Feature/Dashboard/RecordTaskCompletionTest.php:17
-- **Detail**: RecordTaskCompletionTest extends TestCase directly and re-implements user + household factory setup, pivot attach, and actingAs — identical to ApplianceTestCase. A future change to the household setup pattern would need to be made in two places.
-- **Fix**: Create tests/Feature/Dashboard/DashboardTestCase.php mirroring ApplianceTestCase, add the $appliance fixture on top, and have RecordTaskCompletionTest extend it.
-- **Decision**: FIXED + ACCEPTED-AS-RULE: "Feature test namespaces must have their own base test case"
-
-### F4 — Multi-household authorization uses first() not exists()
+### F1 — Single-household ->first() authz assumption
 
 - **Severity**: ⚠️ WARNING
 - **Impact**: 🔎 MEDIUM — real tradeoff; pause to reason through it
 - **Dimension**: Safety & Quality
-- **Location**: app/Actions/RecordTaskCompletion.php:16
-- **Detail**: $user->households()->first() silently picks the first membership if a user belongs to multiple households. Note: the plan explicitly specifies this pattern, matching create.blade.php:169-170, so this is inherited from the established codebase pattern, not an implementation mistake.
-- **Fix A ⭐ Recommended**: Keep plan-specified pattern; record as lesson. Adopting exists() here while every other auth-guarded action uses first() would create inconsistency — fix the pattern globally or accept it for now and document the single-household assumption.
-  - Strength: Keeps Phase 1 consistent with the rest of the codebase; the lesson records the risk for future multi-household work.
-  - Tradeoff: Bug remains if multi-household is ever added without revisiting this code.
-  - Confidence: HIGH — current app scope is explicitly single-household.
-  - Blind spot: Whether multi-household is in the roadmap.
-- **Fix B**: Switch to exists() now. Replace first() check with abort_if(!$user->households()->where('households.id', $task->appliance->household_id)->exists(), 403).
-  - Strength: Correct for any number of households; one query not two.
-  - Tradeoff: Diverges from every other action's pattern; needs global reconciliation eventually.
-  - Confidence: MED — haven't audited all other call sites.
-  - Blind spot: Other actions using first() remain inconsistent.
-- **Decision**: ACCEPTED-AS-RULE: "Ownership guards assume single household per user"
+- **Location**: app/Actions/RecordTaskCompletion.php:18–19
+- **Detail**: `$user->households()->first()` silently picks one household. Correct under the current single-household-per-user invariant but becomes a bug if multi-household support is added. Already documented in lessons.md and accepted as a known limitation.
+- **Fix A ⭐ Applied**: Accept the known risk — lessons.md rule covers the fix path.
+- **Decision**: ACCEPTED (documented in lessons.md — "Ownership guards assume single household per user")
 
-### F5 — appliance relationship lazy-loads in execute()
+### F2 — isToday() without frozen time — potential midnight flake
 
-- **Severity**: OBSERVATION
+- **Severity**: ⚠️ WARNING
 - **Impact**: 🏃 LOW — quick decision; fix is obvious and narrowly scoped
 - **Dimension**: Safety & Quality
-- **Location**: app/Actions/RecordTaskCompletion.php:17
-- **Detail**: $task->appliance->household_id triggers a lazy load if the caller didn't eager-load appliance. Fine for current single-call use; becomes N+1 if a future caller iterates tasks.
-- **Fix**: Add $task->loadMissing('appliance') at the top of execute() to make the action self-contained.
-- **Decision**: FIXED — added $task->loadMissing('appliance') at top of __invoke()
+- **Location**: tests/Feature/Dashboard/RecordTaskCompletionTest.php:34, 50
+- **Detail**: `->isToday()` assertions without freezing the clock — fails if test straddles midnight.
+- **Fix**: Added `$this->freezeTime()` to `DashboardTestCase::setUp()` so all subclass tests run with a stable clock.
+- **Decision**: FIXED
 
-### F6 — scopeForHousehold subquery needs index on appliances.household_id
+### F3 — No duplicate-completion guard on the action
 
-- **Severity**: OBSERVATION
+- **Severity**: 💬 OBSERVATION
 - **Impact**: 🏃 LOW — quick decision; fix is obvious and narrowly scoped
 - **Dimension**: Safety & Quality
-- **Location**: app/Models/MaintenanceTask.php:32
-- **Detail**: whereHas compiles to a correlated EXISTS subquery on appliances. Correct at household scale; verify a migration added an index on appliances.household_id.
-- **Fix**: Grep the migration files to confirm the index exists. No PHP change needed.
-- **Decision**: VERIFIED — foreignId()->constrained() creates the index automatically; no action needed
+- **Location**: app/Actions/RecordTaskCompletion.php
+- **Detail**: Two rapid invocations would create two ServiceRecord rows and advance next_due_at twice.
+- **Fix**: Added `wire:loading.attr="disabled"` and `disabled:opacity-50` to all three Mark done buttons in the dashboard template.
+- **Decision**: FIXED
 
-### F7 — abort_if couples action to HTTP context
+### F4 — 403 abort test doesn't assert status code value
 
-- **Severity**: OBSERVATION
+- **Severity**: 💬 OBSERVATION
 - **Impact**: 🏃 LOW — quick decision; fix is obvious and narrowly scoped
-- **Dimension**: Architecture
-- **Location**: app/Actions/RecordTaskCompletion.php:17
-- **Detail**: abort_if throws HttpException. Fine for current HTTP-only use. If ever reused from Artisan/queue, replace with AuthorizationException.
-- **Fix**: Accept for now; no change needed until a non-HTTP caller appears.
-- **Decision**: ACCEPTED-AS-RULE: "Action classes that use abort_if are coupled to HTTP context"
+- **Dimension**: Success Criteria
+- **Location**: tests/Feature/Dashboard/RecordTaskCompletionTest.php:151
+- **Detail**: `expectException(HttpException::class)` passes for any HTTP exception. Note: `expectExceptionCode(403)` does not work because `HttpException::getCode()` is always 0; the HTTP status is in `getStatusCode()`.
+- **Fix**: Replaced `expectException` pattern with try/catch that asserts `$e->getStatusCode() === 403`.
+- **Decision**: FIXED
+
+### F5 — No test for user with zero households
+
+- **Severity**: 💬 OBSERVATION
+- **Impact**: 🏃 LOW — quick decision; fix is obvious and narrowly scoped
+- **Dimension**: Success Criteria
+- **Location**: tests/Feature/Dashboard/RecordTaskCompletionTest.php
+- **Detail**: The `abort_if(!$household ...)` branch — user with no household membership — had no test coverage.
+- **Fix**: Added `test_aborts_403_when_user_has_no_household` — creates a householdless user, invokes the action, asserts `$e->getStatusCode() === 403`.
+- **Decision**: FIXED

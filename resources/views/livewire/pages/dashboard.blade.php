@@ -98,7 +98,7 @@ new #[Layout('layouts.app')] class extends Component
                                 <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
                                 <p class="text-sm text-red-600">Due {{ $task->next_due_at->format('M j, Y') }}</p>
                             </div>
-                            <button wire:click="markDone({{ $task->id }})" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded">
+                            <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
                                 Mark done
                             </button>
                         </div>
@@ -120,7 +120,7 @@ new #[Layout('layouts.app')] class extends Component
                                 <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
                                 <p class="text-sm text-yellow-600">Due {{ $task->next_due_at->format('M j, Y') }}</p>
                             </div>
-                            <button wire:click="markDone({{ $task->id }})" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded">
+                            <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
                                 Mark done
                             </button>
                         </div>
@@ -142,7 +142,7 @@ new #[Layout('layouts.app')] class extends Component
                                 <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
                                 <p class="text-sm text-gray-500">Due {{ $task->next_due_at->format('M j, Y') }}</p>
                             </div>
-                            <button wire:click="markDone({{ $task->id }})" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded">
+                            <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
                                 Mark done
                             </button>
                         </div>

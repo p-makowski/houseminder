@@ -23,6 +23,7 @@ abstract class DashboardTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->freezeTime();
 
         $this->user = User::factory()->create();
         $this->household = Household::factory()->create();
