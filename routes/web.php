@@ -15,6 +15,10 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
+Volt::route('appliances', 'pages.appliances.index')
+    ->middleware(['auth', 'verified'])
+    ->name('appliances.index');
+
 Volt::route('appliances/create', 'pages.appliances.create')
     ->middleware(['auth', 'verified'])
     ->name('appliances.create');

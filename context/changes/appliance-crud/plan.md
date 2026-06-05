@@ -267,16 +267,16 @@ All tests extend `tests/Feature/Appliances/ApplianceTestCase.php` which handles 
 
 #### Automated
 
-- [ ] 1.1 Feature tests pass: `php artisan test --filter=ApplianceIndexTest`
+- [x] 1.1 Feature tests pass: `php artisan test --filter=ApplianceIndexTest`
 
 #### Manual
 
-- [ ] 1.2 "My Appliances" nav link appears on desktop and mobile
-- [ ] 1.3 Index page loads and shows all household appliances
-- [ ] 1.4 Cards display name, type, and task counts (overdue / due soon / upcoming)
-- [ ] 1.5 Appliances with overdue tasks appear before those without
-- [ ] 1.6 Empty state renders when no appliances exist
-- [ ] 1.7 "Add Appliance" button links to the create wizard
+- [x] 1.2 "My Appliances" nav link appears on desktop and mobile
+- [x] 1.3 Index page loads and shows all household appliances
+- [x] 1.4 Cards display name, type, and task counts (overdue / due soon / upcoming)
+- [x] 1.5 Appliances with overdue tasks appear before those without
+- [x] 1.6 Empty state renders when no appliances exist
+- [x] 1.7 "Add Appliance" button links to the create wizard
 
 ### Phase 2: Appliance Edit Page
 
