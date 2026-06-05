@@ -303,7 +303,7 @@ $this->assertDatabaseMissing('service_records', ['maintenance_task_id' => $forei
 ```
 
 **Key rules:**
-- Do NOT use `->assertForbidden()` for Style B actions. `Volt::test()->call()` surfaces `ModelNotFoundException` as a PHP exception, not an HTTP 404 response — the test must assert the exception, not a status code.
+- Do NOT use `->assertForbidden()` for Style B actions. `Volt::test()->call()` does not run through the HTTP kernel, so Laravel's exception-to-response conversion does not fire — the `ModelNotFoundException` propagates as a raw PHP exception and must be caught in the test.
 - Always add `$this->fail()` immediately after the `Volt::test()->call()` line so the test fails explicitly when the exception is NOT thrown.
 - Pair the try/catch with `assertDatabaseMissing` as defense-in-depth to confirm the side effect was also blocked.
 

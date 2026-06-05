@@ -7,7 +7,6 @@ namespace Tests\Feature\Appliances;
 use App\Models\Appliance;
 use App\Models\ApplianceType;
 use App\Models\Household;
-use App\Models\User;
 use Livewire\Volt\Volt;
 
 class ApplianceEditTest extends ApplianceTestCase
@@ -53,9 +52,6 @@ class ApplianceEditTest extends ApplianceTestCase
     public function test_editing_appliance_from_another_household_returns_403(): void
     {
         $otherHousehold = Household::factory()->create();
-        $otherUser = User::factory()->create();
-        $otherUser->households()->attach($otherHousehold->id, ['role' => 'owner']);
-
         $type = ApplianceType::factory()->create(['household_id' => null]);
         $appliance = Appliance::factory()->create([
             'household_id'      => $otherHousehold->id,
