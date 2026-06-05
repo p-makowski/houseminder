@@ -392,5 +392,5 @@ Fill in the `§6.1 Adding a unit test for business logic` placeholder with the c
 
 #### Manual
 
-- [x] 5.1 §6.1 is self-contained and a future developer can follow it without reading this plan
-- [x] 5.2 `test-plan.md §3 Phase 1` status row updated to `complete`
+- [x] 5.1 §6.1 is self-contained and a future developer can follow it without reading this plan — e84aaaf
+- [x] 5.2 `test-plan.md §3 Phase 1` status row updated to `complete` — e84aaaf
