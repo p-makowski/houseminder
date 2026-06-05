@@ -6,7 +6,7 @@
 >
 > Refresh: re-run `/10x-test-plan --refresh` when stale (see §8).
 >
-> Last updated: 2026-06-05 (Phase 1 change opened)
+> Last updated: 2026-06-05 (Phase 1 complete)
 
 ---
 
@@ -71,7 +71,7 @@ orchestrator updates Status as artifacts appear on disk.
 
 | # | Phase name | Goal | Risks covered | Test types | Status | Change folder |
 |---|---|---|---|---|---|---|
-| 1 | Calculation correctness | Prove `next_due_at` is exact for all interval units and anchor types in both the wizard confirm path and mark-done path | #2 | unit + integration | change opened | context/changes/testing-calculation-correctness |
+| 1 | Calculation correctness | Prove `next_due_at` is exact for all interval units and anchor types in both the wizard confirm path and mark-done path | #2 | unit + integration | complete | context/changes/testing-calculation-correctness |
 | 2 | Authorization depth | Prove all Volt components enforce household scope; IDOR on markDone returns 403 and creates no ServiceRecord | #1, #3 | integration | not started | — |
 | 3 | Edge cases + AI contract | Prove dashboard date boundaries are exact; unconfirmed tasks stay hidden; AI zero-task and malformed responses surface an error | #4, #5, #6 | integration | not started | — |
 | 4 | Quality-gates wiring | Lock PHPStan level 6 + Pint + PHPUnit as mandatory CI gates; add post-edit hook guidance | cross-cutting | CI gates | not started | — |
@@ -137,7 +137,101 @@ the relevant rollout phase ships; before that, the sub-section reads
 
 ### 6.1 Adding a unit test for business logic
 
-TBD — see §3 Phase 1 (calculation correctness — will establish the unit test pattern for pure logic extraction from Livewire components).
+**When to use:** The logic is a pure function (no DB, no Livewire, no auth) — i.e., you can call it with typed inputs and assert the return value.
+
+**Reference test:** `tests/Unit/Support/CalendarIntervalTest.php`
+
+**Pattern:**
+```php
+namespace Tests\Unit\Support;
+
+use App\Support\CalendarInterval;          // the class under test
+use Illuminate\Support\Carbon;
+use PHPUnit\Framework\TestCase;            // no Laravel bootstrap needed
+
+class CalendarIntervalTest extends TestCase
+{
+    private Carbon $anchor;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->anchor = Carbon::parse('2024-01-15');  // fixed date, not Carbon::now()
+    }
+
+    public function test_calculates_next_due_at_for_months(): void
+    {
+        $result = CalendarInterval::calculateNextDueAt($this->anchor, 'months', 6);
+        $this->assertSame('2024-07-15', $result->toDateString());
+    }
+}
+```
+
+**Key rules:**
+- Extend `PHPUnit\Framework\TestCase` directly — not `Tests\TestCase`. Unit tests must not boot Laravel.
+- Import `Illuminate\Support\Carbon`, **not** `Carbon\Carbon`. The production helpers use Illuminate's subclass; type hints must match.
+- Use a fixed anchor date (e.g., `Carbon::parse('2024-01-15')`). Never use `Carbon::today()` or `now()` — those make the expected value impossible to hardcode.
+- Assert the exact output string with `assertSame`, not "is in the future" or `isFuture()`.
+- Place the file in `tests/Unit/<Namespace>/` mirroring `app/<Namespace>/`.
+
+**Run command:** `php artisan test tests/Unit/`
+
+---
+
+**When to use Volt integration tests instead:** The logic lives inside a Livewire Volt component's action (e.g., `confirm()`, `markDone()`). In that case use the Volt test pattern below.
+
+**Reference test:** `tests/Feature/Appliances/WizardCalculationTest.php`
+
+**Pattern:**
+```php
+namespace Tests\Feature\Appliances;
+
+use App\Models\ApplianceType;
+use App\Models\MaintenanceTask;
+use Illuminate\Support\Carbon;
+use Livewire\Volt\Volt;
+
+class WizardCalculationTest extends ApplianceTestCase
+{
+    public function test_confirm_next_due_at_for_months_with_from_last_done_anchor(): void
+    {
+        $task = $this->confirmedTask(
+            ['interval_unit' => 'months', 'interval_value' => 6, 'anchor_type' => 'from_last_done'],
+            ['skip' => false, 'date' => '2024-01-15', 'metric' => null, 'notes' => ''],
+        );
+
+        $this->assertSame('2024-07-15', $task->next_due_at->toDateString());
+        $this->assertSame('2024-01-15', $task->last_completed_at->toDateString());
+        $this->assertNull($task->anchor_date);
+    }
+
+    private function confirmedTask(array $taskFields, array $backdate = []): MaintenanceTask
+    {
+        $type = ApplianceType::factory()->create(['name' => 'Test Type', 'household_id' => null]);
+        $taskFields = array_merge(['name' => 'Test Task', 'description' => null], $taskFields);
+        $backdate   = $backdate ?: ['skip' => false, 'date' => '', 'metric' => null, 'notes' => ''];
+
+        Volt::test('pages.appliances.create')
+            ->set('name', 'Test Appliance')
+            ->set('model', 'Model X')
+            ->set('selectedTypeId', $type->id)
+            ->set('tasks', [$taskFields])
+            ->set('backdates', [$backdate])
+            ->call('confirm');
+
+        return MaintenanceTask::first();
+    }
+}
+```
+
+**Key rules:**
+- Extend `ApplianceTestCase` (in `tests/Feature/Appliances/`). Its `setUp()` calls `$this->freezeTime()` before fixture creation so `Carbon::today()` is pinned for the whole test.
+- Inject component state with `->set()` rather than simulating the full wizard UI — this bypasses the AI step and avoids needing `Prism::fake()`.
+- Backdate format: `['skip' => false, 'date' => 'YYYY-MM-DD', 'metric' => null, 'notes' => '']`. For no-backdate: `['skip' => false, 'date' => '', 'metric' => null, 'notes' => '']`.
+- Assert exact date strings. For `fixed_calendar` anchor type also assert `anchor_date`; for `from_last_done` also assert `last_completed_at`.
+- Fetch the created model via `MaintenanceTask::first()` after calling `confirm()` — the component does not return the model.
+
+**Run command:** `php artisan test tests/Feature/Appliances/`
 
 ### 6.2 Adding an integration test for a Livewire Volt component
 

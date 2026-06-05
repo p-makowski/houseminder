@@ -381,16 +381,16 @@ Fill in the `§6.1 Adding a unit test for business logic` placeholder with the c
 
 #### Automated
 
-- [x] 4.1 All 9 RTC tests pass (5 existing + 4 new): `composer test --filter RecordTaskCompletionTest`
-- [x] 4.2 PHPStan + Pint — no violations
+- [x] 4.1 All 9 RTC tests pass (5 existing + 4 new): `composer test --filter RecordTaskCompletionTest` — 02b5904
+- [x] 4.2 PHPStan + Pint — no violations — 02b5904
 
 #### Manual
 
-- [x] 4.3 No observable change to dashboard mark-done behavior
+- [x] 4.3 No observable change to dashboard mark-done behavior — 02b5904
 
 ### Phase 5: Update `test-plan.md §6.1` Cookbook
 
 #### Manual
 
-- [ ] 5.1 §6.1 is self-contained and a future developer can follow it without reading this plan
-- [ ] 5.2 `test-plan.md §3 Phase 1` status row updated to `complete`
+- [x] 5.1 §6.1 is self-contained and a future developer can follow it without reading this plan
+- [x] 5.2 `test-plan.md §3 Phase 1` status row updated to `complete`
