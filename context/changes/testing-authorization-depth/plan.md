@@ -237,8 +237,8 @@ No unit tests needed — no pure functions are being tested.
 
 #### Manual
 
-- [x] 1.5 Happy-path fixture uses `$this->household->id`; 403 fixture uses `$otherHousehold->id` with no pivot
-- [x] 1.6 Removing `abort_if` from `show.blade.php:17` causes 403 test to fail; restore line
+- [x] 1.5 Happy-path fixture uses `$this->household->id`; 403 fixture uses `$otherHousehold->id` with no pivot — 084bc24
+- [x] 1.6 Removing `abort_if` from `show.blade.php:17` causes 403 test to fail; restore line — 084bc24
 
 ### Phase 2: Strengthen DashboardPageTest — Close the Silent Non-Assertion
 
@@ -256,9 +256,9 @@ No unit tests needed — no pure functions are being tested.
 
 #### Automated
 
-- [x] 3.1 `grep -c 'TBD' context/foundation/test-plan.md` count decreases by 2 vs current count
+- [x] 3.1 `grep -c 'TBD' context/foundation/test-plan.md` count decreases by 2 vs current count — 084bc24
 
 #### Manual
 
-- [x] 3.2 §6.2 documents `Volt::test(..., ['appliance' => $appliance])` call signature, happy path, 403 path, and run command
-- [x] 3.3 §6.3 documents second-household fixture (no pivot), `abort_if`/scoped-`findOrFail` distinction, and "do NOT use `assertForbidden()` for scoped `findOrFail()` paths" rule
+- [x] 3.2 §6.2 documents `Volt::test(..., ['appliance' => $appliance])` call signature, happy path, 403 path, and run command — 084bc24
+- [x] 3.3 §6.3 documents second-household fixture (no pivot), `abort_if`/scoped-`findOrFail` distinction, and "do NOT use `assertForbidden()` for scoped `findOrFail()` paths" rule — 084bc24
