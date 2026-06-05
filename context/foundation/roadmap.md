@@ -3,7 +3,7 @@ project: "House Minder"
 version: 1
 status: draft
 created: 2026-06-01
-updated: 2026-06-04
+updated: 2026-06-05
 prd_version: 1
 main_goal: market-feedback
 top_blocker: time
@@ -31,7 +31,7 @@ House Minder is a shared web tool for households tracking maintenance on home ap
 | ---- | ----------------------------- | ----------------------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------- | -------- |
 | F-01 | domain-schema-bootstrap       | (foundation) domain models and migrations in place; appliance types seeded; registration extended with household name | —             | FR-001, FR-002, FR-005, FR-010, FR-011, FR-012, FR-013 | done     |
 | S-01 | first-appliance-ai-plan       | add an appliance, get AI suggestions, edit intervals and anchor type, backdate services, confirm plan | F-01          | US-01, FR-005, FR-010, FR-011                     | done     |
-| S-02 | dashboard-tasks-and-mark-done | view all tasks grouped as overdue / due soon / upcoming; mark any task done; next due date advances   | S-01          | US-02, FR-012, FR-013                             | proposed |
+| S-02 | dashboard-tasks-and-mark-done | view all tasks grouped as overdue / due soon / upcoming; mark any task done; next due date advances   | S-01          | US-02, FR-012, FR-013                             | done     |
 | S-03 | appliance-crud                | edit appliance details; delete appliance with explicit confirmation (permanent)                       | S-01          | FR-008, FR-009                                    | proposed |
 
 ## Streams
@@ -96,7 +96,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Which appliance types should surface conditional metrics (motor hours, km, etc.)? PRD says "shown conditionally based on appliance type" but does not specify the mapping. — Owner: user. Block: no (can ship with sensible defaults — e.g. motor hours for lawn mowers and generators, km for vehicles — and adjust during implementation).
 - **Risk:** The next-due-date advancement logic is the recurring-use-case engine; if the calculation is wrong users lose trust quickly. Sequenced after S-01 so a real confirmed maintenance plan exists to validate the calculation against before this slice is signed off.
-- **Status:** proposed
+- **Status:** done
 
 ### S-03: Appliance CRUD — edit and delete
 
@@ -143,3 +143,4 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 - **F-01: (foundation) domain models and migrations in place; appliance types seeded; registration extended with household name** — Archived 2026-06-03 → `context/archive/2026-06-01-domain-schema-bootstrap/`. Lesson: —.
 - **S-01: add an appliance, get AI suggestions, edit intervals and anchor type, backdate services, confirm plan** — Archived 2026-06-04 → `context/archive/2026-06-03-first-appliance-ai-plan/`. Lesson: —.
+- **S-02: view all tasks grouped as overdue / due soon / upcoming; mark any task done; next due date advances** — Archived 2026-06-05 → `context/archive/2026-06-04-dashboard-tasks-and-mark-done/`. Lesson: —.
