@@ -237,28 +237,28 @@ No unit tests needed — no pure functions are being tested.
 
 #### Manual
 
-- [ ] 1.5 Happy-path fixture uses `$this->household->id`; 403 fixture uses `$otherHousehold->id` with no pivot
-- [ ] 1.6 Removing `abort_if` from `show.blade.php:17` causes 403 test to fail; restore line
+- [x] 1.5 Happy-path fixture uses `$this->household->id`; 403 fixture uses `$otherHousehold->id` with no pivot
+- [x] 1.6 Removing `abort_if` from `show.blade.php:17` causes 403 test to fail; restore line
 
 ### Phase 2: Strengthen DashboardPageTest — Close the Silent Non-Assertion
 
 #### Automated
 
-- [x] 2.1 Dashboard suite passes: `php artisan test tests/Feature/Dashboard/DashboardPageTest.php`
-- [x] 2.2 Full test suite passes: `php artisan test`
-- [x] 2.3 PHPStan passes: `./vendor/bin/phpstan analyse`
+- [x] 2.1 Dashboard suite passes: `php artisan test tests/Feature/Dashboard/DashboardPageTest.php` — 0bbf375
+- [x] 2.2 Full test suite passes: `php artisan test` — 0bbf375
+- [x] 2.3 PHPStan passes: `./vendor/bin/phpstan analyse` — 0bbf375
 
 #### Manual
 
-- [x] 2.4 Removing `forHousehold()` from `markDone()` causes test to fail with `$this->fail()` message; restore scope
+- [x] 2.4 Removing `forHousehold()` from `markDone()` causes test to fail with `$this->fail()` message; restore scope — 0bbf375
 
 ### Phase 3: §6.2 and §6.3 Cookbook Update
 
 #### Automated
 
-- [ ] 3.1 `grep -c 'TBD' context/foundation/test-plan.md` count decreases by 2 vs current count
+- [x] 3.1 `grep -c 'TBD' context/foundation/test-plan.md` count decreases by 2 vs current count
 
 #### Manual
 
-- [ ] 3.2 §6.2 documents `Volt::test(..., ['appliance' => $appliance])` call signature, happy path, 403 path, and run command
-- [ ] 3.3 §6.3 documents second-household fixture (no pivot), `abort_if`/scoped-`findOrFail` distinction, and "do NOT use `assertForbidden()` for scoped `findOrFail()` paths" rule
+- [x] 3.2 §6.2 documents `Volt::test(..., ['appliance' => $appliance])` call signature, happy path, 403 path, and run command
+- [x] 3.3 §6.3 documents second-household fixture (no pivot), `abort_if`/scoped-`findOrFail` distinction, and "do NOT use `assertForbidden()` for scoped `findOrFail()` paths" rule

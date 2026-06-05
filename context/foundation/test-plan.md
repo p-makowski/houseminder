@@ -235,11 +235,79 @@ class WizardCalculationTest extends ApplianceTestCase
 
 ### 6.2 Adding an integration test for a Livewire Volt component
 
-TBD — see §3 Phase 2 (authorization depth — will establish the household-scoped fixture pattern and `Volt::test()` authorization assertion conventions).
+**When to use:** Testing any Volt page component's rendering and ownership guard (happy path + forbidden path).
+
+**Reference test:** `tests/Feature/Appliances/ApplianceShowTest.php`
+
+**Pattern:**
+
+```php
+// Happy path — owner sees the component
+$appliance = Appliance::factory()->create(['household_id' => $this->household->id]);
+
+Volt::test('pages.appliances.show', ['appliance' => $appliance])
+    ->assertOk()
+    ->assertSee($appliance->name);
+
+// Forbidden path — foreign appliance is rejected by abort_if in mount()
+$otherHousehold = Household::factory()->create();
+$foreignAppliance = Appliance::factory()->create(['household_id' => $otherHousehold->id]);
+// No pivot attachment — $this->user is NOT a member of $otherHousehold
+
+Volt::test('pages.appliances.show', ['appliance' => $foreignAppliance])
+    ->assertForbidden();
+```
+
+**Key rules:**
+- Extend the relevant base `TestCase` for the namespace (e.g. `ApplianceTestCase`); never duplicate `setUp()` boilerplate.
+- Pass the model via the binding array (second argument): key = route param name, value = model instance.
+- Use `->assertOk()` + `->assertSee()` for the happy path.
+- Use `->assertForbidden()` for the 403 path when the guard is `abort_if` in `mount()`.
+
+**Run command:** `php artisan test tests/Feature/Appliances/`
 
 ### 6.3 Adding a test for a new household-scoped Volt component or action
 
-TBD — see §3 Phase 2 (authorization depth — will document how to set up a second-household fixture and assert 403 on foreign-resource access).
+**When to use:** Testing household isolation — proving a resource from household B cannot be accessed by a user who belongs only to household A.
+
+**Reference tests:** `ApplianceShowTest::test_viewing_appliance_from_another_household_returns_403` and `DashboardPageTest::test_mark_done_rejects_foreign_household_task`
+
+**Second-household fixture (shared by both styles):**
+
+```php
+$otherHousehold = Household::factory()->create();
+$foreignAppliance = Appliance::factory()->create(['household_id' => $otherHousehold->id]);
+// No pivot attachment — the test user is NOT a member of $otherHousehold
+```
+
+**Style A — `abort_if` in `mount()` (implicit binding, returns HTTP 403):**
+
+```php
+Volt::test('pages.appliances.show', ['appliance' => $foreignAppliance])
+    ->assertForbidden();
+```
+
+**Style B — `forHousehold()->findOrFail()` in an action (scoped query, throws `ModelNotFoundException`):**
+
+```php
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+try {
+    Volt::test('pages.dashboard')->call('markDone', $foreignTask->id);
+    $this->fail('ModelNotFoundException not thrown — forHousehold() scope guard may have been removed');
+} catch (ModelNotFoundException $e) {
+    // correct: scoped findOrFail() blocked the foreign resource
+}
+
+$this->assertDatabaseMissing('service_records', ['maintenance_task_id' => $foreignTask->id]);
+```
+
+**Key rules:**
+- Do NOT use `->assertForbidden()` for Style B actions. `Volt::test()->call()` surfaces `ModelNotFoundException` as a PHP exception, not an HTTP 404 response — the test must assert the exception, not a status code.
+- Always add `$this->fail()` immediately after the `Volt::test()->call()` line so the test fails explicitly when the exception is NOT thrown.
+- Pair the try/catch with `assertDatabaseMissing` as defense-in-depth to confirm the side effect was also blocked.
+
+**Run command:** `php artisan test tests/Feature/`
 
 ### 6.4 Adding a test for an AI-integrated flow (Prism-backed)
 
