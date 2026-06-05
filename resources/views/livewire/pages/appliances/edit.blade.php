@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Models\Appliance;
 use App\Models\ApplianceType;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
@@ -64,22 +65,24 @@ new #[Layout('layouts.app')] class extends Component
         abort_if(!$household, 403);
         abort_if($this->appliance->household_id !== $household->id, 403);
 
-        if ($this->selectedTypeId) {
-            $type = ApplianceType::findOrFail($this->selectedTypeId);
-            abort_if($type->household_id !== null && $type->household_id !== $household->id, 403);
-        } else {
-            $type = ApplianceType::firstOrCreate([
-                'name'         => $this->typeSearch,
-                'household_id' => $household->id,
-            ]);
-        }
+        DB::transaction(function () use ($household) {
+            if ($this->selectedTypeId) {
+                $type = ApplianceType::findOrFail($this->selectedTypeId);
+                abort_if($type->household_id !== null && $type->household_id !== $household->id, 403);
+            } else {
+                $type = ApplianceType::firstOrCreate([
+                    'name'         => $this->typeSearch,
+                    'household_id' => $household->id,
+                ]);
+            }
 
-        $this->appliance->update([
-            'name'              => $this->name,
-            'model'             => $this->model,
-            'purchase_date'     => $this->purchaseDate ?: null,
-            'appliance_type_id' => $type->id,
-        ]);
+            $this->appliance->update([
+                'name'              => $this->name,
+                'model'             => $this->model,
+                'purchase_date'     => $this->purchaseDate ?: null,
+                'appliance_type_id' => $type->id,
+            ]);
+        });
 
         $this->redirect(route('appliances.show', $this->appliance), navigate: true);
     }
@@ -197,7 +200,7 @@ new #[Layout('layouts.app')] class extends Component
 </div>
 
 <x-modal name="confirm-appliance-delete" :show="false" focusable>
-    <div class="p-6">
+    <form wire:submit.prevent="delete" class="p-6">
         <h2 class="text-lg font-medium text-gray-900">
             {{ __('Delete') }} {{ $appliance->name }}?
         </h2>
@@ -211,13 +214,13 @@ new #[Layout('layouts.app')] class extends Component
             {{ __('This action cannot be undone.') }}
         </p>
         <div class="mt-6 flex justify-end gap-3">
-            <x-secondary-button x-on:click="$dispatch('close')">
+            <x-secondary-button type="button" x-on:click="$dispatch('close')">
                 {{ __('Cancel') }}
             </x-secondary-button>
-            <x-danger-button wire:click="delete" wire:loading.attr="disabled">
+            <x-danger-button type="submit" wire:loading.attr="disabled">
                 {{ __('Delete Appliance') }}
             </x-danger-button>
         </div>
-    </div>
+    </form>
 </x-modal>
 </div>

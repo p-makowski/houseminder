@@ -32,6 +32,24 @@ class ApplianceEditTest extends ApplianceTestCase
         $this->assertSame('New Model', $appliance->model);
     }
 
+    public function test_save_with_cross_household_type_id_returns_403(): void
+    {
+        $otherHousehold = Household::factory()->create();
+        $ownType = ApplianceType::factory()->create(['household_id' => null]);
+        $privateType = ApplianceType::factory()->create(['household_id' => $otherHousehold->id]);
+
+        $appliance = Appliance::factory()->create([
+            'household_id'      => $this->household->id,
+            'appliance_type_id' => $ownType->id,
+        ]);
+
+        Volt::test('pages.appliances.edit', ['appliance' => $appliance])
+            ->set('selectedTypeId', $privateType->id)
+            ->set('typeSearch', $privateType->name)
+            ->call('save')
+            ->assertForbidden();
+    }
+
     public function test_editing_appliance_from_another_household_returns_403(): void
     {
         $otherHousehold = Household::factory()->create();
