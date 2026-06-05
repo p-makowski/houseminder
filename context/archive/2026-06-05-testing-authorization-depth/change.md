@@ -1,10 +1,10 @@
 ---
 change_id: testing-authorization-depth
 title: Authorization depth — prove household scope on all Volt components and IDOR on markDone
-status: impl_reviewed
+status: archived
 created: 2026-06-05
 updated: 2026-06-05
-archived_at: null
+archived_at: 2026-06-05T21:36:50Z
 ---
 
 ## Notes
