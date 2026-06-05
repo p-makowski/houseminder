@@ -29,10 +29,9 @@ class RecordTaskCompletion
             $task->last_completed_at = $completedAt;
 
             $task->next_due_at = match ($task->interval_unit) {
-                'days' => $completedAt->copy()->addDays((int) $task->interval_value),
-                'weeks' => $completedAt->copy()->addWeeks((int) $task->interval_value),
-                'months' => $completedAt->copy()->addMonths((int) $task->interval_value),
-                'years' => $completedAt->copy()->addYears((int) $task->interval_value),
+                'days', 'weeks', 'months', 'years' => MaintenanceTask::calculateNextDueAt(
+                    $completedAt, $task->interval_unit, (int) $task->interval_value
+                ),
                 default => $task->next_due_at,
             };
 

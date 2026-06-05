@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Actions\GenerateMaintenancePlan;
 use App\Models\Appliance;
 use App\Models\ApplianceType;
+use App\Models\MaintenanceTask;
 use App\Models\ServiceRecord;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -198,13 +199,9 @@ new #[Layout('layouts.app')] class extends Component
                     ? Carbon::parse($backdate['date'])
                     : Carbon::today();
 
-                $nextDueAt = match ($task['interval_unit']) {
-                    'days'   => $anchorDate->copy()->addDays((int) $task['interval_value']),
-                    'weeks'  => $anchorDate->copy()->addWeeks((int) $task['interval_value']),
-                    'months' => $anchorDate->copy()->addMonths((int) $task['interval_value']),
-                    'years'  => $anchorDate->copy()->addYears((int) $task['interval_value']),
-                    default  => $anchorDate->copy()->addMonths((int) $task['interval_value']),
-                };
+                $nextDueAt = MaintenanceTask::calculateNextDueAt(
+                    $anchorDate, $task['interval_unit'], (int) $task['interval_value']
+                );
 
                 $isFromLastDone  = $task['anchor_type'] === 'from_last_done';
                 $isFixedCalendar = $task['anchor_type'] === 'fixed_calendar';
