@@ -15,7 +15,9 @@ abstract class DashboardTestCase extends TestCase
     use RefreshDatabase;
 
     protected User $user;
+
     protected Household $household;
+
     protected Appliance $appliance;
 
     protected function setUp(): void

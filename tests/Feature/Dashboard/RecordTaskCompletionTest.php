@@ -9,18 +9,18 @@ use App\Models\Appliance;
 use App\Models\Household;
 use App\Models\MaintenanceTask;
 use App\Models\ServiceRecord;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class RecordTaskCompletionTest extends DashboardTestCase
 {
-
     public function test_creates_service_record_with_completed_at_now(): void
     {
         $task = MaintenanceTask::factory()->create([
-            'appliance_id'  => $this->appliance->id,
+            'appliance_id' => $this->appliance->id,
             'interval_unit' => 'months',
             'interval_value' => 6,
-            'next_due_at'   => now()->subDay(),
-            'is_confirmed'  => true,
+            'next_due_at' => now()->subDay(),
+            'is_confirmed' => true,
         ]);
 
         (new RecordTaskCompletion)($task, $this->user);
@@ -37,11 +37,11 @@ class RecordTaskCompletionTest extends DashboardTestCase
     public function test_updates_last_completed_at_on_task(): void
     {
         $task = MaintenanceTask::factory()->create([
-            'appliance_id'   => $this->appliance->id,
-            'interval_unit'  => 'months',
+            'appliance_id' => $this->appliance->id,
+            'interval_unit' => 'months',
             'interval_value' => 6,
-            'next_due_at'    => now()->subDay(),
-            'is_confirmed'   => true,
+            'next_due_at' => now()->subDay(),
+            'is_confirmed' => true,
         ]);
 
         (new RecordTaskCompletion)($task, $this->user);
@@ -53,11 +53,11 @@ class RecordTaskCompletionTest extends DashboardTestCase
     public function test_recalculates_next_due_at_for_days(): void
     {
         $task = MaintenanceTask::factory()->create([
-            'appliance_id'   => $this->appliance->id,
-            'interval_unit'  => 'days',
+            'appliance_id' => $this->appliance->id,
+            'interval_unit' => 'days',
             'interval_value' => 30,
-            'next_due_at'    => now()->subDay(),
-            'is_confirmed'   => true,
+            'next_due_at' => now()->subDay(),
+            'is_confirmed' => true,
         ]);
 
         (new RecordTaskCompletion)($task, $this->user);
@@ -70,11 +70,11 @@ class RecordTaskCompletionTest extends DashboardTestCase
     public function test_recalculates_next_due_at_for_weeks(): void
     {
         $task = MaintenanceTask::factory()->create([
-            'appliance_id'   => $this->appliance->id,
-            'interval_unit'  => 'weeks',
+            'appliance_id' => $this->appliance->id,
+            'interval_unit' => 'weeks',
             'interval_value' => 2,
-            'next_due_at'    => now()->subDay(),
-            'is_confirmed'   => true,
+            'next_due_at' => now()->subDay(),
+            'is_confirmed' => true,
         ]);
 
         (new RecordTaskCompletion)($task, $this->user);
@@ -86,11 +86,11 @@ class RecordTaskCompletionTest extends DashboardTestCase
     public function test_recalculates_next_due_at_for_months(): void
     {
         $task = MaintenanceTask::factory()->create([
-            'appliance_id'   => $this->appliance->id,
-            'interval_unit'  => 'months',
+            'appliance_id' => $this->appliance->id,
+            'interval_unit' => 'months',
             'interval_value' => 6,
-            'next_due_at'    => now()->subDay(),
-            'is_confirmed'   => true,
+            'next_due_at' => now()->subDay(),
+            'is_confirmed' => true,
         ]);
 
         (new RecordTaskCompletion)($task, $this->user);
@@ -102,11 +102,11 @@ class RecordTaskCompletionTest extends DashboardTestCase
     public function test_recalculates_next_due_at_for_years(): void
     {
         $task = MaintenanceTask::factory()->create([
-            'appliance_id'   => $this->appliance->id,
-            'interval_unit'  => 'years',
+            'appliance_id' => $this->appliance->id,
+            'interval_unit' => 'years',
             'interval_value' => 1,
-            'next_due_at'    => now()->subDay(),
-            'is_confirmed'   => true,
+            'next_due_at' => now()->subDay(),
+            'is_confirmed' => true,
         ]);
 
         (new RecordTaskCompletion)($task, $this->user);
@@ -120,11 +120,11 @@ class RecordTaskCompletionTest extends DashboardTestCase
         $originalNextDue = now()->addMonths(3);
 
         $task = MaintenanceTask::factory()->create([
-            'appliance_id'   => $this->appliance->id,
-            'interval_unit'  => 'hours',
+            'appliance_id' => $this->appliance->id,
+            'interval_unit' => 'hours',
             'interval_value' => 500,
-            'next_due_at'    => $originalNextDue,
-            'is_confirmed'   => true,
+            'next_due_at' => $originalNextDue,
+            'is_confirmed' => true,
         ]);
 
         (new RecordTaskCompletion)($task, $this->user);
@@ -141,14 +141,14 @@ class RecordTaskCompletionTest extends DashboardTestCase
         ]);
 
         $task = MaintenanceTask::factory()->create([
-            'appliance_id'   => $otherAppliance->id,
-            'interval_unit'  => 'months',
+            'appliance_id' => $otherAppliance->id,
+            'interval_unit' => 'months',
             'interval_value' => 6,
-            'next_due_at'    => now()->subDay(),
-            'is_confirmed'   => true,
+            'next_due_at' => now()->subDay(),
+            'is_confirmed' => true,
         ]);
 
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\HttpException::class);
+        $this->expectException(HttpException::class);
 
         (new RecordTaskCompletion)($task, $this->user);
     }

@@ -267,22 +267,22 @@ No schema changes. The `/dashboard` URL and `dashboard` named route are preserve
 
 #### Manual
 
-- [ ] 1.4 `app/Models/MaintenanceTask.php` declares the three scopes
-- [ ] 1.5 `app/Actions/RecordTaskCompletion.php` exists alongside `GenerateMaintenancePlan.php`
-- [ ] 1.6 Existing appliance wizard tests still pass: `php artisan test tests/Feature/Appliances/`
+- [x] 1.4 `app/Models/MaintenanceTask.php` declares the three scopes
+- [x] 1.5 `app/Actions/RecordTaskCompletion.php` exists alongside `GenerateMaintenancePlan.php`
+- [x] 1.6 Existing appliance wizard tests still pass: `php artisan test tests/Feature/Appliances/`
 
 ### Phase 2: Dashboard Volt Page
 
 #### Automated
 
-- [ ] 2.1 Full test suite passes: `php artisan test`
-- [ ] 2.2 PHPStan passes: `./vendor/bin/phpstan analyse`
-- [ ] 2.3 Pint reports no style issues: `./vendor/bin/pint --test`
+- [x] 2.1 Full test suite passes: `php artisan test`
+- [x] 2.2 PHPStan passes: `./vendor/bin/phpstan analyse`
+- [x] 2.3 Pint reports no style issues: `./vendor/bin/pint --test`
 
 #### Manual
 
-- [ ] 2.4 `/dashboard` loads after login with four section headings
-- [ ] 2.5 Overdue task visible in Overdue section after wizard run with backdated task
-- [ ] 2.6 Mark done moves task to Upcoming without page reload
-- [ ] 2.7 `ServiceRecord::latest()->first()` exists with today's `completed_at`
-- [ ] 2.8 `MaintenanceTask::find($id)->next_due_at` is recalculated to a future date
+- [x] 2.4 `/dashboard` loads after login with four section headings
+- [x] 2.5 Overdue task visible in Overdue section after wizard run with backdated task
+- [x] 2.6 Mark done moves task to Upcoming without page reload
+- [x] 2.7 `ServiceRecord::latest()->first()` exists with today's `completed_at`
+- [x] 2.8 `MaintenanceTask::find($id)->next_due_at` is recalculated to a future date
