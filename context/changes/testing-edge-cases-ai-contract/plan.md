@@ -318,27 +318,27 @@ Fill in the `§6.2` placeholder with the `Prism::fake()` integration-test patter
 
 #### Automated
 
-- [x] 2.1 All 3 AI contract tests pass: `composer test --filter AiContractTest`
-- [x] 2.2 PHPStan + Pint — no violations
-- [x] 2.3 Full suite — no regressions: `composer test`
+- [x] 2.1 All 3 AI contract tests pass: `composer test --filter AiContractTest` — 67ced5c
+- [x] 2.2 PHPStan + Pint — no violations — 67ced5c
+- [x] 2.3 Full suite — no regressions: `composer test` — 67ced5c
 
 #### Manual
 
-- [x] 2.4 Each test covers a distinct failure trigger, not three variants of the same code path
-- [x] 2.5 `aiError` is a user-readable string in all 3 cases
+- [x] 2.4 Each test covers a distinct failure trigger, not three variants of the same code path — 67ced5c
+- [x] 2.5 `aiError` is a user-readable string in all 3 cases — 67ced5c
 
 ### Phase 3: Risk #4 Boundary Tests + Test-Plan Correction
 
 #### Automated
 
-- [ ] 3.1 All 4 boundary tests pass: `composer test --filter DashboardBoundaryTest`
-- [ ] 3.2 PHPStan + Pint — no violations
-- [ ] 3.3 Full suite — no regressions: `composer test`
+- [x] 3.1 All 4 boundary tests pass: `composer test --filter DashboardBoundaryTest`
+- [x] 3.2 PHPStan + Pint — no violations
+- [x] 3.3 Full suite — no regressions: `composer test`
 
 #### Manual
 
-- [ ] 3.4 Each boundary test asserts presence in expected bucket AND absence from adjacent bucket
-- [ ] 3.5 `test-plan.md §2` Risk #4 row no longer contains the erroneous "today → overdue" statement
+- [x] 3.4 Each boundary test asserts presence in expected bucket AND absence from adjacent bucket
+- [x] 3.5 `test-plan.md §2` Risk #4 row no longer contains the erroneous "today → overdue" statement
 
 ### Phase 4: Risk #5 — Unconfirmed Tests
 
