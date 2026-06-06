@@ -14,7 +14,7 @@ new class extends Component
     {
         $logout();
 
-        $this->redirect('/', navigate: true);
+        $this->redirect(route('login', absolute: false));
     }
 }; ?>
 
