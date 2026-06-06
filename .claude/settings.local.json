@@ -36,7 +36,8 @@
       "Bash(php vendor/bin/phpstan analyse --no-progress)",
       "Skill(10x-archive)",
       "Bash(echo \"staged_exit:$?\")",
-      "Bash(git mv *)"
+      "Bash(git mv *)",
+      "Bash(composer phpstan *)"
     ],
     "deny": [
       "Bash(rm -rf *)"
@@ -46,6 +47,19 @@
       "Bash(wget *)",
       "Bash(git push *)",
       "Bash(git push)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | grep -qE 'composer\\.(json|lock)' && composer validate && composer audit || true"
+          }
+        ]
+      }
     ]
   }
 }
