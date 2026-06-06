@@ -85,6 +85,32 @@ class DashboardPageTest extends DashboardTestCase
         $this->get('/dashboard')->assertDontSee('Draft Task');
     }
 
+    public function test_unconfirmed_task_does_not_appear_in_due_this_week(): void
+    {
+        MaintenanceTask::factory()->create([
+            'appliance_id' => $this->appliance->id,
+            'name' => 'Draft Due This Week Task',
+            'next_due_at' => now()->addDays(3),
+            'interval_unit' => 'months',
+            'is_confirmed' => false,
+        ]);
+
+        $this->get('/dashboard')->assertDontSee('Draft Due This Week Task');
+    }
+
+    public function test_unconfirmed_task_does_not_appear_in_upcoming(): void
+    {
+        MaintenanceTask::factory()->create([
+            'appliance_id' => $this->appliance->id,
+            'name' => 'Draft Upcoming Task',
+            'next_due_at' => now()->addDays(30),
+            'interval_unit' => 'months',
+            'is_confirmed' => false,
+        ]);
+
+        $this->get('/dashboard')->assertDontSee('Draft Upcoming Task');
+    }
+
     public function test_task_from_different_household_does_not_appear(): void
     {
         $otherHousehold = Household::factory()->create();

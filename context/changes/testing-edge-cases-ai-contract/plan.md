@@ -331,25 +331,25 @@ Fill in the `§6.2` placeholder with the `Prism::fake()` integration-test patter
 
 #### Automated
 
-- [x] 3.1 All 4 boundary tests pass: `composer test --filter DashboardBoundaryTest`
-- [x] 3.2 PHPStan + Pint — no violations
-- [x] 3.3 Full suite — no regressions: `composer test`
+- [x] 3.1 All 4 boundary tests pass: `composer test --filter DashboardBoundaryTest` — 67561dc
+- [x] 3.2 PHPStan + Pint — no violations — 67561dc
+- [x] 3.3 Full suite — no regressions: `composer test` — 67561dc
 
 #### Manual
 
-- [x] 3.4 Each boundary test asserts presence in expected bucket AND absence from adjacent bucket
-- [x] 3.5 `test-plan.md §2` Risk #4 row no longer contains the erroneous "today → overdue" statement
+- [x] 3.4 Each boundary test asserts presence in expected bucket AND absence from adjacent bucket — 67561dc
+- [x] 3.5 `test-plan.md §2` Risk #4 row no longer contains the erroneous "today → overdue" statement — 67561dc
 
 ### Phase 4: Risk #5 — Unconfirmed Tests
 
 #### Automated
 
-- [ ] 4.1 All DashboardPageTest tests pass: `composer test --filter DashboardPageTest`
-- [ ] 4.2 PHPStan + Pint — no violations
+- [x] 4.1 All DashboardPageTest tests pass: `composer test --filter DashboardPageTest`
+- [x] 4.2 PHPStan + Pint — no violations
 
 #### Manual
 
-- [ ] 4.3 Tests pass reliably across multiple runs (frozen time)
+- [x] 4.3 Tests pass reliably across multiple runs (frozen time)
 
 ### Phase 5: §6.2 Cookbook
 
