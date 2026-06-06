@@ -13,13 +13,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable(['household_id', 'name'])]
 class ApplianceType extends Model
 {
+    /** @use HasFactory<\Database\Factories\ApplianceTypeFactory> */
     use HasFactory;
 
+    /** @return BelongsTo<Household, $this> */
     public function household(): BelongsTo
     {
         return $this->belongsTo(Household::class);
     }
 
+    /** @return HasMany<Appliance, $this> */
     public function appliances(): HasMany
     {
         return $this->hasMany(Appliance::class);

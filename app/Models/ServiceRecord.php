@@ -12,8 +12,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable(['maintenance_task_id', 'completed_at', 'metric_reading', 'notes'])]
 class ServiceRecord extends Model
 {
+    /** @use HasFactory<\Database\Factories\ServiceRecordFactory> */
     use HasFactory;
 
+    /** @return BelongsTo<MaintenanceTask, $this> */
     public function maintenanceTask(): BelongsTo
     {
         return $this->belongsTo(MaintenanceTask::class);

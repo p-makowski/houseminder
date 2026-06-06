@@ -252,15 +252,15 @@ None required — this change adds only PHPDoc annotations and a factory stub. R
 
 #### Automated
 
-- [x] 1.1 File exists: `ls database/factories/ServiceRecordFactory.php`
-- [x] 1.2 PHPStan error count does not increase: `composer phpstan` (baseline check)
+- [x] 1.1 File exists: `ls database/factories/ServiceRecordFactory.php` — 02706fd
+- [x] 1.2 PHPStan error count does not increase: `composer phpstan` (baseline check) — 02706fd
 
 ### Phase 2: Model PHPDoc Annotations
 
 #### Automated
 
-- [ ] 2.1 PHPStan reports exactly 1 remaining error (GenerateMaintenancePlan only)
-- [ ] 2.2 Tests still pass: `composer test`
+- [x] 2.1 PHPStan reports exactly 1 remaining error (GenerateMaintenancePlan only)
+- [x] 2.2 Tests still pass: `composer test`
 
 ### Phase 3: Action PHPDoc Annotation
 

@@ -20,6 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    /** @return BelongsToMany<Household, $this> */
     public function households(): BelongsToMany
     {
         return $this->belongsToMany(Household::class)->withPivot('role');

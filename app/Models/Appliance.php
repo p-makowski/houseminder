@@ -13,18 +13,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable(['household_id', 'appliance_type_id', 'name', 'model', 'purchase_date', 'is_plan_confirmed'])]
 class Appliance extends Model
 {
+    /** @use HasFactory<\Database\Factories\ApplianceFactory> */
     use HasFactory;
 
+    /** @return BelongsTo<Household, $this> */
     public function household(): BelongsTo
     {
         return $this->belongsTo(Household::class);
     }
 
+    /** @return BelongsTo<ApplianceType, $this> */
     public function applianceType(): BelongsTo
     {
         return $this->belongsTo(ApplianceType::class);
     }
 
+    /** @return HasMany<MaintenanceTask, $this> */
     public function maintenanceTasks(): HasMany
     {
         return $this->hasMany(MaintenanceTask::class);
