@@ -54,6 +54,9 @@
             "@php artisan config:clear --ansi @no_additional_args",
             "@php artisan test"
         ],
+        "phpstan": [
+            "@php vendor/bin/phpstan analyse --no-progress --memory-limit=512M"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

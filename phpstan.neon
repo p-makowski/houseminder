@@ -6,4 +6,3 @@ parameters:
         - app
 
     level: 6
-    memory_limit: 512M

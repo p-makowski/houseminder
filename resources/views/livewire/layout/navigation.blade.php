@@ -14,6 +14,8 @@ new class extends Component
     {
         $logout();
 
+        // Full-page redirect intentional: clears Livewire page cache and Alpine state
+        // so no stale authenticated UI survives back-navigation after logout.
         $this->redirect(route('login', absolute: false));
     }
 }; ?>
