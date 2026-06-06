@@ -64,3 +64,10 @@
 **Problem**: Calendar units (days/weeks/months/years) use next_due_at (datetime); metric units (hours/km) use next_due_at_value (float). No DB or model constraint enforces this. Both fields can be set or both null without error.
 **Rule**: Any code reading/writing next_due_at or next_due_at_value must branch on interval_unit first. Form validation (S-01) and schedule calculation (S-02) must enforce that exactly one field is populated per task.
 **Applies to**: S-01 plan confirmation, S-02 overdue detection, any future task CRUD.
+
+## Larastan v3.x relationship return types require $this as TDeclaringModel
+
+**Context**: `app/Models/*` — all Eloquent relationship methods (BelongsTo, HasMany, BelongsToMany)
+**Problem**: Larastan v3.x stubs return `BelongsTo<TRelated, $this(Model)>` from `belongsTo()` etc. Since `TDeclaringModel` is invariant, annotating `@return BelongsTo<Related, ConcreteModel>` causes a type mismatch: "should return BelongsTo<Related, ConcreteModel> but returns BelongsTo<Related, $this(ConcreteModel)>". PHPStan level 6 reports this as an error.
+**Rule**: Always use `$this` as the second type parameter in Eloquent relationship PHPDoc annotations — e.g. `@return BelongsTo<Household, $this>`, not `@return BelongsTo<Household, Appliance>`. The declaring-model type is always `$this` to match what Larastan infers from the relation builder stubs.
+**Applies to**: Any model file adding `@return` generics to BelongsTo, HasMany, HasOne, BelongsToMany, or similar Eloquent relation return types under Larastan v3.x.

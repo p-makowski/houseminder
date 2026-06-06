@@ -114,9 +114,9 @@ Groups E (2 errors in `RecordTaskCompletion`) resolve automatically as a side ef
 
 **Contract**:
 - Before `use HasFactory;` on line 16: `/** @use HasFactory<\Database\Factories\ApplianceFactory> */`
-- `household(): BelongsTo` → annotate `@return BelongsTo<Household, Appliance>`
-- `applianceType(): BelongsTo` → annotate `@return BelongsTo<ApplianceType, Appliance>`
-- `maintenanceTasks(): HasMany` → annotate `@return HasMany<MaintenanceTask, Appliance>`
+- `household(): BelongsTo` → annotate `@return BelongsTo<Household, $this>`
+- `applianceType(): BelongsTo` → annotate `@return BelongsTo<ApplianceType, $this>`
+- `maintenanceTasks(): HasMany` → annotate `@return HasMany<MaintenanceTask, $this>`
 
 #### 2. ApplianceType model
 
@@ -126,8 +126,8 @@ Groups E (2 errors in `RecordTaskCompletion`) resolve automatically as a side ef
 
 **Contract**:
 - Before `use HasFactory;`: `/** @use HasFactory<\Database\Factories\ApplianceTypeFactory> */`
-- `household(): BelongsTo` → `@return BelongsTo<Household, ApplianceType>`
-- `appliances(): HasMany` → `@return HasMany<Appliance, ApplianceType>`
+- `household(): BelongsTo` → `@return BelongsTo<Household, $this>`
+- `appliances(): HasMany` → `@return HasMany<Appliance, $this>`
 
 #### 3. Household model
 
@@ -137,9 +137,9 @@ Groups E (2 errors in `RecordTaskCompletion`) resolve automatically as a side ef
 
 **Contract**:
 - Before `use HasFactory;`: `/** @use HasFactory<\Database\Factories\HouseholdFactory> */`
-- `users(): BelongsToMany` → `@return BelongsToMany<User, Household>` (2-type form; pivot type omitted)
-- `appliances(): HasMany` → `@return HasMany<Appliance, Household>`
-- `applianceTypes(): HasMany` → `@return HasMany<ApplianceType, Household>`
+- `users(): BelongsToMany` → `@return BelongsToMany<User, $this>` (TDeclaringModel = $this required by Larastan v3)
+- `appliances(): HasMany` → `@return HasMany<Appliance, $this>`
+- `applianceTypes(): HasMany` → `@return HasMany<ApplianceType, $this>`
 
 #### 4. MaintenanceTask model
 
@@ -166,8 +166,8 @@ For the three scope methods (each gets a `/** @param Builder<MaintenanceTask> $q
 - `scopeForHousehold(Builder $query, int $householdId)` — also add `/** @param Builder<Appliance> $q */` inside the closure body before the lambda expression
 
 For relationship methods:
-- `appliance(): BelongsTo` → `@return BelongsTo<Appliance, MaintenanceTask>`
-- `serviceRecords(): HasMany` → `@return HasMany<ServiceRecord, MaintenanceTask>`
+- `appliance(): BelongsTo` → `@return BelongsTo<Appliance, $this>`
+- `serviceRecords(): HasMany` → `@return HasMany<ServiceRecord, $this>`
 
 #### 5. ServiceRecord model
 
@@ -177,7 +177,7 @@ For relationship methods:
 
 **Contract**:
 - Before `use HasFactory;`: `/** @use HasFactory<\Database\Factories\ServiceRecordFactory> */`
-- `maintenanceTask(): BelongsTo` → `@return BelongsTo<MaintenanceTask, ServiceRecord>`
+- `maintenanceTask(): BelongsTo` → `@return BelongsTo<MaintenanceTask, $this>`
 
 #### 6. User model
 
@@ -185,7 +185,7 @@ For relationship methods:
 
 **Intent**: Add `@return` generic to `households()`. The `@use HasFactory<UserFactory>` is already correct on line 20 — do not modify it.
 
-**Contract**: `households(): BelongsToMany` → `@return BelongsToMany<Household, User>`
+**Contract**: `households(): BelongsToMany` → `@return BelongsToMany<Household, $this>`
 
 ### Success Criteria:
 
