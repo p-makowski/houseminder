@@ -1,4 +1,10 @@
-1. /10x-new dashboard-tasks-and-mark-done
+## HINTS for humans
+
+php artisan serve
+npm run dev
+
+
+1. /10x-new dashboard-tasks-and-mark-done 
    Creates context/changes/dashboard-tasks-and-mark-done/change.md. Skip if the folder already exists.
 
 2. /10x-research dashboard-tasks-and-mark-done
