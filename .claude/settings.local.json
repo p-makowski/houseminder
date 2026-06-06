@@ -32,7 +32,11 @@
       "Bash(php artisan *)",
       "Bash(echo \"empty=$?\")",
       "Bash(./vendor/bin/pint *)",
-      "Bash(composer test *)"
+      "Bash(composer test *)",
+      "Bash(php vendor/bin/phpstan analyse --no-progress)",
+      "Skill(10x-archive)",
+      "Bash(echo \"staged_exit:$?\")",
+      "Bash(git mv *)"
     ],
     "deny": [
       "Bash(rm -rf *)"
