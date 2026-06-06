@@ -23,3 +23,14 @@ After all phases:
 7. /10x-impl-review dashboard-tasks-and-mark-done
 
 8. /10x-archive dashboard-tasks-and-mark-done
+
+
+⏺ The standard chain for a new change is:
+
+/10x-new <change-id>        ← creates context/changes/<id>/change.md
+/10x-research <change-id>   ← parallel sub-agents read relevant code, writes research.md
+/10x-plan <change-id>       ← produces plan.md with phases and Progress section
+/10x-plan-review            ← optional but recommended before you commit to implementation
+/10x-implement <change-id>  ← executes the plan phase by phase
+/10x-impl-review            ← review against the plan for drift/safety
+/10x-archive <change-id>    ← closes the change, moves to context/archive/
