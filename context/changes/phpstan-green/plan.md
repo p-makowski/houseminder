@@ -259,12 +259,12 @@ None required — this change adds only PHPDoc annotations and a factory stub. R
 
 #### Automated
 
-- [x] 2.1 PHPStan reports exactly 1 remaining error (GenerateMaintenancePlan only)
-- [x] 2.2 Tests still pass: `composer test`
+- [x] 2.1 PHPStan reports exactly 1 remaining error (GenerateMaintenancePlan only) — c8d008e
+- [x] 2.2 Tests still pass: `composer test` — c8d008e
 
 ### Phase 3: Action PHPDoc Annotation
 
 #### Automated
 
-- [ ] 3.1 PHPStan exits 0: `composer phpstan` outputs `[OK] No errors`
-- [ ] 3.2 Tests still pass: `composer test`
+- [x] 3.1 PHPStan exits 0: `composer phpstan` outputs `[OK] No errors`
+- [x] 3.2 Tests still pass: `composer test`

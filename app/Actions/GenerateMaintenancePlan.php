@@ -15,6 +15,7 @@ use Prism\Prism\ValueObjects\Messages\UserMessage;
 
 class GenerateMaintenancePlan
 {
+    /** @return array<int, array{name: string, description: string, interval_value: int|float, interval_unit: string}> */
     public function __invoke(string $applianceName, string $applianceModel, string $typeName): array
     {
         $applianceName = preg_replace('/[\x00-\x1F\x7F]/u', '', mb_substr($applianceName, 0, 255));
