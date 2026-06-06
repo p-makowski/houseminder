@@ -137,10 +137,10 @@ No base `TestCase` subclass needed — the auth test only requires `User::factor
 
 #### Automated
 
-- [x] 1.1 New tests pass: `composer test --filter RootRedirectTest`
-- [x] 1.2 PHPStan level 6 clean: `./vendor/bin/phpstan analyse`
-- [x] 1.3 Code style clean: `./vendor/bin/pint --test`
-- [x] 1.4 Full suite passes: `composer test`
+- [x] 1.1 New tests pass: `composer test --filter RootRedirectTest` — 49afdac
+- [x] 1.2 PHPStan level 6 clean: `./vendor/bin/phpstan analyse` — 49afdac
+- [x] 1.3 Code style clean: `./vendor/bin/pint --test` — 49afdac
+- [x] 1.4 Full suite passes: `composer test` — 49afdac
 
 #### Manual
 
