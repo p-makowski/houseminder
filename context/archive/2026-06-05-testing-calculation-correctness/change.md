@@ -1,10 +1,10 @@
 ---
 change_id: testing-calculation-correctness
 title: Phase 1 — Calculation correctness tests for next_due_at
-status: impl_reviewed
+status: archived
 created: 2026-06-05
 updated: 2026-06-06
-archived_at: null
+archived_at: 2026-06-06T06:54:30Z
 ---
 
 ## Notes
