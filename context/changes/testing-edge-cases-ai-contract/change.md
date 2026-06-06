@@ -1,7 +1,7 @@
 ---
 change_id: testing-edge-cases-ai-contract
 title: Edge cases + AI contract — dashboard date boundaries, unconfirmed tasks, Prism failure modes
-status: preparing
+status: implementing
 created: 2026-06-06
 updated: 2026-06-06
 archived_at: null

@@ -111,6 +111,11 @@ new #[Layout('layouts.app')] class extends Component
                 'anchor_type' => 'from_last_done',
             ]), $result);
 
+            if (empty($this->tasks)) {
+                $this->aiError = 'No maintenance tasks were generated. Please try again.';
+                return;
+            }
+
             $this->aiError = null;
         } catch (PrismException $e) {
             $this->aiError = 'Could not generate maintenance tasks. Please try again.';

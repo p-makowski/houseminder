@@ -17,9 +17,9 @@ class GenerateMaintenancePlan
 {
     public function __invoke(string $applianceName, string $applianceModel, string $typeName): array
     {
-        $applianceName  = preg_replace('/[\x00-\x1F\x7F]/u', '', mb_substr($applianceName, 0, 255));
+        $applianceName = preg_replace('/[\x00-\x1F\x7F]/u', '', mb_substr($applianceName, 0, 255));
         $applianceModel = preg_replace('/[\x00-\x1F\x7F]/u', '', mb_substr($applianceModel, 0, 255));
-        $typeName       = preg_replace('/[\x00-\x1F\x7F]/u', '', mb_substr($typeName, 0, 255));
+        $typeName = preg_replace('/[\x00-\x1F\x7F]/u', '', mb_substr($typeName, 0, 255));
 
         $schema = new ObjectSchema(
             name: 'maintenance_plan',
@@ -46,10 +46,10 @@ class GenerateMaintenancePlan
 
         $systemMessage = (new SystemMessage(
             'You are a home appliance maintenance expert. '
-            . 'Suggest 3 to 6 practical, calendar-based maintenance tasks for the given appliance. '
-            . 'interval_unit MUST be one of: days, weeks, months, years. '
-            . 'Never return hours or km. '
-            . 'Return structured JSON only.'
+            .'Suggest 3 to 6 practical, calendar-based maintenance tasks for the given appliance. '
+            .'interval_unit MUST be one of: days, weeks, months, years. '
+            .'Never return hours or km. '
+            .'Return structured JSON only.'
         ))->withProviderOptions(['cacheType' => 'ephemeral', 'cacheTtl' => '5m']);
 
         $response = Prism::structured()
@@ -65,6 +65,17 @@ class GenerateMaintenancePlan
             ->withClientRetry(2, 500)
             ->asStructured();
 
-        return $response->structured['tasks'] ?? [];
+        $tasks = $response->structured['tasks'] ?? [];
+
+        $required = ['name', 'description', 'interval_value', 'interval_unit'];
+        foreach ($tasks as $task) {
+            foreach ($required as $field) {
+                if (! array_key_exists($field, (array) $task)) {
+                    throw new \InvalidArgumentException('AI returned a task missing required fields.');
+                }
+            }
+        }
+
+        return $tasks;
     }
 }
