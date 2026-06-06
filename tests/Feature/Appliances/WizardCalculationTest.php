@@ -13,7 +13,7 @@ class WizardCalculationTest extends ApplianceTestCase
 {
     private const BACKDATE = '2024-01-15';
 
-    // === No-backdate scenario (anchor = Carbon::today() = frozen) ===
+    // === No-backdate scenario: confirm() falls back to Carbon::today() as anchor (frozen by freezeTime()) ===
 
     public function test_confirm_next_due_at_for_days_with_no_backdate(): void
     {

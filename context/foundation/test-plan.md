@@ -174,7 +174,7 @@ class CalendarIntervalTest extends TestCase
 - Assert the exact output string with `assertSame`, not "is in the future" or `isFuture()`.
 - Place the file in `tests/Unit/<Namespace>/` mirroring `app/<Namespace>/`.
 
-**Run command:** `php artisan test tests/Unit/`
+**Run command:** `composer test --filter CalendarIntervalTest`
 
 ---
 
@@ -231,7 +231,7 @@ class WizardCalculationTest extends ApplianceTestCase
 - Assert exact date strings. For `fixed_calendar` anchor type also assert `anchor_date`; for `from_last_done` also assert `last_completed_at`.
 - Fetch the created model via `MaintenanceTask::first()` after calling `confirm()` — the component does not return the model.
 
-**Run command:** `php artisan test tests/Feature/Appliances/`
+**Run command:** `composer test --filter WizardCalculationTest`
 
 ### 6.2 Adding an integration test for a Livewire Volt component
 

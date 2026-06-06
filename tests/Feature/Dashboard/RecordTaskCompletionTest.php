@@ -134,6 +134,8 @@ class RecordTaskCompletionTest extends DashboardTestCase
         $this->assertEquals($originalNextDue->toDateString(), $task->next_due_at->toDateString());
     }
 
+    // anchor_type does not affect mark-done arithmetic by design —
+    // fixed_calendar tasks advance from completion time, same as from_last_done.
     public function test_recalculates_next_due_at_for_days_with_fixed_calendar_anchor(): void
     {
         $task = MaintenanceTask::factory()->create([
