@@ -306,26 +306,26 @@ Fill in the `§6.2` placeholder with the `Prism::fake()` integration-test patter
 
 #### Automated
 
-- [x] 1.1 All existing tests pass: `composer test`
-- [x] 1.2 PHPStan level 6 — no new violations: `./vendor/bin/phpstan analyse`
-- [x] 1.3 Code style — no violations: `./vendor/bin/pint --test`
+- [x] 1.1 All existing tests pass: `composer test` — 8a14198
+- [x] 1.2 PHPStan level 6 — no new violations: `./vendor/bin/phpstan analyse` — 8a14198
+- [x] 1.3 Code style — no violations: `./vendor/bin/pint --test` — 8a14198
 
 #### Manual
 
-- [x] 1.4 Zero-tasks fix verified: forced empty AI response shows error immediately in step 2
+- [x] 1.4 Zero-tasks fix verified: forced empty AI response shows error immediately in step 2 — 8a14198
 
 ### Phase 2: Risk #6 Tests — AI Contract
 
 #### Automated
 
-- [ ] 2.1 All 3 AI contract tests pass: `composer test --filter AiContractTest`
-- [ ] 2.2 PHPStan + Pint — no violations
-- [ ] 2.3 Full suite — no regressions: `composer test`
+- [x] 2.1 All 3 AI contract tests pass: `composer test --filter AiContractTest`
+- [x] 2.2 PHPStan + Pint — no violations
+- [x] 2.3 Full suite — no regressions: `composer test`
 
 #### Manual
 
-- [ ] 2.4 Each test covers a distinct failure trigger, not three variants of the same code path
-- [ ] 2.5 `aiError` is a user-readable string in all 3 cases
+- [x] 2.4 Each test covers a distinct failure trigger, not three variants of the same code path
+- [x] 2.5 `aiError` is a user-readable string in all 3 cases
 
 ### Phase 3: Risk #4 Boundary Tests + Test-Plan Correction
 
