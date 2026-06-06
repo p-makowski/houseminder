@@ -355,5 +355,5 @@ Fill in the `§6.2` placeholder with the `Prism::fake()` integration-test patter
 
 #### Manual
 
-- [x] 5.1 §6.2 is self-contained and citable without reading this plan
-- [x] 5.2 `test-plan.md §3 Phase 3` status row updated to `complete`
+- [x] 5.1 §6.2 is self-contained and citable without reading this plan — d7ae4ef
+- [x] 5.2 `test-plan.md §3 Phase 3` status row updated to `complete` — d7ae4ef
