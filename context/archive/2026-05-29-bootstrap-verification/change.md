@@ -1,10 +1,10 @@
 ---
 change_id: bootstrap-verification
 title: Bootstrap verification — Laravel starter
-status: implemented
+status: archived
 created: 2026-05-29
 updated: 2026-06-06
-archived_at: null
+archived_at: 2026-06-06T06:58:58Z
 ---
 
 ## Notes
