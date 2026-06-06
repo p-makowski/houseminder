@@ -73,7 +73,7 @@ orchestrator updates Status as artifacts appear on disk.
 |---|---|---|---|---|---|---|
 | 1 | Calculation correctness | Prove `next_due_at` is exact for all interval units and anchor types in both the wizard confirm path and mark-done path | #2 | unit + integration | complete | context/changes/testing-calculation-correctness |
 | 2 | Authorization depth | Prove all Volt components enforce household scope; IDOR on markDone returns 403 and creates no ServiceRecord | #1, #3 | integration | complete | context/archive/2026-06-05-testing-authorization-depth |
-| 3 | Edge cases + AI contract | Prove dashboard date boundaries are exact; unconfirmed tasks stay hidden; AI zero-task and malformed responses surface an error | #4, #5, #6 | integration | change opened | context/changes/testing-edge-cases-ai-contract |
+| 3 | Edge cases + AI contract | Prove dashboard date boundaries are exact; unconfirmed tasks stay hidden; AI zero-task and malformed responses surface an error | #4, #5, #6 | integration | complete | context/changes/testing-edge-cases-ai-contract |
 | 4 | Quality-gates wiring | Lock PHPStan level 6 + Pint + PHPUnit as mandatory CI gates; add post-edit hook guidance | cross-cutting | CI gates | not started | — |
 
 **Status vocabulary:**
@@ -311,7 +311,81 @@ $this->assertDatabaseMissing('service_records', ['maintenance_task_id' => $forei
 
 ### 6.4 Adding a test for an AI-integrated flow (Prism-backed)
 
-TBD — see §3 Phase 3 (edge cases + AI contract — will document how to use `Prism::fake()` with empty/malformed response fixtures to guard against AI contract drift).
+**When to use `Prism::fake()` vs action mocking:**
+
+- Use `Prism::fake()` when the test must exercise the **real `GenerateMaintenancePlan` action path** — i.e., field validation, deserialization, and the zero-tasks guard in `fetchSuggestions()`. This is the correct tool for AI contract tests because it exercises the integration path from Prism response through the action to the component state.
+- Use `$this->mock(GenerateMaintenancePlan::class)` only when testing the **component's response to a specific exception** (e.g., the `PrismException` retry UX in `AiFailureTest`). This bypasses the action entirely, which is appropriate when the action's own behavior is not the subject of the test.
+
+**StructuredResponseFake fixture setup:**
+
+```php
+use Prism\Prism\Facades\Prism;
+use Prism\Prism\Testing\StructuredResponseFake;
+use Prism\Prism\ValueObjects\Usage;
+
+// Empty task array — triggers the zero-tasks guard in fetchSuggestions()
+Prism::fake([
+    StructuredResponseFake::make()
+        ->withStructured(['tasks' => []])
+        ->withUsage(new Usage(10, 5)),
+]);
+
+// Missing required field — triggers \InvalidArgumentException in GenerateMaintenancePlan
+// (omit any of: name, description, interval_value, interval_unit)
+Prism::fake([
+    StructuredResponseFake::make()
+        ->withStructured([
+            'tasks' => [
+                [
+                    'description'    => 'Clean the lint filter.',
+                    'interval_value' => 3,
+                    'interval_unit'  => 'months',
+                    // 'name' omitted intentionally
+                ],
+            ],
+        ])
+        ->withUsage(new Usage(10, 5)),
+]);
+
+// Non-iterable tasks value — triggers \Throwable fallback in fetchSuggestions()
+Prism::fake([
+    StructuredResponseFake::make()
+        ->withStructured(['tasks' => 'not-an-array'])
+        ->withUsage(new Usage(10, 5)),
+]);
+```
+
+**Volt component call pattern:**
+
+```php
+class MyAiTest extends ApplianceTestCase
+{
+    public function test_some_failure_mode_shows_error(): void
+    {
+        Prism::fake([/* fixture */]);
+
+        $component = Volt::test('pages.appliances.create')
+            ->set('name', 'Test Appliance')
+            ->set('model', 'Model X')
+            ->set('typeSearch', 'Appliance Type');
+
+        $component->call('fetchSuggestions');
+
+        $component
+            ->assertSet('aiError', fn ($v) => ! empty($v))
+            ->assertSet('aiLoading', false);
+    }
+}
+```
+
+- Extend `ApplianceTestCase` — provides user, household, actingAs, and `$this->freezeTime()`.
+- Set `name`, `model`, and `typeSearch` before calling `fetchSuggestions()` — these are the minimum component properties the action reads.
+- `->assertSet('aiError', fn ($v) => ! empty($v))` asserts the error is a non-empty string without hardcoding the message. Use the exact string form when asserting a specific message (see `test_zero_tasks_shows_immediate_error`).
+- Do NOT assert `->assertSet('tasks', ...)` in failure tests — the tasks state is irrelevant when `aiError` is set.
+
+**Run command:** `composer test --filter AiContractTest`
+
+**Canonical example:** `tests/Feature/Appliances/AiContractTest.php`
 
 ### 6.5 Wiring a new CI gate
 

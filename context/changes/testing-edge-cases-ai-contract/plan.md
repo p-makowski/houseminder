@@ -344,16 +344,16 @@ Fill in the `§6.2` placeholder with the `Prism::fake()` integration-test patter
 
 #### Automated
 
-- [x] 4.1 All DashboardPageTest tests pass: `composer test --filter DashboardPageTest`
-- [x] 4.2 PHPStan + Pint — no violations
+- [x] 4.1 All DashboardPageTest tests pass: `composer test --filter DashboardPageTest` — 47a3446
+- [x] 4.2 PHPStan + Pint — no violations — 47a3446
 
 #### Manual
 
-- [x] 4.3 Tests pass reliably across multiple runs (frozen time)
+- [x] 4.3 Tests pass reliably across multiple runs (frozen time) — 47a3446
 
 ### Phase 5: §6.2 Cookbook
 
 #### Manual
 
-- [ ] 5.1 §6.2 is self-contained and citable without reading this plan
-- [ ] 5.2 `test-plan.md §3 Phase 3` status row updated to `complete`
+- [x] 5.1 §6.2 is self-contained and citable without reading this plan
+- [x] 5.2 `test-plan.md §3 Phase 3` status row updated to `complete`
