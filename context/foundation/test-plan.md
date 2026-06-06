@@ -6,7 +6,7 @@
 >
 > Refresh: re-run `/10x-test-plan --refresh` when stale (see §8).
 >
-> Last updated: 2026-06-05 (Phase 1 complete; Phase 2 research backport — Risk #3 assertion corrected)
+> Last updated: 2026-06-06 (Phase 2 complete + archived; Phase 3 change opening next)
 
 ---
 
@@ -72,8 +72,8 @@ orchestrator updates Status as artifacts appear on disk.
 | # | Phase name | Goal | Risks covered | Test types | Status | Change folder |
 |---|---|---|---|---|---|---|
 | 1 | Calculation correctness | Prove `next_due_at` is exact for all interval units and anchor types in both the wizard confirm path and mark-done path | #2 | unit + integration | complete | context/changes/testing-calculation-correctness |
-| 2 | Authorization depth | Prove all Volt components enforce household scope; IDOR on markDone returns 403 and creates no ServiceRecord | #1, #3 | integration | researched | context/changes/testing-authorization-depth |
-| 3 | Edge cases + AI contract | Prove dashboard date boundaries are exact; unconfirmed tasks stay hidden; AI zero-task and malformed responses surface an error | #4, #5, #6 | integration | not started | — |
+| 2 | Authorization depth | Prove all Volt components enforce household scope; IDOR on markDone returns 403 and creates no ServiceRecord | #1, #3 | integration | complete | context/archive/2026-06-05-testing-authorization-depth |
+| 3 | Edge cases + AI contract | Prove dashboard date boundaries are exact; unconfirmed tasks stay hidden; AI zero-task and malformed responses surface an error | #4, #5, #6 | integration | change opened | context/changes/testing-edge-cases-ai-contract |
 | 4 | Quality-gates wiring | Lock PHPStan level 6 + Pint + PHPUnit as mandatory CI gates; add post-edit hook guidance | cross-cutting | CI gates | not started | — |
 
 **Status vocabulary:**
