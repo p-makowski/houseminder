@@ -266,5 +266,5 @@ None required — this change adds only PHPDoc annotations and a factory stub. R
 
 #### Automated
 
-- [x] 3.1 PHPStan exits 0: `composer phpstan` outputs `[OK] No errors`
-- [x] 3.2 Tests still pass: `composer test`
+- [x] 3.1 PHPStan exits 0: `composer phpstan` outputs `[OK] No errors` — 7a3c437
+- [x] 3.2 Tests still pass: `composer test` — 7a3c437
