@@ -9,6 +9,7 @@ use Prism\Prism\Facades\Prism;
 use Prism\Prism\Testing\StructuredResponseFake;
 use Prism\Prism\ValueObjects\Usage;
 
+/** Tests AI response shape via Prism::fake() — exercises real GenerateMaintenancePlan validation. For transport failures (PrismException), see AiFailureTest. */
 class AiContractTest extends ApplianceTestCase
 {
     public function test_zero_tasks_shows_immediate_error(): void
@@ -64,7 +65,7 @@ class AiContractTest extends ApplianceTestCase
     {
         Prism::fake([
             StructuredResponseFake::make()
-                ->withStructured(['tasks' => 'not-an-array'])
+                ->withStructured(['tasks' => 'not-an-array']) // strings are not iterable in PHP 8 — triggers TypeError → \Throwable catch in fetchSuggestions()
                 ->withUsage(new Usage(10, 5)),
         ]);
 
