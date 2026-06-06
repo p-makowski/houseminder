@@ -37,7 +37,8 @@
       "Skill(10x-archive)",
       "Bash(echo \"staged_exit:$?\")",
       "Bash(git mv *)",
-      "Bash(composer phpstan *)"
+      "Bash(composer phpstan *)",
+      "Skill(10x-plan)"
     ],
     "deny": [
       "Bash(rm -rf *)"
