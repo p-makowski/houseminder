@@ -389,7 +389,7 @@ No schema changes. `ServiceRecord` and all `MaintenanceTask` fields used (`last_
 
 #### Automated
 
-- [x] 3.1 `php artisan test` passes (no regressions)
+- [x] 3.1 `php artisan test` passes (no regressions) — d2d1497
 
 #### Manual
 
@@ -404,9 +404,9 @@ No schema changes. `ServiceRecord` and all `MaintenanceTask` fields used (`last_
 
 #### Automated
 
-- [ ] 4.1 `php artisan test --filter=ApplianceShowTaskCreateTest` — all 5 pass
-- [ ] 4.2 `php artisan test` — full suite green
-- [ ] 4.3 `composer phpstan` — no new errors
+- [x] 4.1 `php artisan test --filter=ApplianceShowTaskCreateTest` — all 5 pass — ebd3fe4
+- [x] 4.2 `php artisan test` — full suite green — ebd3fe4
+- [x] 4.3 `composer phpstan` — no new errors — ebd3fe4
 
 #### Manual
 
