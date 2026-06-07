@@ -4,8 +4,8 @@
 - **Plan**: `context/changes/dashboard-this-month-section/plan.md`
 - **Scope**: Full plan — Phase 1 + Phase 2
 - **Date**: 2026-06-07
-- **Verdict**: NEEDS ATTENTION
-- **Findings**: 0 critical · 3 warnings · 0 observations
+- **Verdict**: APPROVED (all findings fixed in 57ade83; re-verified 2026-06-07)
+- **Findings**: 0 critical · 3 warnings · 0 observations (all fixed)
 
 ## Verdicts
 
@@ -37,7 +37,7 @@
   - Tradeoff: Unconfirmed tasks disappear from the page entirely — users lose the ability to see/manage them from the appliance view.
   - Confidence: HIGH — technically trivial but changes the UX contract significantly.
   - Blind spot: There may be no UI path to reach unconfirmed tasks once they're hidden here.
-- **Decision**: PENDING
+- **Decision**: FIXED via Fix A (57ade83) — Draft badge added to all 5 section read cards
 
 ### F2 — Section tests don't set is_confirmed=true; tests pass by omission
 
@@ -47,7 +47,7 @@
 - **Location**: `tests/Feature/Appliances/ApplianceShowSectionsTest.php:22–83`
 - **Detail**: All six factory calls omit `'is_confirmed' => true`. Factory default is `false`. Dashboard test conventions always set it explicitly. Tests currently pass because the computed properties have no `is_confirmed` filter. If F1-Fix-B is applied, all six tests immediately go red. The coupling makes the tests brittle and silent about their intent.
 - **Fix**: Be explicit about intent — if Fix A from F1 is accepted (show all tasks), add `'is_confirmed' => false` explicitly to one test to assert unconfirmed tasks are visible. If Fix B is chosen, add `'is_confirmed' => true` to all six factory calls.
-- **Decision**: PENDING
+- **Decision**: FIXED (57ade83) — added `test_unconfirmed_task_is_visible_with_draft_badge` with explicit `is_confirmed => false`
 
 ### F3 — resolveHouseholdId() runs a DB query per computed property
 
@@ -57,4 +57,4 @@
 - **Location**: `resources/views/livewire/pages/dashboard.blade.php:90–93`
 - **Detail**: `resolveHouseholdId()` calls `Auth::user()->households()->first()` on every invocation. There are now 4 calendar-section computed properties calling it (was 3 before `dueThisMonth()`). Each is an independent DB query. Livewire `#[Computed]` caches section results but not this helper. Pre-existing issue; the new property adds one more hit.
 - **Fix**: Cache the household id once in `mount()`: store as a property (e.g., `private int $householdId`) and assign `$this->householdId = Auth::user()->households()->first()->id` there. Aligns with the existing `abort_if` call in `mount()` which already does this lookup.
-- **Decision**: PENDING
+- **Decision**: FIXED (57ade83) — replaced `resolveHouseholdId()` with `#[Computed] public function householdId(): int` (private property approach broke on Livewire hydration)
