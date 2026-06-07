@@ -363,8 +363,8 @@ No schema changes. `ServiceRecord` and all `MaintenanceTask` fields used (`last_
 
 #### Automated
 
-- [x] 1.1 PHPStan passes: `composer phpstan`
-- [x] 1.2 Full test suite passes: `php artisan test`
+- [x] 1.1 PHPStan passes: `composer phpstan` — ebd3fe4
+- [x] 1.2 Full test suite passes: `php artisan test` — ebd3fe4
 
 #### Manual
 
@@ -376,7 +376,7 @@ No schema changes. `ServiceRecord` and all `MaintenanceTask` fields used (`last_
 
 #### Automated
 
-- [ ] 2.1 `php artisan view:cache` completes without errors
+- [x] 2.1 `php artisan view:cache` completes without errors
 
 #### Manual
 
