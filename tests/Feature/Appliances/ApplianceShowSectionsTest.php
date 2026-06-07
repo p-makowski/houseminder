@@ -83,6 +83,22 @@ class ApplianceShowSectionsTest extends ApplianceTestCase
             ->assertSee('border-gray-200');
     }
 
+    public function test_unconfirmed_task_is_visible_with_draft_badge(): void
+    {
+        // Appliance detail intentionally shows unconfirmed (draft) tasks so users
+        // can manage them. Confirmed tasks are shown without the badge.
+        MaintenanceTask::factory()->create([
+            'appliance_id'  => $this->appliance->id,
+            'name'          => 'Draft Task',
+            'next_due_at'   => now()->addDays(15),
+            'is_confirmed'  => false,
+        ]);
+
+        Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
+            ->assertSee('Draft Task')
+            ->assertSee('Draft');
+    }
+
     public function test_this_month_tasks_sorted_alphabetically_by_name(): void
     {
         MaintenanceTask::factory()->create([

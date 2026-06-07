@@ -18,12 +18,15 @@ new #[Layout('layouts.app')] class extends Component
         abort_if(! Auth::user()->households()->first(), 403);
     }
 
+    #[Computed]
+    public function householdId(): int
+    {
+        return Auth::user()->households()->first()->id;
+    }
+
     public function markDone(int $taskId): void
     {
-        $household = Auth::user()->households()->first();
-        abort_if(! $household, 403);
-
-        $task = MaintenanceTask::calendar()->forHousehold($household->id)->findOrFail($taskId);
+        $task = MaintenanceTask::calendar()->forHousehold($this->householdId)->findOrFail($taskId);
 
         (new RecordTaskCompletion)($task, Auth::user());
     }
@@ -32,7 +35,7 @@ new #[Layout('layouts.app')] class extends Component
     public function overdue(): Collection
     {
         return MaintenanceTask::calendar()
-            ->forHousehold($this->resolveHouseholdId())
+            ->forHousehold($this->householdId)
             ->where('next_due_at', '<', now())
             ->orderBy('next_due_at')
             ->with('appliance')
@@ -45,7 +48,7 @@ new #[Layout('layouts.app')] class extends Component
         $now = now();
 
         return MaintenanceTask::calendar()
-            ->forHousehold($this->resolveHouseholdId())
+            ->forHousehold($this->householdId)
             ->whereBetween('next_due_at', [$now, $now->copy()->addDays(7)])
             ->orderBy('next_due_at')
             ->with('appliance')
@@ -58,7 +61,7 @@ new #[Layout('layouts.app')] class extends Component
         $now = now();
 
         return MaintenanceTask::calendar()
-            ->forHousehold($this->resolveHouseholdId())
+            ->forHousehold($this->householdId)
             ->where('next_due_at', '>', $now->copy()->addDays(7))
             ->where('next_due_at', '<=', $now->copy()->addDays(30))
             ->orderBy('next_due_at')
@@ -70,7 +73,7 @@ new #[Layout('layouts.app')] class extends Component
     public function upcoming(): Collection
     {
         return MaintenanceTask::calendar()
-            ->forHousehold($this->resolveHouseholdId())
+            ->forHousehold($this->householdId)
             ->where('next_due_at', '>', now()->addDays(30))
             ->orderBy('next_due_at')
             ->with('appliance')
@@ -81,15 +84,10 @@ new #[Layout('layouts.app')] class extends Component
     public function metric(): Collection
     {
         return MaintenanceTask::metric()
-            ->forHousehold($this->resolveHouseholdId())
+            ->forHousehold($this->householdId)
             ->orderBy('name')
             ->with('appliance')
             ->get();
-    }
-
-    private function resolveHouseholdId(): int
-    {
-        return Auth::user()->households()->first()->id;
     }
 }; ?>
 

@@ -307,7 +307,12 @@ new #[Layout('layouts.app')] class extends Component
                         @else
                             <div class="bg-white border border-red-200 rounded-md p-4">
                                 <div class="flex justify-between items-start">
-                                    <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                        @if(!$task->is_confirmed)
+                                            <span class="text-xs text-amber-600 border border-amber-200 bg-amber-50 rounded px-1.5 py-0.5 mt-0.5 inline-block">Draft</span>
+                                        @endif
+                                    </div>
                                     <div class="flex items-center gap-3">
                                         <span class="text-xs text-red-600">Due {{ $task->next_due_at->format('M j, Y') }}</span>
                                         <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
@@ -342,7 +347,12 @@ new #[Layout('layouts.app')] class extends Component
                         @else
                             <div class="bg-white border border-yellow-200 rounded-md p-4">
                                 <div class="flex justify-between items-start">
-                                    <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                        @if(!$task->is_confirmed)
+                                            <span class="text-xs text-amber-600 border border-amber-200 bg-amber-50 rounded px-1.5 py-0.5 mt-0.5 inline-block">Draft</span>
+                                        @endif
+                                    </div>
                                     <div class="flex items-center gap-3">
                                         <span class="text-xs text-yellow-600">Due {{ $task->next_due_at->format('M j, Y') }}</span>
                                         <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
@@ -377,7 +387,12 @@ new #[Layout('layouts.app')] class extends Component
                         @else
                             <div class="bg-white border border-blue-200 rounded-md p-4">
                                 <div class="flex justify-between items-start">
-                                    <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                        @if(!$task->is_confirmed)
+                                            <span class="text-xs text-amber-600 border border-amber-200 bg-amber-50 rounded px-1.5 py-0.5 mt-0.5 inline-block">Draft</span>
+                                        @endif
+                                    </div>
                                     <div class="flex items-center gap-3">
                                         <span class="text-xs text-blue-600">Due {{ $task->next_due_at->format('M j, Y') }}</span>
                                         <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
@@ -412,7 +427,12 @@ new #[Layout('layouts.app')] class extends Component
                         @else
                             <div class="bg-white border border-gray-200 rounded-md p-4">
                                 <div class="flex justify-between items-start">
-                                    <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                        @if(!$task->is_confirmed)
+                                            <span class="text-xs text-amber-600 border border-amber-200 bg-amber-50 rounded px-1.5 py-0.5 mt-0.5 inline-block">Draft</span>
+                                        @endif
+                                    </div>
                                     <div class="flex items-center gap-3">
                                         <span class="text-xs text-gray-500">Due {{ $task->next_due_at->format('M j, Y') }}</span>
                                         <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
@@ -447,7 +467,12 @@ new #[Layout('layouts.app')] class extends Component
                         @else
                             <div class="bg-white border border-gray-200 rounded-md p-4">
                                 <div class="flex justify-between items-start">
-                                    <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                        @if(!$task->is_confirmed)
+                                            <span class="text-xs text-amber-600 border border-amber-200 bg-amber-50 rounded px-1.5 py-0.5 mt-0.5 inline-block">Draft</span>
+                                        @endif
+                                    </div>
                                     <div class="flex items-center gap-3">
                                         <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
                                         <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
