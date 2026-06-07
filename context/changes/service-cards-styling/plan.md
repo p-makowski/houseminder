@@ -274,7 +274,7 @@ The due date was previously in the left info stack; it now moves into the compon
 
 #### Automated
 
-- [ ] 1.1 PHPStan passes: `composer phpstan`
+- [x] 1.1 PHPStan passes: `composer phpstan`
 
 #### Manual
 
