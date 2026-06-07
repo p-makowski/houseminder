@@ -286,8 +286,8 @@ Each task card gains an "Edit" link that expands the card into an inline editabl
   - Textarea bound to `wire:model="editDescription"`
   - Number input bound to `wire:model.number="editIntervalValue"` (min 1)
   - Select for `editIntervalUnit` — options determined by the task's current category (calendar or metric); Blade `@if` on `in_array($task->interval_unit, ['days','weeks','months','years'])` to decide which option set to render
-  - Select for `editAnchorType` (from_last_done / fixed_calendar) — hidden for metric tasks
   - Date input for `editNextDueAt` — only shown for calendar tasks; placeholder text: "Leave blank to auto-calculate"
+  - Note: `anchor_type` is intentionally excluded from the edit form — `saveEdit` never branches on it, and `RecordTaskCompletion` always anchors to completion time. The wizard-set value is preserved on the model untouched.
   - "Save" button (`wire:click="saveEdit"`) and "Cancel" link (`wire:click="cancelEdit"`)
 
 ### Success Criteria
@@ -430,8 +430,8 @@ Not applicable — no new standalone classes introduced.
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `./vendor/bin/phpstan analyse`
-- [x] 3.2 Tests pass: `php artisan test --filter=ApplianceShowTest`
+- [x] 3.1 Type checking passes: `./vendor/bin/phpstan analyse` — fe64a43
+- [x] 3.2 Tests pass: `php artisan test --filter=ApplianceShowTest` — fe64a43
 
 #### Manual
 
@@ -445,8 +445,8 @@ Not applicable — no new standalone classes introduced.
 
 #### Automated
 
-- [ ] 4.1 Type checking passes: `./vendor/bin/phpstan analyse`
-- [ ] 4.2 Tests pass: `php artisan test --filter=ApplianceShowTest`
+- [x] 4.1 Type checking passes: `./vendor/bin/phpstan analyse`
+- [x] 4.2 Tests pass: `php artisan test --filter=ApplianceShowTest`
 
 #### Manual
 
