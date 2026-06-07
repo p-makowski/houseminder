@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Actions\RecordTaskCompletion;
 use App\Models\Appliance;
+use App\Models\MaintenanceTask;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
@@ -44,6 +46,14 @@ new #[Layout('layouts.app')] class extends Component
             })->values(),
             default => $tasks->sortBy(fn ($t) => $t->next_due_at?->timestamp ?? PHP_INT_MAX)->values(),
         };
+    }
+
+    public function markDone(int $taskId): void
+    {
+        $task = MaintenanceTask::findOrFail($taskId);
+        abort_if($task->appliance_id !== $this->appliance->id, 403);
+
+        (new RecordTaskCompletion)($task, Auth::user());
     }
 
     public function setSortBy(string $key): void
@@ -121,11 +131,17 @@ new #[Layout('layouts.app')] class extends Component
                 <div class="bg-white border {{ $borderClass }} rounded-md p-4">
                     <div class="flex justify-between items-start">
                         <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
-                        @if($task->next_due_at)
-                            <span class="text-xs {{ $dateTextClass }}">
-                                Due {{ $task->next_due_at->format('M j, Y') }}
-                            </span>
-                        @endif
+                        <div class="flex items-center gap-3">
+                            @if($task->next_due_at)
+                                <span class="text-xs {{ $dateTextClass }}">
+                                    Due {{ $task->next_due_at->format('M j, Y') }}
+                                </span>
+                            @endif
+                            <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
+                                class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
+                                Mark done
+                            </button>
+                        </div>
                     </div>
 
                     @if($task->description)
