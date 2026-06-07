@@ -445,8 +445,8 @@ Not applicable — no new standalone classes introduced.
 
 #### Automated
 
-- [x] 4.1 Type checking passes: `./vendor/bin/phpstan analyse`
-- [x] 4.2 Tests pass: `php artisan test --filter=ApplianceShowTest`
+- [x] 4.1 Type checking passes: `./vendor/bin/phpstan analyse` — 0bc9e5c
+- [x] 4.2 Tests pass: `php artisan test --filter=ApplianceShowTest` — 0bc9e5c
 
 #### Manual
 
@@ -462,9 +462,9 @@ Not applicable — no new standalone classes introduced.
 
 #### Automated
 
-- [ ] 5.1 New tests pass: `php artisan test --filter="ApplianceShowMarkDoneTest|ApplianceShowTaskEditTest|ApplianceShowTaskDeleteTest"`
-- [ ] 5.2 Full test suite green: `php artisan test`
-- [ ] 5.3 Type checking passes: `./vendor/bin/phpstan analyse`
+- [x] 5.1 New tests pass: `php artisan test --filter="ApplianceShowMarkDoneTest|ApplianceShowTaskEditTest|ApplianceShowTaskDeleteTest"`
+- [x] 5.2 Full test suite green: `php artisan test`
+- [x] 5.3 Type checking passes: `./vendor/bin/phpstan analyse`
 
 #### Manual
 
