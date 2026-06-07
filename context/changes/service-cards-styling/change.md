@@ -1,7 +1,7 @@
 ---
 change_id: service-cards-styling
 title: Redesign service cards layout and unify across appliance detail and dashboard
-status: implementing
+status: implemented
 created: 2026-06-07
 updated: 2026-06-07
 archived_at: null
