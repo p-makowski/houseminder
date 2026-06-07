@@ -305,29 +305,21 @@ new #[Layout('layouts.app')] class extends Component
                         @if($editingTaskId === $task->id)
                             @include('livewire.pages.appliances._edit-form')
                         @else
-                            <div class="bg-white border border-red-200 rounded-md p-4">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
-                                        @if(!$task->is_confirmed)
-                                            <span class="text-xs text-amber-600 border border-amber-200 bg-amber-50 rounded px-1.5 py-0.5 mt-0.5 inline-block">Draft</span>
-                                        @endif
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-xs text-red-600">Due {{ $task->next_due_at->format('M j, Y') }}</span>
-                                        <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
-                                            class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
-                                            Mark done
-                                        </button>
-                                        <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
-                                        <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
-                                    </div>
-                                </div>
-                                @if($task->description)
-                                    <p class="text-sm text-gray-500 mt-1">{{ $task->description }}</p>
-                                @endif
-                                <p class="text-xs text-gray-400 mt-2">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
-                            </div>
+                            <x-maintenance-task-card
+                                :task="$task"
+                                color="red"
+                                :showDraftBadge="true"
+                                :showDescription="true"
+                            >
+                                <x-slot:actions>
+                                    <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
+                                        class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
+                                        Mark done
+                                    </button>
+                                    <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
+                                    <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
+                                </x-slot:actions>
+                            </x-maintenance-task-card>
                         @endif
                     @endforeach
                 </div>
@@ -345,29 +337,21 @@ new #[Layout('layouts.app')] class extends Component
                         @if($editingTaskId === $task->id)
                             @include('livewire.pages.appliances._edit-form')
                         @else
-                            <div class="bg-white border border-yellow-200 rounded-md p-4">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
-                                        @if(!$task->is_confirmed)
-                                            <span class="text-xs text-amber-600 border border-amber-200 bg-amber-50 rounded px-1.5 py-0.5 mt-0.5 inline-block">Draft</span>
-                                        @endif
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-xs text-yellow-600">Due {{ $task->next_due_at->format('M j, Y') }}</span>
-                                        <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
-                                            class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
-                                            Mark done
-                                        </button>
-                                        <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
-                                        <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
-                                    </div>
-                                </div>
-                                @if($task->description)
-                                    <p class="text-sm text-gray-500 mt-1">{{ $task->description }}</p>
-                                @endif
-                                <p class="text-xs text-gray-400 mt-2">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
-                            </div>
+                            <x-maintenance-task-card
+                                :task="$task"
+                                color="yellow"
+                                :showDraftBadge="true"
+                                :showDescription="true"
+                            >
+                                <x-slot:actions>
+                                    <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
+                                        class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
+                                        Mark done
+                                    </button>
+                                    <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
+                                    <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
+                                </x-slot:actions>
+                            </x-maintenance-task-card>
                         @endif
                     @endforeach
                 </div>
@@ -385,29 +369,21 @@ new #[Layout('layouts.app')] class extends Component
                         @if($editingTaskId === $task->id)
                             @include('livewire.pages.appliances._edit-form')
                         @else
-                            <div class="bg-white border border-blue-200 rounded-md p-4">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
-                                        @if(!$task->is_confirmed)
-                                            <span class="text-xs text-amber-600 border border-amber-200 bg-amber-50 rounded px-1.5 py-0.5 mt-0.5 inline-block">Draft</span>
-                                        @endif
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-xs text-blue-600">Due {{ $task->next_due_at->format('M j, Y') }}</span>
-                                        <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
-                                            class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
-                                            Mark done
-                                        </button>
-                                        <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
-                                        <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
-                                    </div>
-                                </div>
-                                @if($task->description)
-                                    <p class="text-sm text-gray-500 mt-1">{{ $task->description }}</p>
-                                @endif
-                                <p class="text-xs text-gray-400 mt-2">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
-                            </div>
+                            <x-maintenance-task-card
+                                :task="$task"
+                                color="blue"
+                                :showDraftBadge="true"
+                                :showDescription="true"
+                            >
+                                <x-slot:actions>
+                                    <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
+                                        class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
+                                        Mark done
+                                    </button>
+                                    <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
+                                    <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
+                                </x-slot:actions>
+                            </x-maintenance-task-card>
                         @endif
                     @endforeach
                 </div>
@@ -425,29 +401,21 @@ new #[Layout('layouts.app')] class extends Component
                         @if($editingTaskId === $task->id)
                             @include('livewire.pages.appliances._edit-form')
                         @else
-                            <div class="bg-white border border-gray-200 rounded-md p-4">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
-                                        @if(!$task->is_confirmed)
-                                            <span class="text-xs text-amber-600 border border-amber-200 bg-amber-50 rounded px-1.5 py-0.5 mt-0.5 inline-block">Draft</span>
-                                        @endif
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-xs text-gray-500">Due {{ $task->next_due_at->format('M j, Y') }}</span>
-                                        <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
-                                            class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
-                                            Mark done
-                                        </button>
-                                        <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
-                                        <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
-                                    </div>
-                                </div>
-                                @if($task->description)
-                                    <p class="text-sm text-gray-500 mt-1">{{ $task->description }}</p>
-                                @endif
-                                <p class="text-xs text-gray-400 mt-2">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
-                            </div>
+                            <x-maintenance-task-card
+                                :task="$task"
+                                color="gray"
+                                :showDraftBadge="true"
+                                :showDescription="true"
+                            >
+                                <x-slot:actions>
+                                    <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
+                                        class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
+                                        Mark done
+                                    </button>
+                                    <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
+                                    <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
+                                </x-slot:actions>
+                            </x-maintenance-task-card>
                         @endif
                     @endforeach
                 </div>
@@ -465,24 +433,17 @@ new #[Layout('layouts.app')] class extends Component
                         @if($editingTaskId === $task->id)
                             @include('livewire.pages.appliances._edit-form')
                         @else
-                            <div class="bg-white border border-gray-200 rounded-md p-4">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
-                                        @if(!$task->is_confirmed)
-                                            <span class="text-xs text-amber-600 border border-amber-200 bg-amber-50 rounded px-1.5 py-0.5 mt-0.5 inline-block">Draft</span>
-                                        @endif
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
-                                        <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
-                                    </div>
-                                </div>
-                                @if($task->description)
-                                    <p class="text-sm text-gray-500 mt-1">{{ $task->description }}</p>
-                                @endif
-                                <p class="text-xs text-gray-400 mt-2">Every {{ $task->interval_value }} {{ $task->interval_unit }}</p>
-                            </div>
+                            <x-maintenance-task-card
+                                :task="$task"
+                                color="gray"
+                                :showDraftBadge="true"
+                                :showDescription="true"
+                            >
+                                <x-slot:actions>
+                                    <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
+                                    <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
+                                </x-slot:actions>
+                            </x-maintenance-task-card>
                         @endif
                     @endforeach
                 </div>

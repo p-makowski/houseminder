@@ -69,4 +69,28 @@ class ApplianceShowDisplayTest extends ApplianceTestCase
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
             ->assertSee('border-gray-200');
     }
+
+    public function test_never_done_shown_for_task_with_no_completion_history(): void
+    {
+        MaintenanceTask::factory()->create([
+            'appliance_id'      => $this->appliance->id,
+            'last_completed_at' => null,
+            'next_due_at'       => now()->addMonths(3),
+        ]);
+
+        Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
+            ->assertSee('Never done');
+    }
+
+    public function test_last_done_shown_for_task_with_completion_history(): void
+    {
+        MaintenanceTask::factory()->create([
+            'appliance_id'      => $this->appliance->id,
+            'last_completed_at' => now()->subMonths(2),
+            'next_due_at'       => now()->addMonths(4),
+        ]);
+
+        Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
+            ->assertSee('Last done');
+    }
 }
