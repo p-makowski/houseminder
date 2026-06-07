@@ -86,6 +86,10 @@ new #[Layout('layouts.app')] class extends Component
 
     public function deleteTask(): void
     {
+        if ($this->deletingTaskId === null) {
+            return;
+        }
+
         $task = MaintenanceTask::findOrFail($this->deletingTaskId);
         abort_if($task->appliance_id !== $this->appliance->id, 403);
 
@@ -118,6 +122,10 @@ new #[Layout('layouts.app')] class extends Component
 
     public function saveEdit(): void
     {
+        if ($this->editingTaskId === null) {
+            return;
+        }
+
         if ($this->editNextDueAt === '') {
             $this->editNextDueAt = null;
         }
@@ -149,10 +157,6 @@ new #[Layout('layouts.app')] class extends Component
                 $task->next_due_at = Carbon::parse($validated['editNextDueAt']);
             } else {
                 $anchor = $task->last_completed_at ?? $task->anchor_date ?? now();
-                abort_if(
-                    ! in_array($task->interval_unit, ['days', 'weeks', 'months', 'years'], strict: true),
-                    422
-                );
                 $task->next_due_at = CalendarInterval::calculateNextDueAt(
                     $anchor,
                     $task->interval_unit,
@@ -343,8 +347,6 @@ new #[Layout('layouts.app')] class extends Component
 
                         <p class="text-xs text-gray-400 mt-2">
                             Every {{ $task->interval_value }} {{ $task->interval_unit }}
-                            &mdash;
-                            {{ $task->anchor_type === 'from_last_done' ? 'From last done' : 'Fixed calendar' }}
                         </p>
                     </div>
                 @endif

@@ -33,6 +33,16 @@ class ApplianceShowTaskDeleteTest extends ApplianceTestCase
         $this->assertDatabaseMissing('service_records', ['id' => $record->id]);
     }
 
+    public function test_delete_task_without_confirm_delete_is_a_no_op(): void
+    {
+        $task = MaintenanceTask::factory()->create(['appliance_id' => $this->appliance->id]);
+
+        Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
+            ->call('deleteTask');
+
+        $this->assertDatabaseHas('maintenance_tasks', ['id' => $task->id]);
+    }
+
     public function test_confirm_delete_on_task_from_different_household_returns_403(): void
     {
         $otherHousehold = Household::factory()->create();
