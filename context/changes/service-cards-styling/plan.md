@@ -284,8 +284,8 @@ The due date was previously in the left info stack; it now moves into the compon
 
 #### Automated
 
-- [x] 2.1 PHPStan passes: `composer phpstan`
-- [x] 2.2 Full test suite passes: `php artisan test`
+- [x] 2.1 PHPStan passes: `composer phpstan` — 2c60218
+- [x] 2.2 Full test suite passes: `php artisan test` — 2c60218
 
 #### Manual
 
@@ -301,8 +301,8 @@ The due date was previously in the left info stack; it now moves into the compon
 
 #### Automated
 
-- [ ] 3.1 PHPStan passes: `composer phpstan`
-- [ ] 3.2 Full test suite passes: `php artisan test`
+- [x] 3.1 PHPStan passes: `composer phpstan`
+- [x] 3.2 Full test suite passes: `php artisan test`
 
 #### Manual
 

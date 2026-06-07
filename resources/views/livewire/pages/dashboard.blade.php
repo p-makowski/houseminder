@@ -106,16 +106,17 @@ new #[Layout('layouts.app')] class extends Component
             @else
                 <div class="space-y-2">
                     @foreach($this->overdue as $task)
-                        <div class="bg-white border border-red-200 rounded-md px-4 py-3 flex justify-between items-center">
-                            <div>
-                                <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
-                                <p class="text-sm text-red-600">Due {{ $task->next_due_at->format('M j, Y') }}</p>
-                                <p class="text-sm text-gray-500">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
-                            </div>
-                            <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
-                                Mark done
-                            </button>
-                        </div>
+                        <x-maintenance-task-card
+                            :task="$task"
+                            color="red"
+                            :showApplianceName="true"
+                        >
+                            <x-slot:actions>
+                                <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
+                                    Mark done
+                                </button>
+                            </x-slot:actions>
+                        </x-maintenance-task-card>
                     @endforeach
                 </div>
             @endif
@@ -129,16 +130,17 @@ new #[Layout('layouts.app')] class extends Component
             @else
                 <div class="space-y-2">
                     @foreach($this->dueThisWeek as $task)
-                        <div class="bg-white border border-yellow-200 rounded-md px-4 py-3 flex justify-between items-center">
-                            <div>
-                                <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
-                                <p class="text-sm text-yellow-600">Due {{ $task->next_due_at->format('M j, Y') }}</p>
-                                <p class="text-sm text-gray-500">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
-                            </div>
-                            <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
-                                Mark done
-                            </button>
-                        </div>
+                        <x-maintenance-task-card
+                            :task="$task"
+                            color="yellow"
+                            :showApplianceName="true"
+                        >
+                            <x-slot:actions>
+                                <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
+                                    Mark done
+                                </button>
+                            </x-slot:actions>
+                        </x-maintenance-task-card>
                     @endforeach
                 </div>
             @endif
@@ -152,16 +154,17 @@ new #[Layout('layouts.app')] class extends Component
             @else
                 <div class="space-y-2">
                     @foreach($this->dueThisMonth as $task)
-                        <div class="bg-white border border-blue-200 rounded-md px-4 py-3 flex justify-between items-center">
-                            <div>
-                                <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
-                                <p class="text-sm text-blue-600">Due {{ $task->next_due_at->format('M j, Y') }}</p>
-                                <p class="text-sm text-gray-500">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
-                            </div>
-                            <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
-                                Mark done
-                            </button>
-                        </div>
+                        <x-maintenance-task-card
+                            :task="$task"
+                            color="blue"
+                            :showApplianceName="true"
+                        >
+                            <x-slot:actions>
+                                <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
+                                    Mark done
+                                </button>
+                            </x-slot:actions>
+                        </x-maintenance-task-card>
                     @endforeach
                 </div>
             @endif
@@ -175,16 +178,17 @@ new #[Layout('layouts.app')] class extends Component
             @else
                 <div class="space-y-2">
                     @foreach($this->upcoming as $task)
-                        <div class="bg-white border border-gray-200 rounded-md px-4 py-3 flex justify-between items-center">
-                            <div>
-                                <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
-                                <p class="text-sm text-gray-500">Due {{ $task->next_due_at->format('M j, Y') }}</p>
-                                <p class="text-sm text-gray-500">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
-                            </div>
-                            <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
-                                Mark done
-                            </button>
-                        </div>
+                        <x-maintenance-task-card
+                            :task="$task"
+                            color="gray"
+                            :showApplianceName="true"
+                        >
+                            <x-slot:actions>
+                                <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
+                                    Mark done
+                                </button>
+                            </x-slot:actions>
+                        </x-maintenance-task-card>
                     @endforeach
                 </div>
             @endif
@@ -198,13 +202,15 @@ new #[Layout('layouts.app')] class extends Component
             @else
                 <div class="space-y-2">
                     @foreach($this->metric as $task)
-                        <div class="bg-white border border-gray-200 rounded-md px-4 py-3 flex justify-between items-center">
-                            <div>
-                                <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
-                                <p class="text-sm text-gray-500">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
-                            </div>
-                            <span class="text-xs text-gray-400 border border-gray-200 rounded px-2 py-1">No date</span>
-                        </div>
+                        <x-maintenance-task-card
+                            :task="$task"
+                            color="gray"
+                            :showApplianceName="true"
+                        >
+                            <x-slot:actions>
+                                <span class="text-xs text-gray-400 border border-gray-200 rounded px-2 py-1">No date</span>
+                            </x-slot:actions>
+                        </x-maintenance-task-card>
                     @endforeach
                 </div>
             @endif
