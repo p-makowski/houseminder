@@ -404,8 +404,8 @@ Not applicable — no new standalone classes introduced.
 
 #### Automated
 
-- [ ] 1.1 Type checking passes: `./vendor/bin/phpstan analyse`
-- [ ] 1.2 Existing tests still pass: `php artisan test --filter=ApplianceShowTest`
+- [x] 1.1 Type checking passes: `./vendor/bin/phpstan analyse`
+- [x] 1.2 Existing tests still pass: `php artisan test --filter=ApplianceShowTest`
 
 #### Manual
 

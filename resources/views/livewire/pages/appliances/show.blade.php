@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use App\Models\Appliance;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
@@ -11,13 +13,46 @@ new #[Layout('layouts.app')] class extends Component
 {
     public Appliance $appliance;
 
+    public string $sortBy = 'due_date';
+
     public function mount(Appliance $appliance): void
     {
         $household = Auth::user()->households()->first();
-        abort_if(!$household || $appliance->household_id !== $household->id, 403);
+        abort_if(! $household || $appliance->household_id !== $household->id, 403);
 
-        $appliance->load(['applianceType', 'maintenanceTasks']);
+        $appliance->load(['applianceType']);
         $this->appliance = $appliance;
+    }
+
+    #[Computed]
+    public function sortedTasks(): Collection
+    {
+        $tasks = $this->appliance->maintenanceTasks()->get();
+
+        return match ($this->sortBy) {
+            'name'     => $tasks->sortBy('name')->values(),
+            'interval' => $tasks->sortBy(function ($task) {
+                $multiplier = match ($task->interval_unit) {
+                    'days'   => 1,
+                    'weeks'  => 7,
+                    'months' => 30,
+                    'years'  => 365,
+                    default  => PHP_INT_MAX,
+                };
+
+                return $task->interval_value * $multiplier;
+            })->values(),
+            default => $tasks->sortBy(fn ($t) => $t->next_due_at?->timestamp ?? PHP_INT_MAX)->values(),
+        };
+    }
+
+    public function setSortBy(string $key): void
+    {
+        if (! in_array($key, ['name', 'due_date', 'interval'], strict: true)) {
+            return;
+        }
+
+        $this->sortBy = $key;
     }
 }; ?>
 
@@ -40,18 +75,54 @@ new #[Layout('layouts.app')] class extends Component
         </div>
     </div>
 
-    <h2 class="text-lg font-semibold text-gray-800 mb-3">Maintenance Plan</h2>
+    <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-semibold text-gray-800">Maintenance Plan</h2>
 
-    @if($appliance->maintenanceTasks->isEmpty())
+        <div class="inline-flex rounded-md shadow-sm" role="group">
+            <button wire:click="setSortBy('name')"
+                class="px-3 py-1 text-sm rounded-l-md border {{ $sortBy === 'name' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50' }}">
+                Name
+            </button>
+            <button wire:click="setSortBy('due_date')"
+                class="px-3 py-1 text-sm border-t border-b {{ $sortBy === 'due_date' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50' }}">
+                Due date
+            </button>
+            <button wire:click="setSortBy('interval')"
+                class="px-3 py-1 text-sm rounded-r-md border {{ $sortBy === 'interval' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50' }}">
+                Frequency
+            </button>
+        </div>
+    </div>
+
+    @if($this->sortedTasks->isEmpty())
         <p class="text-gray-500">No maintenance tasks.</p>
     @else
         <div class="space-y-3">
-            @foreach($appliance->maintenanceTasks as $task)
-                <div class="border border-gray-200 rounded-md p-4">
+            @foreach($this->sortedTasks as $task)
+                @php
+                    $status = match(true) {
+                        $task->next_due_at !== null && $task->next_due_at < now()               => 'overdue',
+                        $task->next_due_at !== null && $task->next_due_at <= now()->addDays(7)  => 'due_soon',
+                        $task->next_due_at !== null                                             => 'upcoming',
+                        default                                                                 => 'metric',
+                    };
+                    $borderClass   = match($status) {
+                        'overdue'  => 'border-red-200',
+                        'due_soon' => 'border-yellow-200',
+                        default    => 'border-gray-200',
+                    };
+                    $dateTextClass = match($status) {
+                        'overdue'  => 'text-red-600',
+                        'due_soon' => 'text-yellow-600',
+                        default    => 'text-gray-500',
+                    };
+                @endphp
+
+                <div class="bg-white border {{ $borderClass }} rounded-md p-4">
                     <div class="flex justify-between items-start">
                         <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
                         @if($task->next_due_at)
-                            <span class="text-xs text-gray-500">
+                            <span class="text-xs {{ $dateTextClass }}">
                                 Due {{ $task->next_due_at->format('M j, Y') }}
                             </span>
                         @endif
