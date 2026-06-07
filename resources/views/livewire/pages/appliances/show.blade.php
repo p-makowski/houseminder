@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
@@ -46,11 +47,8 @@ new #[Layout('layouts.app')] class extends Component
         $this->appliance = $appliance;
     }
 
-    #[Computed]
-    public function sortedTasks(): Collection
+    private function sortTasks(Collection $tasks): Collection
     {
-        $tasks = $this->appliance->maintenanceTasks()->get();
-
         return match ($this->sortBy) {
             'name'     => $tasks->sortBy('name')->values(),
             'interval' => $tasks->sortBy(function ($task) {
@@ -66,6 +64,69 @@ new #[Layout('layouts.app')] class extends Component
             })->values(),
             default => $tasks->sortBy(fn ($t) => $t->next_due_at?->timestamp ?? PHP_INT_MAX)->values(),
         };
+    }
+
+    #[Computed]
+    public function overdue(): Collection
+    {
+        return $this->sortTasks(
+            $this->appliance->maintenanceTasks()
+                ->whereIn('interval_unit', ['days', 'weeks', 'months', 'years'])
+                ->whereNotNull('next_due_at')
+                ->where('next_due_at', '<', now())
+                ->get()
+        );
+    }
+
+    #[Computed]
+    public function dueThisWeek(): Collection
+    {
+        $now = now();
+
+        return $this->sortTasks(
+            $this->appliance->maintenanceTasks()
+                ->whereIn('interval_unit', ['days', 'weeks', 'months', 'years'])
+                ->whereNotNull('next_due_at')
+                ->whereBetween('next_due_at', [$now, $now->copy()->addDays(7)])
+                ->get()
+        );
+    }
+
+    #[Computed]
+    public function dueThisMonth(): Collection
+    {
+        $now = now();
+
+        return $this->sortTasks(
+            $this->appliance->maintenanceTasks()
+                ->whereIn('interval_unit', ['days', 'weeks', 'months', 'years'])
+                ->whereNotNull('next_due_at')
+                ->where('next_due_at', '>', $now->copy()->addDays(7))
+                ->where('next_due_at', '<=', $now->copy()->addDays(30))
+                ->get()
+        );
+    }
+
+    #[Computed]
+    public function upcoming(): Collection
+    {
+        return $this->sortTasks(
+            $this->appliance->maintenanceTasks()
+                ->whereIn('interval_unit', ['days', 'weeks', 'months', 'years'])
+                ->whereNotNull('next_due_at')
+                ->where('next_due_at', '>', now()->addDays(30))
+                ->get()
+        );
+    }
+
+    #[Computed]
+    public function metric(): Collection
+    {
+        return $this->sortTasks(
+            $this->appliance->maintenanceTasks()
+                ->whereIn('interval_unit', ['hours', 'km'])
+                ->get()
+        );
     }
 
     #[Computed]
@@ -231,128 +292,179 @@ new #[Layout('layouts.app')] class extends Component
         </div>
     </div>
 
-    @if($this->sortedTasks->isEmpty())
-        <p class="text-gray-500">No maintenance tasks.</p>
-    @else
-        <div class="space-y-3">
-            @foreach($this->sortedTasks as $task)
-                @php
-                    $status = match(true) {
-                        $task->next_due_at !== null && $task->next_due_at < now()               => 'overdue',
-                        $task->next_due_at !== null && $task->next_due_at <= now()->addDays(7)  => 'due_soon',
-                        $task->next_due_at !== null                                             => 'upcoming',
-                        default                                                                 => 'metric',
-                    };
-                    $borderClass   = match($status) {
-                        'overdue'  => 'border-red-200',
-                        'due_soon' => 'border-yellow-200',
-                        default    => 'border-gray-200',
-                    };
-                    $dateTextClass = match($status) {
-                        'overdue'  => 'text-red-600',
-                        'due_soon' => 'text-yellow-600',
-                        default    => 'text-gray-500',
-                    };
-                @endphp
+    <div class="space-y-6">
 
-                @if($editingTaskId === $task->id)
-                    <div class="bg-white border border-indigo-300 rounded-md p-4 space-y-3">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 mb-1">Name</label>
-                            <input wire:model="editName" type="text"
-                                class="w-full border border-gray-300 rounded px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">
-                            @error('editName') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 mb-1">Description</label>
-                            <textarea wire:model="editDescription" rows="2"
-                                class="w-full border border-gray-300 rounded px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <div class="flex-1">
-                                <label class="block text-xs font-medium text-gray-700 mb-1">Every</label>
-                                <input wire:model.number="editIntervalValue" type="number" min="1"
-                                    class="w-full border border-gray-300 rounded px-3 py-1.5 text-sm">
-                                @error('editIntervalValue') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
-                            </div>
-                            <div class="flex-1">
-                                <label class="block text-xs font-medium text-gray-700 mb-1">Unit</label>
-                                <select wire:model="editIntervalUnit"
-                                    class="w-full border border-gray-300 rounded px-3 py-1.5 text-sm">
-                                    @if($editIntervalCategory === 'calendar')
-                                        <option value="days">days</option>
-                                        <option value="weeks">weeks</option>
-                                        <option value="months">months</option>
-                                        <option value="years">years</option>
-                                    @else
-                                        <option value="hours">hours</option>
-                                        <option value="km">km</option>
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-
-                        @if($editIntervalCategory === 'calendar')
-                            <div>
-                                <label class="block text-xs font-medium text-gray-700 mb-1">
-                                    Next due date
-                                    <span class="font-normal text-gray-400">(leave blank to auto-calculate)</span>
-                                </label>
-                                <input wire:model="editNextDueAt" type="date"
-                                    class="w-full border border-gray-300 rounded px-3 py-1.5 text-sm">
-                                @error('editNextDueAt') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
-                            </div>
-                        @endif
-
-                        <div class="flex items-center gap-3 pt-1">
-                            <button wire:click="saveEdit"
-                                class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded">
-                                Save
-                            </button>
-                            <button wire:click="cancelEdit" class="text-sm text-gray-600 hover:text-gray-800">
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                @else
-                    <div class="bg-white border {{ $borderClass }} rounded-md p-4">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
-                            <div class="flex items-center gap-3">
-                                @if($task->next_due_at)
-                                    <span class="text-xs {{ $dateTextClass }}">
-                                        Due {{ $task->next_due_at->format('M j, Y') }}
-                                    </span>
+        {{-- Overdue --}}
+        <section>
+            <h3 class="text-base font-semibold text-red-700 mb-2">Overdue</h3>
+            @if($this->overdue->isEmpty())
+                <p class="text-sm text-gray-500">No overdue tasks.</p>
+            @else
+                <div class="space-y-3">
+                    @foreach($this->overdue as $task)
+                        @if($editingTaskId === $task->id)
+                            @include('livewire.pages.appliances._edit-form')
+                        @else
+                            <div class="bg-white border border-red-200 rounded-md p-4">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xs text-red-600">Due {{ $task->next_due_at->format('M j, Y') }}</span>
+                                        <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
+                                            class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
+                                            Mark done
+                                        </button>
+                                        <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
+                                        <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
+                                    </div>
+                                </div>
+                                @if($task->description)
+                                    <p class="text-sm text-gray-500 mt-1">{{ $task->description }}</p>
                                 @endif
-                                <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
-                                    class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
-                                    Mark done
-                                </button>
-                                <button wire:click="startEdit({{ $task->id }})"
-                                    class="text-sm text-indigo-600 hover:text-indigo-800">
-                                    Edit
-                                </button>
-                                <button wire:click="confirmDelete({{ $task->id }})"
-                                    class="text-sm text-red-600 hover:text-red-800">
-                                    Delete
-                                </button>
+                                <p class="text-xs text-gray-400 mt-2">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
                             </div>
-                        </div>
-
-                        @if($task->description)
-                            <p class="text-sm text-gray-500 mt-1">{{ $task->description }}</p>
                         @endif
+                    @endforeach
+                </div>
+            @endif
+        </section>
 
-                        <p class="text-xs text-gray-400 mt-2">
-                            Every {{ $task->interval_value }} {{ $task->interval_unit }}
-                        </p>
-                    </div>
-                @endif
-            @endforeach
-        </div>
-    @endif
+        {{-- Due this week --}}
+        <section>
+            <h3 class="text-base font-semibold text-yellow-700 mb-2">Due this week</h3>
+            @if($this->dueThisWeek->isEmpty())
+                <p class="text-sm text-gray-500">Nothing due this week.</p>
+            @else
+                <div class="space-y-3">
+                    @foreach($this->dueThisWeek as $task)
+                        @if($editingTaskId === $task->id)
+                            @include('livewire.pages.appliances._edit-form')
+                        @else
+                            <div class="bg-white border border-yellow-200 rounded-md p-4">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xs text-yellow-600">Due {{ $task->next_due_at->format('M j, Y') }}</span>
+                                        <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
+                                            class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
+                                            Mark done
+                                        </button>
+                                        <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
+                                        <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
+                                    </div>
+                                </div>
+                                @if($task->description)
+                                    <p class="text-sm text-gray-500 mt-1">{{ $task->description }}</p>
+                                @endif
+                                <p class="text-xs text-gray-400 mt-2">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            @endif
+        </section>
+
+        {{-- This month --}}
+        <section>
+            <h3 class="text-base font-semibold text-blue-700 mb-2">This month</h3>
+            @if($this->dueThisMonth->isEmpty())
+                <p class="text-sm text-gray-500">Nothing due this month.</p>
+            @else
+                <div class="space-y-3">
+                    @foreach($this->dueThisMonth as $task)
+                        @if($editingTaskId === $task->id)
+                            @include('livewire.pages.appliances._edit-form')
+                        @else
+                            <div class="bg-white border border-blue-200 rounded-md p-4">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xs text-blue-600">Due {{ $task->next_due_at->format('M j, Y') }}</span>
+                                        <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
+                                            class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
+                                            Mark done
+                                        </button>
+                                        <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
+                                        <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
+                                    </div>
+                                </div>
+                                @if($task->description)
+                                    <p class="text-sm text-gray-500 mt-1">{{ $task->description }}</p>
+                                @endif
+                                <p class="text-xs text-gray-400 mt-2">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            @endif
+        </section>
+
+        {{-- Upcoming --}}
+        <section>
+            <h3 class="text-base font-semibold text-gray-700 mb-2">Upcoming</h3>
+            @if($this->upcoming->isEmpty())
+                <p class="text-sm text-gray-500">No upcoming tasks.</p>
+            @else
+                <div class="space-y-3">
+                    @foreach($this->upcoming as $task)
+                        @if($editingTaskId === $task->id)
+                            @include('livewire.pages.appliances._edit-form')
+                        @else
+                            <div class="bg-white border border-gray-200 rounded-md p-4">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xs text-gray-500">Due {{ $task->next_due_at->format('M j, Y') }}</span>
+                                        <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled"
+                                            class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
+                                            Mark done
+                                        </button>
+                                        <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
+                                        <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
+                                    </div>
+                                </div>
+                                @if($task->description)
+                                    <p class="text-sm text-gray-500 mt-1">{{ $task->description }}</p>
+                                @endif
+                                <p class="text-xs text-gray-400 mt-2">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            @endif
+        </section>
+
+        {{-- Manual tracking --}}
+        <section>
+            <h3 class="text-base font-semibold text-gray-700 mb-2">Manual tracking</h3>
+            @if($this->metric->isEmpty())
+                <p class="text-sm text-gray-500">No tasks requiring manual tracking.</p>
+            @else
+                <div class="space-y-3">
+                    @foreach($this->metric as $task)
+                        @if($editingTaskId === $task->id)
+                            @include('livewire.pages.appliances._edit-form')
+                        @else
+                            <div class="bg-white border border-gray-200 rounded-md p-4">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+                                    <div class="flex items-center gap-3">
+                                        <button wire:click="startEdit({{ $task->id }})" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</button>
+                                        <button wire:click="confirmDelete({{ $task->id }})" class="text-sm text-red-600 hover:text-red-800">Delete</button>
+                                    </div>
+                                </div>
+                                @if($task->description)
+                                    <p class="text-sm text-gray-500 mt-1">{{ $task->description }}</p>
+                                @endif
+                                <p class="text-xs text-gray-400 mt-2">Every {{ $task->interval_value }} {{ $task->interval_unit }}</p>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            @endif
+        </section>
+
+    </div>
 
     @if($this->deletingTask)
         <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">

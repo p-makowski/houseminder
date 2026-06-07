@@ -40,17 +40,17 @@ class ApplianceShowDisplayTest extends ApplianceTestCase
             ->assertSee('border-yellow-200');
     }
 
-    public function test_tasks_sorted_by_name_alphabetically(): void
+    public function test_tasks_sorted_by_name_alphabetically_within_section(): void
     {
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
             'name'         => 'Zap filter',
-            'next_due_at'  => now()->addMonths(1),
+            'next_due_at'  => now()->addDays(10),
         ]);
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
             'name'         => 'Alpha check',
-            'next_due_at'  => now()->addMonths(2),
+            'next_due_at'  => now()->addDays(20),
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
