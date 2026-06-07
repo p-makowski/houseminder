@@ -358,8 +358,8 @@ None — no new utility classes introduced; all logic lives in the Volt componen
 
 #### Automated
 
-- [x] 2.1 `php artisan test --filter=Appliances` — all tests pass including 6 new section tests; no regressions in ApplianceShowDisplayTest
-- [x] 2.2 `composer phpstan` — no new errors
+- [x] 2.1 `php artisan test --filter=Appliances` — all tests pass including 6 new section tests; no regressions in ApplianceShowDisplayTest — 09a152b
+- [x] 2.2 `composer phpstan` — no new errors — 09a152b
 
 #### Manual
 
