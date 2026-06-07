@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Actions\RecordTaskCompletion;
 use App\Models\Appliance;
 use App\Models\MaintenanceTask;
+use App\Models\ServiceRecord;
 use App\Support\CalendarInterval;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -37,6 +38,26 @@ new #[Layout('layouts.app')] class extends Component
     public string $editIntervalCategory = '';
 
     public ?string $editNextDueAt = null;
+
+    public bool $addingTask = false;
+
+    public string $addName = '';
+
+    public string $addDescription = '';
+
+    public int $addIntervalValue = 1;
+
+    public string $addIntervalUnit = 'months';
+
+    public string $addIntervalCategory = 'calendar';
+
+    public ?string $addNextDueAt = null;
+
+    public ?string $addLastDoneAt = null;
+
+    public ?string $addLastMetric = null;
+
+    public string $addNotes = '';
 
     public function mount(Appliance $appliance): void
     {
@@ -234,6 +255,98 @@ new #[Layout('layouts.app')] class extends Component
     public function cancelEdit(): void
     {
         $this->editingTaskId = null;
+    }
+
+    public function startAddTask(): void
+    {
+        $this->editingTaskId      = null;
+        $this->addName            = '';
+        $this->addDescription     = '';
+        $this->addIntervalValue   = 1;
+        $this->addIntervalUnit    = 'months';
+        $this->addIntervalCategory = 'calendar';
+        $this->addNextDueAt       = null;
+        $this->addLastDoneAt      = null;
+        $this->addLastMetric      = null;
+        $this->addNotes           = '';
+        $this->addingTask         = true;
+    }
+
+    public function cancelAddTask(): void
+    {
+        $this->addingTask = false;
+    }
+
+    public function saveNewTask(): void
+    {
+        foreach (['addNextDueAt', 'addLastDoneAt'] as $field) {
+            if ($this->$field === '') {
+                $this->$field = null;
+            }
+        }
+
+        $allowedUnits = $this->addIntervalCategory === 'calendar'
+            ? ['days', 'weeks', 'months', 'years']
+            : ['hours', 'km'];
+
+        $validated = $this->validate([
+            'addName'          => ['required', 'string', 'max:255'],
+            'addDescription'   => ['nullable', 'string', 'max:1000'],
+            'addIntervalValue' => ['required', 'integer', 'min:1'],
+            'addIntervalUnit'  => ['required', 'string', Rule::in($allowedUnits)],
+            'addNextDueAt'     => ['nullable', 'date'],
+            'addLastDoneAt'    => ['nullable', 'date'],
+            'addLastMetric'    => ['nullable', 'numeric'],
+            'addNotes'         => ['nullable', 'string', 'max:2000'],
+        ]);
+
+        $hasDate   = ! empty($validated['addLastDoneAt']);
+        $hasMetric = ! empty($validated['addLastMetric']);
+        $anchor    = $hasDate ? \Illuminate\Support\Carbon::parse($validated['addLastDoneAt']) : now();
+
+        $data = [
+            'name'              => $validated['addName'],
+            'description'       => $validated['addDescription'] ?: null,
+            'interval_value'    => $validated['addIntervalValue'],
+            'interval_unit'     => $validated['addIntervalUnit'],
+            'anchor_type'       => 'from_last_done',
+            'last_completed_at' => $hasDate ? $anchor : null,
+            'is_confirmed'      => true,
+        ];
+
+        if ($this->addIntervalCategory === 'calendar') {
+            $data['next_due_at'] = ! empty($validated['addNextDueAt'])
+                ? Carbon::parse($validated['addNextDueAt'])
+                : CalendarInterval::calculateNextDueAt($anchor, $validated['addIntervalUnit'], (int) $validated['addIntervalValue']);
+            $data['next_due_at_value'] = null;
+        } else {
+            $data['next_due_at']       = null;
+            $data['next_due_at_value'] = null;
+        }
+
+        DB::transaction(function () use ($data, $hasDate, $hasMetric, $anchor, $validated) {
+            $task = $this->appliance->maintenanceTasks()->create($data);
+
+            if ($hasDate || $hasMetric) {
+                ServiceRecord::create([
+                    'maintenance_task_id' => $task->id,
+                    'completed_at'        => $hasDate ? $anchor : Carbon::today(),
+                    'metric_reading'      => $hasMetric ? $validated['addLastMetric'] : null,
+                    'notes'               => ! empty($validated['addNotes']) ? $validated['addNotes'] : null,
+                ]);
+            }
+        });
+
+        $this->addName            = '';
+        $this->addDescription     = '';
+        $this->addIntervalValue   = 1;
+        $this->addIntervalUnit    = 'months';
+        $this->addIntervalCategory = 'calendar';
+        $this->addNextDueAt       = null;
+        $this->addLastDoneAt      = null;
+        $this->addLastMetric      = null;
+        $this->addNotes           = '';
+        $this->addingTask         = false;
     }
 
     public function markDone(int $taskId): void
