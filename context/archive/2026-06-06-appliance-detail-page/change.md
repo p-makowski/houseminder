@@ -1,10 +1,10 @@
 ---
 change_id: appliance-detail-page
 title: Appliance detail page schedule management with actions, colors, and sorting
-status: impl_reviewed
+status: archived
 created: 2026-06-06
 updated: 2026-06-07
-archived_at: null
+archived_at: 2026-06-07T07:15:01Z
 ---
 
 ## Notes
