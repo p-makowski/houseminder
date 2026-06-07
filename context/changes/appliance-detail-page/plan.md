@@ -417,8 +417,8 @@ Not applicable — no new standalone classes introduced.
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `./vendor/bin/phpstan analyse`
-- [x] 2.2 Tests pass: `php artisan test --filter=ApplianceShowTest`
+- [x] 2.1 Type checking passes: `./vendor/bin/phpstan analyse` — bede80a
+- [x] 2.2 Tests pass: `php artisan test --filter=ApplianceShowTest` — bede80a
 
 #### Manual
 
@@ -430,8 +430,8 @@ Not applicable — no new standalone classes introduced.
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `./vendor/bin/phpstan analyse`
-- [ ] 3.2 Tests pass: `php artisan test --filter=ApplianceShowTest`
+- [x] 3.1 Type checking passes: `./vendor/bin/phpstan analyse`
+- [x] 3.2 Tests pass: `php artisan test --filter=ApplianceShowTest`
 
 #### Manual
 

@@ -17,6 +17,8 @@ new #[Layout('layouts.app')] class extends Component
 
     public string $sortBy = 'due_date';
 
+    public ?int $deletingTaskId = null;
+
     public function mount(Appliance $appliance): void
     {
         $household = Auth::user()->households()->first();
@@ -46,6 +48,36 @@ new #[Layout('layouts.app')] class extends Component
             })->values(),
             default => $tasks->sortBy(fn ($t) => $t->next_due_at?->timestamp ?? PHP_INT_MAX)->values(),
         };
+    }
+
+    #[Computed]
+    public function deletingTask(): ?MaintenanceTask
+    {
+        return $this->deletingTaskId !== null
+            ? MaintenanceTask::find($this->deletingTaskId)
+            : null;
+    }
+
+    public function confirmDelete(int $taskId): void
+    {
+        $task = MaintenanceTask::findOrFail($taskId);
+        abort_if($task->appliance_id !== $this->appliance->id, 403);
+
+        $this->deletingTaskId = $taskId;
+    }
+
+    public function deleteTask(): void
+    {
+        $task = MaintenanceTask::findOrFail($this->deletingTaskId);
+        abort_if($task->appliance_id !== $this->appliance->id, 403);
+
+        $task->delete();
+        $this->deletingTaskId = null;
+    }
+
+    public function cancelDelete(): void
+    {
+        $this->deletingTaskId = null;
     }
 
     public function markDone(int $taskId): void
@@ -141,6 +173,10 @@ new #[Layout('layouts.app')] class extends Component
                                 class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
                                 Mark done
                             </button>
+                            <button wire:click="confirmDelete({{ $task->id }})"
+                                class="text-sm text-red-600 hover:text-red-800">
+                                Delete
+                            </button>
                         </div>
                     </div>
 
@@ -155,6 +191,28 @@ new #[Layout('layouts.app')] class extends Component
                     </p>
                 </div>
             @endforeach
+        </div>
+    @endif
+
+    @if($this->deletingTask)
+        <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-md p-6 max-w-sm w-full mx-4 shadow-xl">
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Delete task?</h3>
+                <p class="text-sm text-gray-600 mb-6">
+                    This will permanently delete <strong>{{ $this->deletingTask->name }}</strong>
+                    and all its service history records. This cannot be undone.
+                </p>
+                <div class="flex justify-end gap-3">
+                    <button wire:click="cancelDelete"
+                        class="text-sm text-gray-700 border border-gray-300 px-4 py-2 rounded hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button wire:click="deleteTask"
+                        class="text-sm text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded">
+                        Delete
+                    </button>
+                </div>
+            </div>
         </div>
     @endif
 </div>
