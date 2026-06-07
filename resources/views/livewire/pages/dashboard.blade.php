@@ -6,6 +6,7 @@ use App\Actions\RecordTaskCompletion;
 use App\Models\MaintenanceTask;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
@@ -52,11 +53,25 @@ new #[Layout('layouts.app')] class extends Component
     }
 
     #[Computed]
+    public function dueThisMonth(): Collection
+    {
+        $now = now();
+
+        return MaintenanceTask::calendar()
+            ->forHousehold($this->resolveHouseholdId())
+            ->where('next_due_at', '>', $now->copy()->addDays(7))
+            ->where('next_due_at', '<=', $now->copy()->addDays(30))
+            ->orderBy('next_due_at')
+            ->with('appliance')
+            ->get();
+    }
+
+    #[Computed]
     public function upcoming(): Collection
     {
         return MaintenanceTask::calendar()
             ->forHousehold($this->resolveHouseholdId())
-            ->where('next_due_at', '>', now()->addDays(7))
+            ->where('next_due_at', '>', now()->addDays(30))
             ->orderBy('next_due_at')
             ->with('appliance')
             ->get();
@@ -97,6 +112,7 @@ new #[Layout('layouts.app')] class extends Component
                             <div>
                                 <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
                                 <p class="text-sm text-red-600">Due {{ $task->next_due_at->format('M j, Y') }}</p>
+                                <p class="text-sm text-gray-500">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
                             </div>
                             <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
                                 Mark done
@@ -119,6 +135,30 @@ new #[Layout('layouts.app')] class extends Component
                             <div>
                                 <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
                                 <p class="text-sm text-yellow-600">Due {{ $task->next_due_at->format('M j, Y') }}</p>
+                                <p class="text-sm text-gray-500">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
+                            </div>
+                            <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
+                                Mark done
+                            </button>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </section>
+
+        {{-- This month --}}
+        <section>
+            <h2 class="text-lg font-semibold text-blue-700 mb-3">This month</h2>
+            @if($this->dueThisMonth->isEmpty())
+                <p class="text-sm text-gray-500">Nothing due this month.</p>
+            @else
+                <div class="space-y-2">
+                    @foreach($this->dueThisMonth as $task)
+                        <div class="bg-white border border-blue-200 rounded-md px-4 py-3 flex justify-between items-center">
+                            <div>
+                                <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
+                                <p class="text-sm text-blue-600">Due {{ $task->next_due_at->format('M j, Y') }}</p>
+                                <p class="text-sm text-gray-500">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
                             </div>
                             <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
                                 Mark done
@@ -141,6 +181,7 @@ new #[Layout('layouts.app')] class extends Component
                             <div>
                                 <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
                                 <p class="text-sm text-gray-500">Due {{ $task->next_due_at->format('M j, Y') }}</p>
+                                <p class="text-sm text-gray-500">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
                             </div>
                             <button wire:click="markDone({{ $task->id }})" wire:loading.attr="disabled" class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded disabled:opacity-50">
                                 Mark done
@@ -162,7 +203,7 @@ new #[Layout('layouts.app')] class extends Component
                         <div class="bg-white border border-gray-200 rounded-md px-4 py-3 flex justify-between items-center">
                             <div>
                                 <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
-                                <p class="text-sm text-gray-500">Every {{ $task->interval_value }} {{ $task->interval_unit }}</p>
+                                <p class="text-sm text-gray-500">Every {{ $task->interval_value }} {{ Str::plural($task->interval_unit, $task->interval_value) }}</p>
                             </div>
                             <span class="text-xs text-gray-400 border border-gray-200 rounded px-2 py-1">No date</span>
                         </div>

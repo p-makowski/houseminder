@@ -53,7 +53,7 @@ class DashboardBoundaryTest extends DashboardTestCase
             ->assertSee('No upcoming tasks.');
     }
 
-    public function test_task_due_one_second_past_seven_days_is_upcoming(): void
+    public function test_task_due_one_second_past_seven_days_is_in_this_month(): void
     {
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
@@ -65,6 +65,7 @@ class DashboardBoundaryTest extends DashboardTestCase
 
         $this->get('/dashboard')
             ->assertSee('Boundary AddDays7PlusSecond Task')
-            ->assertSee('Nothing due this week.');
+            ->assertSee('Nothing due this week.')
+            ->assertSee('No upcoming tasks.');
     }
 }

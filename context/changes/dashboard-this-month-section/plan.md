@@ -345,8 +345,8 @@ None — no new utility classes introduced; all logic lives in the Volt componen
 
 #### Automated
 
-- [ ] 1.1 `php artisan test --filter=Dashboard` — all tests pass including 4 new boundary tests
-- [ ] 1.2 `composer phpstan` — no new errors
+- [x] 1.1 `php artisan test --filter=Dashboard` — all tests pass including 4 new boundary tests
+- [x] 1.2 `composer phpstan` — no new errors
 
 #### Manual
 

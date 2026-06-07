@@ -1,7 +1,7 @@
 ---
 change_id: dashboard-this-month-section
 title: Add "This month" dashboard section and recurrence label on task cards
-status: planned
+status: implementing
 created: 2026-06-06
 updated: 2026-06-07
 archived_at: null
