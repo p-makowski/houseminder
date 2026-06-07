@@ -260,6 +260,17 @@ The due date was previously in the left info stack; it now moves into the compon
 7. Visit the dashboard — confirm vertical card layout, appliance name prefix, last-done info
 8. Mark a task done from the dashboard — verify it works and the section refreshes
 
+## Addendum: Unplanned additions (discovered during implementation)
+
+The following were added beyond the original plan scope. All are architecturally consistent.
+
+- **Dashboard "Manual tracking" section** (`dashboard.blade.php:204–214`): A fifth section for metric tasks using `<x-maintenance-task-card showApplianceName=true>` with a "No date" badge. Mirrors how `show.blade.php` handles metric tasks.
+- **Three new test files** (not in original Testing Strategy):
+  - `tests/Feature/Components/MaintenanceTaskCardTest.php` — unit-style tests for Phase 1 component props/behavior
+  - `tests/Feature/Appliances/ApplianceShowDisplayTest.php` — integration tests for Phase 2 layout rendering
+  - `tests/Feature/Dashboard/DashboardPageTest.php` — integration tests for Phase 3 (11 cases including cross-household isolation and mark-done flow)
+- **Minor test boundary note**: `DashboardPageTest::test_upcoming_task_appears_in_upcoming_section` creates a task at exactly +30 days. Due to the strict `>30d` boundary for "upcoming", the task falls in "this month". The test passes via page-level `assertSee` regardless, but the section assertion is imprecise.
+
 ## References
 
 - Research: `context/changes/service-cards-styling/research.md`
