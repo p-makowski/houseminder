@@ -376,7 +376,7 @@ No schema changes. `ServiceRecord` and all `MaintenanceTask` fields used (`last_
 
 #### Automated
 
-- [x] 2.1 `php artisan view:cache` completes without errors
+- [x] 2.1 `php artisan view:cache` completes without errors — 27d0a23
 
 #### Manual
 
@@ -389,7 +389,7 @@ No schema changes. `ServiceRecord` and all `MaintenanceTask` fields used (`last_
 
 #### Automated
 
-- [ ] 3.1 `php artisan test` passes (no regressions)
+- [x] 3.1 `php artisan test` passes (no regressions)
 
 #### Manual
 

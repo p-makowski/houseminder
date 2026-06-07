@@ -389,6 +389,11 @@ new #[Layout('layouts.app')] class extends Component
     <div class="flex items-center justify-between mb-3">
         <h2 class="text-lg font-semibold text-gray-800">Maintenance Plan</h2>
 
+        <button wire:click="startAddTask"
+            class="inline-flex items-center text-sm text-indigo-600 hover:text-indigo-800">
+            + Add task
+        </button>
+
         <div class="inline-flex rounded-md shadow-sm" role="group">
             <button wire:click="setSortBy('name')"
                 class="px-3 py-1 text-sm rounded-l-md border {{ $sortBy === 'name' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50' }}">
@@ -406,6 +411,10 @@ new #[Layout('layouts.app')] class extends Component
     </div>
 
     <div class="space-y-6">
+
+        @if($addingTask)
+            @include('livewire.pages.appliances._add-form')
+        @endif
 
         {{-- Overdue --}}
         <section>
