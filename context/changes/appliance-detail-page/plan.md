@@ -462,9 +462,9 @@ Not applicable — no new standalone classes introduced.
 
 #### Automated
 
-- [x] 5.1 New tests pass: `php artisan test --filter="ApplianceShowMarkDoneTest|ApplianceShowTaskEditTest|ApplianceShowTaskDeleteTest"`
-- [x] 5.2 Full test suite green: `php artisan test`
-- [x] 5.3 Type checking passes: `./vendor/bin/phpstan analyse`
+- [x] 5.1 New tests pass: `php artisan test --filter="ApplianceShowMarkDoneTest|ApplianceShowTaskEditTest|ApplianceShowTaskDeleteTest"` — 5d7b6a5
+- [x] 5.2 Full test suite green: `php artisan test` — 5d7b6a5
+- [x] 5.3 Type checking passes: `./vendor/bin/phpstan analyse` — 5d7b6a5
 
 #### Manual
 
