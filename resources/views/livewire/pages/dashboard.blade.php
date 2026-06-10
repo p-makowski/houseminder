@@ -15,7 +15,7 @@ new #[Layout('layouts.app')] class extends Component
 {
     public function mount(): void
     {
-        abort_if(! Auth::user()->households()->first(), 403);
+        abort_if(Auth::user()->households()->doesntExist(), 403);
     }
 
     #[Computed]

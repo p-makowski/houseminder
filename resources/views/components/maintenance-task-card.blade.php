@@ -3,7 +3,7 @@
     'color'             => 'gray',
     'showDraftBadge'    => false,
     'showDescription'   => false,
-    'showApplianceName' => false,
+    'showApplianceName' => false, // requires appliance relation eager-loaded by caller
 ])
 
 @php
@@ -20,9 +20,9 @@ $c = $colorClasses[$color] ?? $colorClasses['gray'];
     {{-- Header: task name (with optional appliance prefix) + optional draft badge --}}
     <div>
         @if($showApplianceName)
-            <p class="font-medium text-gray-900">{{ $task->appliance->name }} — {{ $task->name }}</p>
+            <p class="font-medium text-gray-900">{{ $task->appliance?->name }} — {{ $task->name }}</p>
         @else
-            <h3 class="font-medium text-gray-900">{{ $task->name }}</h3>
+            <p class="font-medium text-gray-900">{{ $task->name }}</p>
         @endif
         @if($showDraftBadge && !$task->is_confirmed)
             <span class="text-xs text-amber-600 border border-amber-200 bg-amber-50 rounded px-1.5 py-0.5 mt-0.5 inline-block">Draft</span>

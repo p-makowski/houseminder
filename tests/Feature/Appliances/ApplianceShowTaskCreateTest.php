@@ -22,7 +22,7 @@ class ApplianceShowTaskCreateTest extends ApplianceTestCase
 
     public function test_can_create_calendar_task_without_backdate(): void
     {
-        Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
+        $component = Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
             ->call('startAddTask')
             ->set('addName', 'Filter check')
             ->set('addIntervalValue', 3)
@@ -35,7 +35,10 @@ class ApplianceShowTaskCreateTest extends ApplianceTestCase
         $this->assertTrue($task->is_confirmed);
         $this->assertNotNull($task->next_due_at);
         $this->assertNull($task->last_completed_at);
-        $this->assertSame(0, ServiceRecord::count());
+        $this->assertSame(0, $task->serviceRecords()->count());
+
+        $component->assertSet('addingTask', false)
+            ->assertSet('addName', '');
     }
 
     public function test_can_create_calendar_task_with_backdate_and_notes(): void
@@ -59,7 +62,7 @@ class ApplianceShowTaskCreateTest extends ApplianceTestCase
             $task->next_due_at->toDateString()
         );
 
-        $record = ServiceRecord::first();
+        $record = $task->serviceRecords()->first();
         $this->assertNotNull($record);
         $this->assertSame('Replaced filter', $record->notes);
     }
@@ -80,7 +83,7 @@ class ApplianceShowTaskCreateTest extends ApplianceTestCase
         $this->assertNull($task->next_due_at);
         $this->assertTrue($task->is_confirmed);
 
-        $record = ServiceRecord::first();
+        $record = $task->serviceRecords()->first();
         $this->assertNotNull($record);
         $this->assertSame(42000.0, (float) $record->metric_reading);
     }
@@ -94,11 +97,11 @@ class ApplianceShowTaskCreateTest extends ApplianceTestCase
             ->call('saveNewTask')
             ->assertHasErrors(['addName', 'addIntervalValue']);
 
-        $this->assertSame(0, MaintenanceTask::count());
-        $this->assertSame(0, ServiceRecord::count());
+        $this->assertSame(0, $this->appliance->maintenanceTasks()->count());
+        $this->assertSame(0, ServiceRecord::whereHas('maintenanceTask', fn($q) => $q->where('appliance_id', $this->appliance->id))->count());
     }
 
-    public function test_unauthorized_user_cannot_access_appliance(): void
+    public function test_unauthorized_user_cannot_create_task(): void
     {
         $otherUser = User::factory()->create();
         $this->actingAs($otherUser);
@@ -106,4 +109,5 @@ class ApplianceShowTaskCreateTest extends ApplianceTestCase
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
             ->assertForbidden();
     }
+
 }

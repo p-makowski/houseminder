@@ -310,7 +310,7 @@ new #[Layout('layouts.app')] class extends Component
             'interval_value'    => $validated['addIntervalValue'],
             'interval_unit'     => $validated['addIntervalUnit'],
             'anchor_type'       => 'from_last_done',
-            'last_completed_at' => $hasDate ? $anchor : null,
+            'last_completed_at' => $hasDate ? $anchor : ($hasMetric ? Carbon::today() : null),
             'is_confirmed'      => true,
         ];
 

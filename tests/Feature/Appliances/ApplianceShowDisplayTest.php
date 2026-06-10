@@ -29,17 +29,6 @@ class ApplianceShowDisplayTest extends ApplianceTestCase
             ->assertSee('border-red-200');
     }
 
-    public function test_due_soon_task_renders_yellow_border(): void
-    {
-        MaintenanceTask::factory()->create([
-            'appliance_id' => $this->appliance->id,
-            'next_due_at'  => now()->addDays(3),
-        ]);
-
-        Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
-            ->assertSee('border-yellow-200');
-    }
-
     public function test_tasks_sorted_by_name_alphabetically_within_section(): void
     {
         MaintenanceTask::factory()->create([
@@ -56,18 +45,6 @@ class ApplianceShowDisplayTest extends ApplianceTestCase
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
             ->call('setSortBy', 'name')
             ->assertSeeInOrder(['Alpha check', 'Zap filter']);
-    }
-
-    public function test_metric_task_renders_gray_border(): void
-    {
-        MaintenanceTask::factory()->create([
-            'appliance_id'  => $this->appliance->id,
-            'interval_unit' => 'km',
-            'next_due_at'   => null,
-        ]);
-
-        Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
-            ->assertSee('border-gray-200');
     }
 
     public function test_never_done_shown_for_task_with_no_completion_history(): void

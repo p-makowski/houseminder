@@ -368,9 +368,9 @@ No schema changes. `ServiceRecord` and all `MaintenanceTask` fields used (`last_
 
 #### Manual
 
-- [ ] 1.3 Calendar task (no backdate): `next_due_at` from `now()`, no `ServiceRecord`
-- [ ] 1.4 Calendar task (with backdate): `last_completed_at` set, `next_due_at` from backdate, `ServiceRecord` created
-- [ ] 1.5 Metric task with metric reading: `ServiceRecord` with `metric_reading` created
+- [x] 1.3 Calendar task (no backdate): `next_due_at` from `now()`, no `ServiceRecord`
+- [x] 1.4 Calendar task (with backdate): `last_completed_at` set, `next_due_at` from backdate, `ServiceRecord` created
+- [x] 1.5 Metric task with metric reading: `ServiceRecord` with `metric_reading` created
 
 ### Phase 2: _add-form.blade.php partial
 
@@ -380,10 +380,10 @@ No schema changes. `ServiceRecord` and all `MaintenanceTask` fields used (`last_
 
 #### Manual
 
-- [ ] 2.2 Category radio switches unit options (calendar ↔ metric)
-- [ ] 2.3 Next-due date field appears/disappears on category toggle
-- [ ] 2.4 Metric reading field appears only for metric category
-- [ ] 2.5 Cancel button collapses form without saving
+- [x] 2.2 Category radio switches unit options (calendar ↔ metric)
+- [x] 2.3 Next-due date field appears/disappears on category toggle
+- [x] 2.4 Metric reading field appears only for metric category
+- [x] 2.5 Cancel button collapses form without saving
 
 ### Phase 3: Button and inline form wiring
 
@@ -393,12 +393,12 @@ No schema changes. `ServiceRecord` and all `MaintenanceTask` fields used (`last_
 
 #### Manual
 
-- [ ] 3.2 "+ Add task" reveals form box above task sections
-- [ ] 3.3 Cancel collapses form, no DB changes
-- [ ] 3.4 Valid calendar task (no backdate): form collapses, task in correct section, no ServiceRecord
-- [ ] 3.5 Calendar task with backdate + notes: ServiceRecord created with notes
-- [ ] 3.6 Metric task with metric reading: task in "Manual tracking", ServiceRecord with metric_reading
-- [ ] 3.7 Validation errors display inline, form stays open
+- [x] 3.2 "+ Add task" reveals form box above task sections
+- [x] 3.3 Cancel collapses form, no DB changes
+- [x] 3.4 Valid calendar task (no backdate): form collapses, task in correct section, no ServiceRecord
+- [x] 3.5 Calendar task with backdate + notes: ServiceRecord created with notes
+- [x] 3.6 Metric task with metric reading: task in "Manual tracking", ServiceRecord with metric_reading
+- [x] 3.7 Validation errors display inline, form stays open
 
 ### Phase 4: ApplianceShowTaskCreateTest
 
@@ -410,4 +410,4 @@ No schema changes. `ServiceRecord` and all `MaintenanceTask` fields used (`last_
 
 #### Manual
 
-- [ ] 4.4 No regressions in other show-page test classes
+- [x] 4.4 No regressions in other show-page test classes

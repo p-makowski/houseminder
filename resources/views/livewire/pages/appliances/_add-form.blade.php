@@ -78,7 +78,7 @@
     @if($addIntervalCategory === 'metric')
         <div>
             <label class="block text-xs font-medium text-gray-700 mb-1">Metric reading</label>
-            <input wire:model="addLastMetric" type="text"
+            <input wire:model="addLastMetric" type="number" step="any"
                 class="w-full border border-gray-300 rounded px-3 py-1.5 text-sm">
             @error('addLastMetric') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
         </div>
@@ -92,8 +92,8 @@
     </div>
 
     <div class="flex items-center gap-3 pt-1">
-        <button wire:click="saveNewTask"
-            class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded">
+        <button wire:click="saveNewTask" wire:loading.attr="disabled"
+            class="text-sm text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded disabled:opacity-50">
             Save
         </button>
         <button wire:click="cancelAddTask" class="text-sm text-gray-600 hover:text-gray-800">
