@@ -18,7 +18,7 @@
 /.phpunit.cache
 /.vscode
 /.zed
-/auth.json
+/.playwright/.auth
 /node_modules
 /public/build
 /public/fonts-manifest.dev.json
@@ -31,3 +31,11 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
