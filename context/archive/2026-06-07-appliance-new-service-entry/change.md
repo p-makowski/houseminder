@@ -1,10 +1,10 @@
 ---
 change_id: appliance-new-service-entry
 title: Add button on appliance page to create a new maintenance task
-status: impl_reviewed
+status: archived
 created: 2026-06-07
-updated: 2026-06-08
-archived_at: null
+updated: 2026-06-10
+archived_at: 2026-06-10T16:02:15Z
 ---
 
 ## Notes
