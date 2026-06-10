@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "strict": true,
+        "skipLibCheck": true
+    },
+    "include": ["playwright.config.ts", "tests/e2e/**/*.ts"]
+}
