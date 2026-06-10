@@ -1,3 +1,5 @@
+@AGENTS.md
+
 <!-- BEGIN @przeprogramowani/10x-cli -->
 
 ## 10xDevs AI Toolkit - Module 3, Lesson 4 (E2E Tests)
