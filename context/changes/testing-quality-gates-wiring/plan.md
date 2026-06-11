@@ -230,23 +230,23 @@ The hook calls vendor binaries directly (not via `composer phpstan` / `composer 
 
 #### Automated
 
-- [x] 1.1 `composer validate` exits 0
-- [x] 1.2 `composer pint:check` exits 0 (codebase clean after version bump)
-- [x] 1.3 `composer test` exits 0 (131 tests green)
+- [x] 1.1 `composer validate` exits 0 — 8259ce2
+- [x] 1.2 `composer pint:check` exits 0 (codebase clean after version bump) — 8259ce2
+- [x] 1.3 `composer test` exits 0 (131 tests green) — 8259ce2
 
 #### Manual
 
-- [x] 1.4 `composer.json` require.php reads `^8.5`
-- [x] 1.5 Dockerfile PHP stage reads `php8.5`
-- [x] 1.6 AGENTS.md header reads "PHP 8.5 / Laravel 13"
-- [x] 1.7 settings.local.json allowlist contains `"Bash(composer pint:check *)"`
+- [x] 1.4 `composer.json` require.php reads `^8.5` — 8259ce2
+- [x] 1.5 Dockerfile PHP stage reads `php8.5` — 8259ce2
+- [x] 1.6 AGENTS.md header reads "PHP 8.5 / Laravel 13" — 8259ce2
+- [x] 1.7 settings.local.json allowlist contains `"Bash(composer pint:check *)"` — 8259ce2
 
 ### Phase 2: GitHub Actions CI Workflow
 
 #### Automated
 
-- [ ] 2.1 `.github/workflows/ci.yml` exists and is valid YAML
-- [ ] 2.2 Workflow file references PHP 8.5 and all three composer scripts
+- [x] 2.1 `.github/workflows/ci.yml` exists and is valid YAML
+- [x] 2.2 Workflow file references PHP 8.5 and all three composer scripts
 
 #### Manual
 
@@ -257,9 +257,9 @@ The hook calls vendor binaries directly (not via `composer phpstan` / `composer 
 
 #### Automated
 
-- [ ] 3.1 `settings.local.json` parses as valid JSON
-- [ ] 3.2 New hook entry present under `hooks.PostToolUse`
-- [ ] 3.3 `./vendor/bin/pint --test app/Models/Appliance.php` exits 0
+- [x] 3.1 `settings.local.json` parses as valid JSON
+- [x] 3.2 New hook entry present under `hooks.PostToolUse`
+- [x] 3.3 `./vendor/bin/pint --test app/Models/Appliance.php` exits 0
 
 #### Manual
 
