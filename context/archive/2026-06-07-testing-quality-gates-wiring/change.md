@@ -1,11 +1,11 @@
 ---
 change_id: testing-quality-gates-wiring
 title: Quality-gates wiring — PHPStan, Pint, and PHPUnit as mandatory CI gates
-status: implemented
+status: archived
 created: 2026-06-07
 updated: 2026-06-11
 plan: context/changes/testing-quality-gates-wiring/plan.md
-archived_at: null
+archived_at: 2026-06-11T10:44:38Z
 ---
 
 ## Notes
