@@ -122,7 +122,7 @@ new #[Layout('layouts.app')] class extends Component
             Log::error('GenerateMaintenancePlan failed', ['error' => $e->getMessage()]);
         } catch (\Throwable $e) {
             $this->aiError = 'An unexpected error occurred. Please try again.';
-            Log::error('GenerateMaintenancePlan unexpected error', ['error' => $e->getMessage()]);
+            Log::error('GenerateMaintenancePlan unexpected error', ['exception' => $e]);
         } finally {
             $this->aiLoading = false;
         }
