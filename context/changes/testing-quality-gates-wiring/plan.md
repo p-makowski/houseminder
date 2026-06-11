@@ -250,8 +250,8 @@ The hook calls vendor binaries directly (not via `composer phpstan` / `composer 
 
 #### Manual
 
-- [x] 2.3 Push branch to GitHub — Actions workflow appears and goes green
-- [x] 2.4 Deliberate-fail check: PHPStan step fails on bad code, CI run blocked
+- [x] 2.3 Push branch to GitHub — Actions workflow appears and goes green — 6d7eeb0
+- [x] 2.4 Deliberate-fail check: PHPStan step fails on bad code, CI run blocked — 6d7eeb0
 
 ### Phase 3: PostToolUse Quality-Gate Hook
 
@@ -263,6 +263,6 @@ The hook calls vendor binaries directly (not via `composer phpstan` / `composer 
 
 #### Manual
 
-- [x] 3.4 Deliberate PHPStan error → Edit → hook fires and prints error
-- [x] 3.5 Deliberate Pint violation → Edit → hook catches it
-- [x] 3.6 Non-PHP file edit → hook exits 0 silently
+- [x] 3.4 Deliberate PHPStan error → Edit → hook fires and prints error — 6d7eeb0
+- [x] 3.5 Deliberate Pint violation → Edit → hook catches it — 6d7eeb0
+- [x] 3.6 Non-PHP file edit → hook exits 0 silently — 6d7eeb0
