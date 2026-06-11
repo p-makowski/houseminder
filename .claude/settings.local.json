@@ -67,7 +67,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "FILE=$(jq -r '.tool_input.file_path'); [ \"${FILE%.php}\" != \"$FILE\" ] || exit 0; ./vendor/bin/phpstan analyse --paths=\"$FILE\" --no-progress --memory-limit=512M && ./vendor/bin/pint --test \"$FILE\""
+            "command": "FILE=$(jq -r '.tool_input.file_path'); [ \"${FILE%.php}\" != \"$FILE\" ] || exit 0; ./vendor/bin/phpstan analyse \"$FILE\" --no-progress --memory-limit=512M && ./vendor/bin/pint --test \"$FILE\""
           }
         ]
       }
