@@ -245,8 +245,8 @@ The hook calls vendor binaries directly (not via `composer phpstan` / `composer 
 
 #### Automated
 
-- [x] 2.1 `.github/workflows/ci.yml` exists and is valid YAML
-- [x] 2.2 Workflow file references PHP 8.5 and all three composer scripts
+- [x] 2.1 `.github/workflows/ci.yml` exists and is valid YAML — 1d6f32b
+- [x] 2.2 Workflow file references PHP 8.5 and all three composer scripts — 1d6f32b
 
 #### Manual
 
@@ -257,9 +257,9 @@ The hook calls vendor binaries directly (not via `composer phpstan` / `composer 
 
 #### Automated
 
-- [x] 3.1 `settings.local.json` parses as valid JSON
-- [x] 3.2 New hook entry present under `hooks.PostToolUse`
-- [x] 3.3 `./vendor/bin/pint --test app/Models/Appliance.php` exits 0
+- [x] 3.1 `settings.local.json` parses as valid JSON — 5d16bb6
+- [x] 3.2 New hook entry present under `hooks.PostToolUse` — 5d16bb6
+- [x] 3.3 `./vendor/bin/pint --test app/Models/Appliance.php` exits 0 — 5d16bb6
 
 #### Manual
 
