@@ -61,6 +61,15 @@
             "command": "jq -r '.tool_input.file_path' | grep -qE 'composer\\.(json|lock)' && composer validate && composer audit || true"
           }
         ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(jq -r '.tool_input.file_path'); [ \"${FILE%.php}\" != \"$FILE\" ] || exit 0; ./vendor/bin/phpstan analyse --paths=\"$FILE\" --no-progress --memory-limit=512M && ./vendor/bin/pint --test \"$FILE\""
+          }
+        ]
       }
     ]
   }
