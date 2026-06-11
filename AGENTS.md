@@ -33,6 +33,7 @@ on a dashboard.
 | `composer test`                | Config-cache clear then full PHPUnit suite          |
 | `php artisan test <path>`      | Run a single test file                              |
 | `./vendor/bin/pint`            | Format PHP (laravel preset, strict_types enforced)  |
+| `composer pint:check`          | Check style without writing changes (CI-safe mode)  |
 | `./vendor/bin/phpstan analyse` | Static analysis at level 6                          |
 
 ## Coding Style
