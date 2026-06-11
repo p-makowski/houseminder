@@ -22,7 +22,7 @@ class ApplianceShowTaskDeleteTest extends ApplianceTestCase
 
     public function test_delete_task_removes_task_and_cascades_service_records(): void
     {
-        $task   = MaintenanceTask::factory()->create(['appliance_id' => $this->appliance->id]);
+        $task = MaintenanceTask::factory()->create(['appliance_id' => $this->appliance->id]);
         $record = ServiceRecord::factory()->create(['maintenance_task_id' => $task->id]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -47,7 +47,7 @@ class ApplianceShowTaskDeleteTest extends ApplianceTestCase
     {
         $otherHousehold = Household::factory()->create();
         $otherAppliance = Appliance::factory()->create(['household_id' => $otherHousehold->id]);
-        $foreignTask    = MaintenanceTask::factory()->create(['appliance_id' => $otherAppliance->id]);
+        $foreignTask = MaintenanceTask::factory()->create(['appliance_id' => $otherAppliance->id]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
             ->call('confirmDelete', $foreignTask->id)

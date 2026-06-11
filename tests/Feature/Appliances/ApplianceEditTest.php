@@ -15,10 +15,10 @@ class ApplianceEditTest extends ApplianceTestCase
     {
         $type = ApplianceType::factory()->create(['household_id' => null]);
         $appliance = Appliance::factory()->create([
-            'household_id'      => $this->household->id,
+            'household_id' => $this->household->id,
             'appliance_type_id' => $type->id,
-            'name'              => 'Old Name',
-            'model'             => 'Old Model',
+            'name' => 'Old Name',
+            'model' => 'Old Model',
         ]);
 
         Volt::test('pages.appliances.edit', ['appliance' => $appliance])
@@ -38,7 +38,7 @@ class ApplianceEditTest extends ApplianceTestCase
         $privateType = ApplianceType::factory()->create(['household_id' => $otherHousehold->id]);
 
         $appliance = Appliance::factory()->create([
-            'household_id'      => $this->household->id,
+            'household_id' => $this->household->id,
             'appliance_type_id' => $ownType->id,
         ]);
 
@@ -54,7 +54,7 @@ class ApplianceEditTest extends ApplianceTestCase
         $otherHousehold = Household::factory()->create();
         $type = ApplianceType::factory()->create(['household_id' => null]);
         $appliance = Appliance::factory()->create([
-            'household_id'      => $otherHousehold->id,
+            'household_id' => $otherHousehold->id,
             'appliance_type_id' => $type->id,
         ]);
 

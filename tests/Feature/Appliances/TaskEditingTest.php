@@ -22,16 +22,16 @@ class TaskEditingTest extends ApplianceTestCase
                 ->withStructured([
                     'tasks' => [
                         [
-                            'name'           => 'Clean filter',
-                            'description'    => 'Remove and clean the lint filter.',
+                            'name' => 'Clean filter',
+                            'description' => 'Remove and clean the lint filter.',
                             'interval_value' => 3,
-                            'interval_unit'  => 'months',
+                            'interval_unit' => 'months',
                         ],
                         [
-                            'name'           => 'Descale drum',
-                            'description'    => 'Run a descaling cycle.',
+                            'name' => 'Descale drum',
+                            'description' => 'Run a descaling cycle.',
                             'interval_value' => 6,
-                            'interval_unit'  => 'months',
+                            'interval_unit' => 'months',
                         ],
                     ],
                 ])
@@ -52,10 +52,10 @@ class TaskEditingTest extends ApplianceTestCase
             ->set('tasks.0.interval_value', 12);
 
         $component->call('deleteTask', 1);
-        $component->assertSet('tasks', fn($t) => count($t) === 1);
+        $component->assertSet('tasks', fn ($t) => count($t) === 1);
 
         $component->call('addTask');
-        $component->assertSet('tasks', fn($t) => count($t) === 2);
+        $component->assertSet('tasks', fn ($t) => count($t) === 2);
 
         $component->set('tasks.1.name', 'Manual Task');
 

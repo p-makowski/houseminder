@@ -38,6 +38,7 @@
       "Bash(echo \"staged_exit:$?\")",
       "Bash(git mv *)",
       "Bash(composer phpstan *)",
+      "Bash(composer pint:check *)",
       "Skill(10x-plan)"
     ],
     "deny": [

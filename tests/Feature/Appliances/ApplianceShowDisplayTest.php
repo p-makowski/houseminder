@@ -22,7 +22,7 @@ class ApplianceShowDisplayTest extends ApplianceTestCase
     {
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'next_due_at'  => now()->subDay(),
+            'next_due_at' => now()->subDay(),
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -33,13 +33,13 @@ class ApplianceShowDisplayTest extends ApplianceTestCase
     {
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'name'         => 'Zap filter',
-            'next_due_at'  => now()->addDays(10),
+            'name' => 'Zap filter',
+            'next_due_at' => now()->addDays(10),
         ]);
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'name'         => 'Alpha check',
-            'next_due_at'  => now()->addDays(20),
+            'name' => 'Alpha check',
+            'next_due_at' => now()->addDays(20),
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -50,9 +50,9 @@ class ApplianceShowDisplayTest extends ApplianceTestCase
     public function test_never_done_shown_for_task_with_no_completion_history(): void
     {
         MaintenanceTask::factory()->create([
-            'appliance_id'      => $this->appliance->id,
+            'appliance_id' => $this->appliance->id,
             'last_completed_at' => null,
-            'next_due_at'       => now()->addMonths(3),
+            'next_due_at' => now()->addMonths(3),
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -62,9 +62,9 @@ class ApplianceShowDisplayTest extends ApplianceTestCase
     public function test_last_done_shown_for_task_with_completion_history(): void
     {
         MaintenanceTask::factory()->create([
-            'appliance_id'      => $this->appliance->id,
+            'appliance_id' => $this->appliance->id,
             'last_completed_at' => now()->subMonths(2),
-            'next_due_at'       => now()->addMonths(4),
+            'next_due_at' => now()->addMonths(4),
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])

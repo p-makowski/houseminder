@@ -230,16 +230,16 @@ The hook calls vendor binaries directly (not via `composer phpstan` / `composer 
 
 #### Automated
 
-- [ ] 1.1 `composer validate` exits 0
-- [ ] 1.2 `composer pint:check` exits 0 (codebase clean after version bump)
-- [ ] 1.3 `composer test` exits 0 (131 tests green)
+- [x] 1.1 `composer validate` exits 0
+- [x] 1.2 `composer pint:check` exits 0 (codebase clean after version bump)
+- [x] 1.3 `composer test` exits 0 (131 tests green)
 
 #### Manual
 
-- [ ] 1.4 `composer.json` require.php reads `^8.5`
-- [ ] 1.5 Dockerfile PHP stage reads `php8.5`
-- [ ] 1.6 AGENTS.md header reads "PHP 8.5 / Laravel 13"
-- [ ] 1.7 settings.local.json allowlist contains `"Bash(composer pint:check *)"`
+- [x] 1.4 `composer.json` require.php reads `^8.5`
+- [x] 1.5 Dockerfile PHP stage reads `php8.5`
+- [x] 1.6 AGENTS.md header reads "PHP 8.5 / Laravel 13"
+- [x] 1.7 settings.local.json allowlist contains `"Bash(composer pint:check *)"`
 
 ### Phase 2: GitHub Actions CI Workflow
 

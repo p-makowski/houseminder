@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Database\Factories\ApplianceFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable(['household_id', 'appliance_type_id', 'name', 'model', 'purchase_date', 'is_plan_confirmed'])]
 class Appliance extends Model
 {
-    /** @use HasFactory<\Database\Factories\ApplianceFactory> */
+    /** @use HasFactory<ApplianceFactory> */
     use HasFactory;
 
     /** @return BelongsTo<Household, $this> */

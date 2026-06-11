@@ -155,11 +155,11 @@ class DashboardPageTest extends DashboardTestCase
     public function test_never_done_shown_on_dashboard_for_task_with_no_completion(): void
     {
         MaintenanceTask::factory()->create([
-            'appliance_id'      => $this->appliance->id,
-            'next_due_at'       => now()->addMonths(2),
-            'interval_unit'     => 'months',
+            'appliance_id' => $this->appliance->id,
+            'next_due_at' => now()->addMonths(2),
+            'interval_unit' => 'months',
             'last_completed_at' => null,
-            'is_confirmed'      => true,
+            'is_confirmed' => true,
         ]);
 
         $this->get('/dashboard')->assertSee('Never done');
@@ -168,11 +168,11 @@ class DashboardPageTest extends DashboardTestCase
     public function test_last_done_shown_on_dashboard_for_task_with_completion(): void
     {
         MaintenanceTask::factory()->create([
-            'appliance_id'      => $this->appliance->id,
-            'next_due_at'       => now()->addMonths(4),
-            'interval_unit'     => 'months',
+            'appliance_id' => $this->appliance->id,
+            'next_due_at' => now()->addMonths(4),
+            'interval_unit' => 'months',
             'last_completed_at' => now()->subMonths(2),
-            'is_confirmed'      => true,
+            'is_confirmed' => true,
         ]);
 
         $this->get('/dashboard')->assertSee('Last done');

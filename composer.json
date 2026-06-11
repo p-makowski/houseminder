@@ -6,7 +6,7 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.3",
+        "php": "^8.5",
         "laravel/framework": "^13.8",
         "laravel/tinker": "^3.0",
         "livewire/livewire": "^3.6.4",
@@ -56,6 +56,9 @@
         ],
         "phpstan": [
             "@php vendor/bin/phpstan analyse --no-progress --memory-limit=512M"
+        ],
+        "pint:check": [
+            "./vendor/bin/pint --test"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

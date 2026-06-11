@@ -4,24 +4,26 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Database\Factories\MaintenanceTaskFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
- * @property \Illuminate\Support\Carbon|null $anchor_date
- * @property \Illuminate\Support\Carbon|null $last_completed_at
+ * @property Carbon|null $anchor_date
+ * @property Carbon|null $last_completed_at
  * @property float|null $last_metric_value
- * @property \Illuminate\Support\Carbon|null $next_due_at
+ * @property Carbon|null $next_due_at
  * @property float|null $next_due_at_value
  */
 #[Fillable(['appliance_id', 'name', 'description', 'interval_value', 'interval_unit', 'anchor_type', 'anchor_date', 'last_completed_at', 'last_metric_value', 'next_due_at', 'next_due_at_value', 'is_confirmed'])]
 class MaintenanceTask extends Model
 {
-    /** @use HasFactory<\Database\Factories\MaintenanceTaskFactory> */
+    /** @use HasFactory<MaintenanceTaskFactory> */
     use HasFactory;
 
     /** @param Builder<MaintenanceTask> $query */

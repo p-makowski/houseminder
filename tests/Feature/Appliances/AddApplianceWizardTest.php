@@ -23,16 +23,16 @@ class AddApplianceWizardTest extends ApplianceTestCase
                 ->withStructured([
                     'tasks' => [
                         [
-                            'name'           => 'Clean filter',
-                            'description'    => 'Remove and clean the lint filter.',
+                            'name' => 'Clean filter',
+                            'description' => 'Remove and clean the lint filter.',
                             'interval_value' => 3,
-                            'interval_unit'  => 'months',
+                            'interval_unit' => 'months',
                         ],
                         [
-                            'name'           => 'Descale drum',
-                            'description'    => 'Run a descaling cycle.',
+                            'name' => 'Descale drum',
+                            'description' => 'Run a descaling cycle.',
                             'interval_value' => 6,
-                            'interval_unit'  => 'months',
+                            'interval_unit' => 'months',
                         ],
                     ],
                 ])
@@ -48,7 +48,7 @@ class AddApplianceWizardTest extends ApplianceTestCase
 
         $component->call('fetchSuggestions');
 
-        $component->assertSet('tasks', fn($tasks) => count($tasks) === 2);
+        $component->assertSet('tasks', fn ($tasks) => count($tasks) === 2);
 
         $component
             ->call('nextStep') // step 2 → 3

@@ -22,8 +22,8 @@ class ApplianceShowSectionsTest extends ApplianceTestCase
     {
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'name'         => 'Filter Expired Task',
-            'next_due_at'  => now()->subDay(),
+            'name' => 'Filter Expired Task',
+            'next_due_at' => now()->subDay(),
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -35,8 +35,8 @@ class ApplianceShowSectionsTest extends ApplianceTestCase
     {
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'name'         => 'Due This Week Task',
-            'next_due_at'  => now()->addDays(3),
+            'name' => 'Due This Week Task',
+            'next_due_at' => now()->addDays(3),
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -48,8 +48,8 @@ class ApplianceShowSectionsTest extends ApplianceTestCase
     {
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'name'         => 'This Month Section Task',
-            'next_due_at'  => now()->addDays(15),
+            'name' => 'This Month Section Task',
+            'next_due_at' => now()->addDays(15),
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -61,8 +61,8 @@ class ApplianceShowSectionsTest extends ApplianceTestCase
     {
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'name'         => 'Far Future Task',
-            'next_due_at'  => now()->addDays(45),
+            'name' => 'Far Future Task',
+            'next_due_at' => now()->addDays(45),
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -73,9 +73,9 @@ class ApplianceShowSectionsTest extends ApplianceTestCase
     public function test_metric_task_appears_in_manual_tracking_section(): void
     {
         MaintenanceTask::factory()->create([
-            'appliance_id'  => $this->appliance->id,
+            'appliance_id' => $this->appliance->id,
             'interval_unit' => 'km',
-            'next_due_at'   => null,
+            'next_due_at' => null,
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -88,10 +88,10 @@ class ApplianceShowSectionsTest extends ApplianceTestCase
         // Appliance detail intentionally shows unconfirmed (draft) tasks so users
         // can manage them. Confirmed tasks are shown without the badge.
         MaintenanceTask::factory()->create([
-            'appliance_id'  => $this->appliance->id,
-            'name'          => 'Draft Task',
-            'next_due_at'   => now()->addDays(15),
-            'is_confirmed'  => false,
+            'appliance_id' => $this->appliance->id,
+            'name' => 'Draft Task',
+            'next_due_at' => now()->addDays(15),
+            'is_confirmed' => false,
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -103,13 +103,13 @@ class ApplianceShowSectionsTest extends ApplianceTestCase
     {
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'name'         => 'Zeta task',
-            'next_due_at'  => now()->addDays(15),
+            'name' => 'Zeta task',
+            'next_due_at' => now()->addDays(15),
         ]);
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'name'         => 'Alpha task',
-            'next_due_at'  => now()->addDays(20),
+            'name' => 'Alpha task',
+            'next_due_at' => now()->addDays(20),
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])

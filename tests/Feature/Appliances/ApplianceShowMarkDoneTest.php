@@ -7,7 +7,6 @@ namespace Tests\Feature\Appliances;
 use App\Models\Appliance;
 use App\Models\Household;
 use App\Models\MaintenanceTask;
-use App\Models\ServiceRecord;
 use Livewire\Volt\Volt;
 
 class ApplianceShowMarkDoneTest extends ApplianceTestCase
@@ -23,10 +22,10 @@ class ApplianceShowMarkDoneTest extends ApplianceTestCase
     public function test_mark_done_on_calendar_task_creates_service_record_and_advances_due_date(): void
     {
         $task = MaintenanceTask::factory()->create([
-            'appliance_id'   => $this->appliance->id,
+            'appliance_id' => $this->appliance->id,
             'interval_value' => 3,
-            'interval_unit'  => 'months',
-            'next_due_at'    => now()->subDay(),
+            'interval_unit' => 'months',
+            'next_due_at' => now()->subDay(),
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -41,9 +40,9 @@ class ApplianceShowMarkDoneTest extends ApplianceTestCase
     public function test_mark_done_on_metric_task_creates_service_record_without_changing_next_due_at(): void
     {
         $task = MaintenanceTask::factory()->create([
-            'appliance_id'  => $this->appliance->id,
+            'appliance_id' => $this->appliance->id,
             'interval_unit' => 'km',
-            'next_due_at'   => null,
+            'next_due_at' => null,
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -59,7 +58,7 @@ class ApplianceShowMarkDoneTest extends ApplianceTestCase
     {
         $otherHousehold = Household::factory()->create();
         $otherAppliance = Appliance::factory()->create(['household_id' => $otherHousehold->id]);
-        $foreignTask    = MaintenanceTask::factory()->create(['appliance_id' => $otherAppliance->id]);
+        $foreignTask = MaintenanceTask::factory()->create(['appliance_id' => $otherAppliance->id]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
             ->call('markDone', $foreignTask->id)

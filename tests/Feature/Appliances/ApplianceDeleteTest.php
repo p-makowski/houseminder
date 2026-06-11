@@ -17,7 +17,7 @@ class ApplianceDeleteTest extends ApplianceTestCase
     {
         $type = ApplianceType::factory()->create(['household_id' => null]);
         $appliance = Appliance::factory()->create([
-            'household_id'      => $this->household->id,
+            'household_id' => $this->household->id,
             'appliance_type_id' => $type->id,
         ]);
         $task = MaintenanceTask::factory()->create(['appliance_id' => $appliance->id]);
@@ -33,7 +33,7 @@ class ApplianceDeleteTest extends ApplianceTestCase
     {
         $type = ApplianceType::factory()->create(['household_id' => null]);
         $appliance = Appliance::factory()->create([
-            'household_id'      => $this->household->id,
+            'household_id' => $this->household->id,
             'appliance_type_id' => $type->id,
         ]);
 
@@ -55,7 +55,7 @@ class ApplianceDeleteTest extends ApplianceTestCase
 
         $type = ApplianceType::factory()->create(['household_id' => null]);
         $appliance = Appliance::factory()->create([
-            'household_id'      => $otherHousehold->id,
+            'household_id' => $otherHousehold->id,
             'appliance_type_id' => $type->id,
         ]);
 

@@ -8,7 +8,7 @@ COPY vite.config.js tailwind.config.js postcss.config.js ./
 RUN npm run build
 
 # Stage 2: FrankenPHP (single-process PHP+HTTP server, no S6-overlay required)
-FROM dunglas/frankenphp:1-php8.4
+FROM dunglas/frankenphp:1-php8.5
 
 # pdo_sqlite for the SQLite DB; unzip is required by Composer to extract packages
 RUN apt-get update && apt-get install -y --no-install-recommends unzip && rm -rf /var/lib/apt/lists/* \

@@ -12,8 +12,8 @@ class DashboardThisMonthBoundaryTest extends DashboardTestCase
     {
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'name'         => 'ThisMonth Boundary Lower Task',
-            'next_due_at'  => now()->addDays(7)->addSecond(),
+            'name' => 'ThisMonth Boundary Lower Task',
+            'next_due_at' => now()->addDays(7)->addSecond(),
             'interval_unit' => 'months',
             'is_confirmed' => true,
         ]);
@@ -27,8 +27,8 @@ class DashboardThisMonthBoundaryTest extends DashboardTestCase
     {
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'name'         => 'ThisMonth Boundary Upper Task',
-            'next_due_at'  => now()->addDays(30),
+            'name' => 'ThisMonth Boundary Upper Task',
+            'next_due_at' => now()->addDays(30),
             'interval_unit' => 'months',
             'is_confirmed' => true,
         ]);
@@ -42,8 +42,8 @@ class DashboardThisMonthBoundaryTest extends DashboardTestCase
     {
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'name'         => 'Upcoming Boundary Task',
-            'next_due_at'  => now()->addDays(30)->addSecond(),
+            'name' => 'Upcoming Boundary Task',
+            'next_due_at' => now()->addDays(30)->addSecond(),
             'interval_unit' => 'months',
             'is_confirmed' => true,
         ]);
@@ -57,8 +57,8 @@ class DashboardThisMonthBoundaryTest extends DashboardTestCase
     {
         MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'name'         => 'ThisMonth Mid Window Task',
-            'next_due_at'  => now()->addDays(15),
+            'name' => 'ThisMonth Mid Window Task',
+            'next_due_at' => now()->addDays(15),
             'interval_unit' => 'months',
             'is_confirmed' => true,
         ]);

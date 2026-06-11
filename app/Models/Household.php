@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Database\Factories\HouseholdFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable(['name'])]
 class Household extends Model
 {
-    /** @use HasFactory<\Database\Factories\HouseholdFactory> */
+    /** @use HasFactory<HouseholdFactory> */
     use HasFactory;
 
     /** @return BelongsToMany<User, $this> */

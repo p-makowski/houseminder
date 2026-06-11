@@ -33,10 +33,10 @@ class MaintenanceTaskCardTest extends TestCase
     public function test_renders_task_name_and_shows_never_done_when_no_completion(): void
     {
         $task = MaintenanceTask::factory()->create([
-            'appliance_id'    => $this->appliance->id,
-            'name'            => 'Oil change',
-            'interval_value'  => 3,
-            'interval_unit'   => 'months',
+            'appliance_id' => $this->appliance->id,
+            'name' => 'Oil change',
+            'interval_value' => 3,
+            'interval_unit' => 'months',
             'last_completed_at' => null,
         ]);
 
@@ -55,7 +55,7 @@ class MaintenanceTaskCardTest extends TestCase
         $completedAt = now()->subMonths(2);
 
         $task = MaintenanceTask::factory()->create([
-            'appliance_id'      => $this->appliance->id,
+            'appliance_id' => $this->appliance->id,
             'last_completed_at' => $completedAt,
         ]);
 
@@ -106,7 +106,7 @@ class MaintenanceTaskCardTest extends TestCase
         $this->appliance->update(['name' => 'Boiler']);
         $task = MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'name'         => 'Annual service',
+            'name' => 'Annual service',
         ]);
         $task->load('appliance');
 

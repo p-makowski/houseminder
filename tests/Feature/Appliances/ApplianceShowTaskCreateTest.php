@@ -98,7 +98,7 @@ class ApplianceShowTaskCreateTest extends ApplianceTestCase
             ->assertHasErrors(['addName', 'addIntervalValue']);
 
         $this->assertSame(0, $this->appliance->maintenanceTasks()->count());
-        $this->assertSame(0, ServiceRecord::whereHas('maintenanceTask', fn($q) => $q->where('appliance_id', $this->appliance->id))->count());
+        $this->assertSame(0, ServiceRecord::whereHas('maintenanceTask', fn ($q) => $q->where('appliance_id', $this->appliance->id))->count());
     }
 
     public function test_unauthorized_user_cannot_create_task(): void
@@ -109,5 +109,4 @@ class ApplianceShowTaskCreateTest extends ApplianceTestCase
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
             ->assertForbidden();
     }
-
 }

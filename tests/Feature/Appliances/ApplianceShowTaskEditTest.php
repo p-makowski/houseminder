@@ -23,8 +23,8 @@ class ApplianceShowTaskEditTest extends ApplianceTestCase
     {
         $task = MaintenanceTask::factory()->create([
             'appliance_id' => $this->appliance->id,
-            'name'         => 'Old name',
-            'description'  => 'Old desc',
+            'name' => 'Old name',
+            'description' => 'Old desc',
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -41,13 +41,13 @@ class ApplianceShowTaskEditTest extends ApplianceTestCase
     public function test_save_edit_on_calendar_task_recalculates_next_due_at_from_last_completed_at(): void
     {
         $lastDone = now()->subMonths(2);
-        $task     = MaintenanceTask::factory()->create([
-            'appliance_id'     => $this->appliance->id,
-            'interval_value'   => 6,
-            'interval_unit'    => 'months',
-            'anchor_type'      => 'from_last_done',
+        $task = MaintenanceTask::factory()->create([
+            'appliance_id' => $this->appliance->id,
+            'interval_value' => 6,
+            'interval_unit' => 'months',
+            'anchor_type' => 'from_last_done',
             'last_completed_at' => $lastDone,
-            'next_due_at'      => $lastDone->copy()->addMonths(6),
+            'next_due_at' => $lastDone->copy()->addMonths(6),
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -67,7 +67,7 @@ class ApplianceShowTaskEditTest extends ApplianceTestCase
     public function test_save_edit_with_explicit_next_due_at_skips_recalculation(): void
     {
         $task = MaintenanceTask::factory()->create([
-            'appliance_id'  => $this->appliance->id,
+            'appliance_id' => $this->appliance->id,
             'interval_unit' => 'months',
         ]);
 
@@ -85,9 +85,9 @@ class ApplianceShowTaskEditTest extends ApplianceTestCase
     public function test_save_edit_on_metric_task_does_not_alter_next_due_at(): void
     {
         $task = MaintenanceTask::factory()->create([
-            'appliance_id'  => $this->appliance->id,
+            'appliance_id' => $this->appliance->id,
             'interval_unit' => 'km',
-            'next_due_at'   => null,
+            'next_due_at' => null,
         ]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
@@ -104,7 +104,7 @@ class ApplianceShowTaskEditTest extends ApplianceTestCase
     {
         $otherHousehold = Household::factory()->create();
         $otherAppliance = Appliance::factory()->create(['household_id' => $otherHousehold->id]);
-        $foreignTask    = MaintenanceTask::factory()->create(['appliance_id' => $otherAppliance->id]);
+        $foreignTask = MaintenanceTask::factory()->create(['appliance_id' => $otherAppliance->id]);
 
         Volt::test('pages.appliances.show', ['appliance' => $this->appliance])
             ->call('startEdit', $foreignTask->id)

@@ -23,10 +23,10 @@ class AiFailureTest extends ApplianceTestCase
             ->once()
             ->andReturn([
                 [
-                    'name'           => 'Clean filter',
-                    'description'    => 'Remove and clean the lint filter.',
+                    'name' => 'Clean filter',
+                    'description' => 'Remove and clean the lint filter.',
                     'interval_value' => 3,
-                    'interval_unit'  => 'months',
+                    'interval_unit' => 'months',
                 ],
             ]);
 
@@ -40,13 +40,13 @@ class AiFailureTest extends ApplianceTestCase
         $component->call('fetchSuggestions');
 
         $component
-            ->assertSet('aiError', fn($e) => !is_null($e))
+            ->assertSet('aiError', fn ($e) => ! is_null($e))
             ->assertSet('aiLoading', false);
 
         $component->call('retryFetch');
 
         $component
-            ->assertSet('tasks', fn($t) => count($t) > 0)
+            ->assertSet('tasks', fn ($t) => count($t) > 0)
             ->assertSet('aiError', null);
     }
 }
