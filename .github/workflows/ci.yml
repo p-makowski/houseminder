@@ -41,6 +41,9 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
+      - name: Build frontend assets
+        run: npm ci --ignore-scripts && npm run build
+
       - name: PHPStan level 6
         run: composer phpstan
 
