@@ -2,8 +2,8 @@
   "package": "@przeprogramowani/10x-cli",
   "version": "1.8.0",
   "manifestVersion": 3,
-  "lastApplied": "2026-06-10T16:38:23.217Z",
-  "lessonId": "m3l4",
+  "lastApplied": "2026-06-25T20:55:11.121Z",
+  "lessonId": "m4l5",
   "course": "10xdevs3",
   "tool": "claude-code",
   "files": {
@@ -247,7 +247,14 @@
       "m1l5-2-constrain-approach.md",
       "m1l5-3-extend-prerequisites.md",
       "m1l5-4-store-plan.md",
-      "m3l2-ad-hoc-testing.md"
+      "m3l2-ad-hoc-testing.md",
+      "m4l2-1-territory-git-history.md",
+      "m4l2-2-structure-dependency-cruiser.md",
+      "m4l2-3-contributors-git.md",
+      "m4l2-repo-map-synthesis.md",
+      "m4l5-1-domain-distillation.md",
+      "m4l5-2-invariant-aggregate-refactor.md",
+      "m4l5-3-anti-corruption-layer.md"
     ],
     "configs": [],
     "promptHashes": {
@@ -256,7 +263,14 @@
       "m1l5-2-constrain-approach.md": "1d2477cdc3c2a867a4bf79d3d1ba1151f0468875237f2322126b26e5d506c505",
       "m1l5-3-extend-prerequisites.md": "3418ae7c2ffc10f9cce9ad23b48b845033b57793fc2816df66c6deb8b6eae867",
       "m1l5-4-store-plan.md": "0f72fd90618f05bd8f6784825d217e128fa3148def28024995f1ad1026b34f48",
-      "m3l2-ad-hoc-testing.md": "6a4509b6b90d3ea9229d19dbec77aea0c6812d0d706144006f9465e195f5387f"
+      "m3l2-ad-hoc-testing.md": "6a4509b6b90d3ea9229d19dbec77aea0c6812d0d706144006f9465e195f5387f",
+      "m4l2-1-territory-git-history.md": "37a48d9095fa02fe2147190a9d4fdcf74a780f556b1e9d25945dd06f33bec5f2",
+      "m4l2-2-structure-dependency-cruiser.md": "0b0a15d46647bc28c0d41c901b2d07366edb9172bc0a529abe03488fb8de186c",
+      "m4l2-3-contributors-git.md": "fc600f19f40cfbc16bec152e1326021b3118d95f43c7bd2519986dcf3318fb50",
+      "m4l2-repo-map-synthesis.md": "8112d4b13fcb4a909308a82a696a64ef1a659e9e3b20238eeae7cccf228352b4",
+      "m4l5-1-domain-distillation.md": "9ff353da7881fb0e08f7950f18c3d3a3bf31dfd8b15a12d52d7cfbb02e2be20a",
+      "m4l5-2-invariant-aggregate-refactor.md": "fcf22eb1676913dabf73e278515b7d8e47d04bc271ed46bc658c08a3792b7721",
+      "m4l5-3-anti-corruption-layer.md": "c3ad9792233c1eeeadbb6f9522f01f0d4594448f17bbfd2e4002a6eabfb9e386"
     }
   },
   "lessons": {
@@ -1642,6 +1656,33 @@
         "m1l5-3-extend-prerequisites.md",
         "m1l5-4-store-plan.md",
         "m3l2-ad-hoc-testing.md"
+      ],
+      "configs": []
+    },
+    "m4l1": {
+      "appliedAt": "2026-06-24T20:04:40.554Z",
+      "skills": {},
+      "prompts": [],
+      "configs": []
+    },
+    "m4l2": {
+      "appliedAt": "2026-06-24T20:09:01.095Z",
+      "skills": {},
+      "prompts": [
+        "m4l2-1-territory-git-history.md",
+        "m4l2-2-structure-dependency-cruiser.md",
+        "m4l2-3-contributors-git.md",
+        "m4l2-repo-map-synthesis.md"
+      ],
+      "configs": []
+    },
+    "m4l5": {
+      "appliedAt": "2026-06-25T20:55:11.120Z",
+      "skills": {},
+      "prompts": [
+        "m4l5-1-domain-distillation.md",
+        "m4l5-2-invariant-aggregate-refactor.md",
+        "m4l5-3-anti-corruption-layer.md"
       ],
       "configs": []
     }

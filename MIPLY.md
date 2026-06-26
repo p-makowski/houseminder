@@ -40,3 +40,8 @@ After all phases:
 /10x-implement <change-id>  ← executes the plan phase by phase
 /10x-impl-review            ← review against the plan for drift/safety
 /10x-archive <change-id>    ← closes the change, moves to context/archive/
+
+
+kontakt@przeprogramowani.pl 
+
+https://ast-grep.github.io/reference/cli.md
