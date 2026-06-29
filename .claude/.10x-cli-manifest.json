@@ -1,9 +1,9 @@
 {
   "package": "@przeprogramowani/10x-cli",
-  "version": "1.8.0",
+  "version": "1.10.0",
   "manifestVersion": 3,
-  "lastApplied": "2026-06-25T20:55:11.121Z",
-  "lessonId": "m4l5",
+  "lastApplied": "2026-06-29T05:36:49.790Z",
+  "lessonId": "m0l0",
   "course": "10xdevs3",
   "tool": "claude-code",
   "files": {
@@ -254,7 +254,8 @@
       "m4l2-repo-map-synthesis.md",
       "m4l5-1-domain-distillation.md",
       "m4l5-2-invariant-aggregate-refactor.md",
-      "m4l5-3-anti-corruption-layer.md"
+      "m4l5-3-anti-corruption-layer.md",
+      "mvp-check.md"
     ],
     "configs": [],
     "promptHashes": {
@@ -270,7 +271,8 @@
       "m4l2-repo-map-synthesis.md": "8112d4b13fcb4a909308a82a696a64ef1a659e9e3b20238eeae7cccf228352b4",
       "m4l5-1-domain-distillation.md": "9ff353da7881fb0e08f7950f18c3d3a3bf31dfd8b15a12d52d7cfbb02e2be20a",
       "m4l5-2-invariant-aggregate-refactor.md": "fcf22eb1676913dabf73e278515b7d8e47d04bc271ed46bc658c08a3792b7721",
-      "m4l5-3-anti-corruption-layer.md": "c3ad9792233c1eeeadbb6f9522f01f0d4594448f17bbfd2e4002a6eabfb9e386"
+      "m4l5-3-anti-corruption-layer.md": "c3ad9792233c1eeeadbb6f9522f01f0d4594448f17bbfd2e4002a6eabfb9e386",
+      "mvp-check.md": "925dbc3beb572cb90e858c8ec1ed6c813803cc7169bbf8be727cf29a83ccd839"
     }
   },
   "lessons": {
@@ -1683,6 +1685,15 @@
         "m4l5-1-domain-distillation.md",
         "m4l5-2-invariant-aggregate-refactor.md",
         "m4l5-3-anti-corruption-layer.md"
+      ],
+      "configs": []
+    },
+    "m0l0": {
+      "appliedAt": "2026-06-29T05:36:49.790Z",
+      "skills": {},
+      "prompts": [
+        "skill-explainer.md",
+        "mvp-check.md"
       ],
       "configs": []
     }

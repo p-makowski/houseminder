@@ -39,7 +39,10 @@
       "Bash(git mv *)",
       "Bash(composer phpstan *)",
       "Bash(composer pint:check *)",
-      "Skill(10x-plan)"
+      "Skill(10x-plan)",
+      "Bash(10x --version)",
+      "Bash(pnpm update *)",
+      "Bash(pnpm add *)"
     ],
     "deny": [
       "Bash(rm -rf *)"
