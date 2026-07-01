@@ -42,7 +42,8 @@
       "Skill(10x-plan)",
       "Bash(10x --version)",
       "Bash(pnpm update *)",
-      "Bash(pnpm add *)"
+      "Bash(pnpm add *)",
+      "mcp__context7__query-docs"
     ],
     "deny": [
       "Bash(rm -rf *)"
