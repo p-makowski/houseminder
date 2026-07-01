@@ -53,6 +53,7 @@ jobs:
         run: ./vendor/bin/phpstan analyse --level=6
 
       - name: Run Unit Tests (PHPUnit)
+        if: false # Disabled for now; enable when tests are added
         run: ./vendor/bin/phpunit
 
   # 2. Advisory Claude AI Code Review (posts a PR comment, does not block merge)
