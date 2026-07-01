@@ -1,0 +1,114 @@
+name: Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: [ main, master ]
+
+jobs:
+  # 1. Local PHP CI Pipeline
+  php-review:
+    name: PHP Code Review (PHP ${{ matrix.php-versions }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['8.3', '8.4', '8.5']
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, xml, ctype, iconv, intl
+          coverage: none
+
+      - name: Validate Composer Files
+        run: composer validate --strict
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Check Code Style (Pint)
+        run: composer pint:check
+
+      - name: Static Analysis (PHPStan)
+        run: ./vendor/bin/phpstan analyse --level=6
+
+      - name: Run Unit Tests (PHPUnit)
+        run: ./vendor/bin/phpunit
+
+  # 2. Advisory Claude AI Code Review (posts a PR comment, does not block merge)
+  claude-review:
+    name: Claude AI Code Review
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Native Claude Code Review
+        uses: anthropics/claude-code-action@v1
+        with:
+          prompt: |
+            You are reviewing a pull request for **House Minder** — a PHP 8.5 / Laravel 13 household
+            appliance maintenance tracker with Livewire 3 and Tailwind CSS.
+
+            Review the diff for the issues below and post your findings as inline comments on the
+            relevant lines. Be specific; quote the problematic code. Skip praise and general observations
+            — only flag real issues.
+
+            ## Hard rules (any violation is a blocker)
+
+            - Every PHP file must open with `declare(strict_types=1);` — flag any file that is missing it.
+            - All Eloquent queries on appliances or tasks must be scoped to the authenticated household.
+              Cross-household data leakage is a critical security bug.
+            - Appliance deletion must require explicit user confirmation — no silent deletes.
+            - Controllers must not contain business logic or direct database queries; delegate to
+              `app/Services/`.
+
+            ## Code quality (flag as suggestions)
+
+            - PHPStan level 6 compliance: flag anything likely to produce a level-6 error (missing
+              return types, unsafe nullable access, untyped properties, etc.).
+            - Pint / Laravel style: 4-space indentation, no trailing whitespace, method and variable
+              names in camelCase, class names in PascalCase.
+            - Livewire components: computed values that are re-used across a request should use the
+              `#[Computed]` attribute, not private properties (private properties are not hydrated on
+              wire requests).
+
+            ## Database migrations (flag as blockers)
+
+            - Every migration must implement both `up()` and `down()` — flag any missing `down()`.
+            - Adding a NOT NULL column without a default must use a two-phase migration (add nullable →
+              backfill → add constraint). Flag single-step NOT NULL additions.
+            - `dropColumn`, `dropTable`, or `change()` without a matching `down()` restoration is a
+              blocker.
+
+            ## Security (flag as blockers)
+
+            - No raw SQL with unescaped user input; use query builder bindings or Eloquent.
+            - No secrets, credentials, or API keys in source files.
+            - Validate all user-supplied input at the controller boundary before passing to services.
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
