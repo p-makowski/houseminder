@@ -4,6 +4,7 @@ on:
   pull_request:
     types: [opened, synchronize]
     branches: [ main, master ]
+  workflow_dispatch: # This enables the manual trigger button
 
 jobs:
   # 1. Local PHP CI Pipeline
