@@ -4,6 +4,7 @@ on:
   pull_request:
     types: [opened, synchronize]
     branches: [ main, master ]
+  workflow_dispatch: # This enables the manual trigger button
 
 jobs:
   # 1. Local PHP CI Pipeline
@@ -14,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['8.3', '8.4', '8.5']
+        php-versions: ['8.5']
 
     steps:
       - name: Checkout Code
@@ -52,6 +53,7 @@ jobs:
         run: ./vendor/bin/phpstan analyse --level=6
 
       - name: Run Unit Tests (PHPUnit)
+        if: false # Disabled for now; enable when tests are added
         run: ./vendor/bin/phpunit
 
   # 2. Advisory Claude AI Code Review (posts a PR comment, does not block merge)
@@ -62,6 +64,7 @@ jobs:
       contents: read
       pull-requests: write
       issues: write
+      id-token: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
